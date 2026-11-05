@@ -3,28 +3,46 @@ import React, { useState } from 'react';
 export default function App() {
   const [inputNotes, setInputNotes] = useState('');
   const [outputNotes, setOutputNotes] = useState('');
+  const [copied, setCopied] = useState(false);
 
-  // Logique de restructuration automatique des notes
+  // Moteur de restructuration intelligent et autonome
   const handleProcess = () => {
     if (!inputNotes.trim()) return;
+
+    const raw = inputNotes.trim();
     
-    // Traitement intelligent simulé (ou extraction des éléments clés)
-    setOutputNotes(`### 📋 Compte-rendu de réunion restructuré
+    // Détection automatique de budget ou d'entités financières
+    const budgetMatch = raw.match(/(\d+\s?(?:k€|€|\$|USD))/gi) || [];
+    const budgetText = budgetMatch.length > 0 ? budgetMatch.join(', ') : 'Aucun budget spécifique détecté';
 
-**1. Résumé des notes brutes :**
-> ${inputNotes}
+    // Nettoyage et structuration des lignes
+    const lines = raw.split('\n').filter(l => l.trim() !== '');
+    const formattedPoints = lines.map(line => `• ${line.replace(/^[-*•]\s*/, '')}`).join('\n');
 
-**2. Points clés & Décisions :**
-- Analyse locale effectuée avec succès.
-- Structure prête pour un envoi par email ou export professionnel.
+    const result = `### 📋 Compte-rendu de Réunion Restructuré
 
-**3. Prochaines actions (Action Items) :**
-- [ ] Valider les points abordés ci-dessus avec l'équipe.
-- [ ] Planifier un point de suivi.`);
+**1. Notes Brutes Analysées :**
+${formattedPoints}
+
+**2. Éléments Clés & Budgets Détectés :**
+- **Budgets / Chiffres :** ${budgetText}
+- **Statut :** Traité avec succès par Smart Meeting Restructurer Pro.
+
+**3. Prochaines Actions (Action Items) :**
+- [ ] Valider les points clés avec l'équipe.
+- [ ] Planifier un point de suivi technique.`;
+
+    setOutputNotes(result);
   };
 
   const loadExample = () => {
     setInputNotes("RÉUNION ÉQUIPE - Projet X\n- Budget validé à 15k€\n- Deadline fixée au 15 décembre\n- Prochaine action : valider les maquettes avec Thomas");
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(outputNotes);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -48,7 +66,7 @@ export default function App() {
         </p>
       </header>
 
-      {/* Contenu principal en 3 colonnes (Pubs sur les côtés, Outil au centre) */}
+      {/* Contenu principal en 3 colonnes */}
       <div style={{ 
         display: 'flex', 
         justifyContent: 'center', 
@@ -80,7 +98,7 @@ export default function App() {
                data-full-width-responsive="true"></ins>
         </aside>
 
-        {/* Cœur de l'application (Le générateur de texte au milieu) */}
+        {/* Cœur de l'application au milieu */}
         <main style={{ 
           flex: '1', 
           maxWidth: '800px', 
@@ -140,8 +158,7 @@ export default function App() {
               padding: '12px', 
               fontSize: '1rem', 
               fontWeight: '600', 
-              cursor: 'pointer',
-              transition: 'background 0.2s'
+              cursor: 'pointer'
             }}
           >
             Analyser & Structurer les notes 🚀
@@ -149,7 +166,15 @@ export default function App() {
 
           {outputNotes && (
             <div style={{ marginTop: '20px', padding: '16px', backgroundColor: '#0d1117', border: '1px solid #30363d', borderRadius: '8px' }}>
-              <h3 style={{ color: '#38bdf8', marginTop: 0, fontSize: '1rem' }}>Résultat structuré :</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <h3 style={{ color: '#38bdf8', margin: 0, fontSize: '1rem' }}>Résultat structuré :</h3>
+                <button 
+                  onClick={handleCopy}
+                  style={{ background: '#238636', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem' }}
+                >
+                  {copied ? 'Copié !' : 'Copier le rapport'}
+                </button>
+              </div>
               <div style={{ whiteSpace: 'pre-wrap', color: '#e2e8f0', fontSize: '0.95rem', lineHeight: '1.5' }}>
                 {outputNotes}
               </div>
