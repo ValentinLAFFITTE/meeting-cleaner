@@ -74,6 +74,16 @@ export default function App() {
     localStorage.setItem('meeting_items', JSON.stringify(items));
   }, [rawText, items]);
 
+  // Initialisation automatique des pubs AdSense lors du rendu des composants publicitaires
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.error(e);
+    }
+  }, [hasProcessed]);
+
   const cleanAndFormatSentence = (str) => {
     let cleaned = str.trim();
     cleaned = cleaned.replace(/^[•\-\*\>\+\d\.\)\s]+/, '');
