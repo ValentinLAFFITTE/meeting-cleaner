@@ -1,0 +1,54 @@
+body {
+  margin: 0;
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-container {
+  padding: 2rem 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* Style propre pour l'impression et la génération de PDF */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .printable-result {
+    background: #ffffff !important;
+    border: none !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+  .category-card {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left-width: 6px !important;
+    margin-bottom: 1rem !important;
+    page-break-inside: avoid;
+  }
+  .item-row {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    margin-bottom: 0.5rem !important;
+  }
+  input[type="text"] {
+    background: transparent !important;
+    color: #000000 !important;
+    border: none !important;
+  }
+  input[type="checkbox"] {
+    accent-color: #000000 !important;
+  }
+}
