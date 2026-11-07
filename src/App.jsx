@@ -26,42 +26,122 @@ const ABBREVIATIONS = {
 };
 
 const KEYWORDS = {
-  actions: [
-    "doit", "doivent", "devra", "devront", "il faut", "faut que", "à faire", "todo", "to-do", "to do",
-    "action", "tâche", "mission", "chargé de", "charge de", "s'occupe de", "s'occuper de", "va faire",
-    "penser à", "pensez à", "ne pas oublier", "envoyer", "préparer", "rédiger", "appeler", "contacter",
-    "relancer", "vérifier", "tester", "corriger", "fixer", "acheter", "commander", "planifier", "organiser",
-    "créer", "mettre à jour", "maj", "modifier", "refaire", "terminer", "finir", "livrer", "déployer",
-    "présenter", "former", "recruter", "embaucher", "payer", "facturer", "devis", "relance", "urgent",
-    "impératif", "priorité", "prioritaire", "d'ici", "avant le", "avant ", "pour lundi", "pour mardi",
-    "pour mercredi", "pour jeudi", "pour vendredi", "semaine prochaine", "demain", "ce soir", "asap"
-  ],
-  decisions: [
-    "décidé", "décision", "validé", "validation", "accord", "d'accord", "ok pour", "okay pour", "approuvé",
-    "retenu", "choisi", "choix", "adopté", "confirmé", "acté", "fixé", "arrêté", "conclu", "tranché",
-    "voté", "accepté", "signé", "officiel", "on part sur", "on garde", "on change", "on passe sur",
-    "abandonné", "annulé", "reporté", "rejeté", "refusé", "budget validé", "go pour", "feu vert"
-  ],
-  risks: [
-    "problème", "souci", "bug", "erreur", "panne", "blocage", "bloqué", "bloquant", "retard", "en retard",
-    "risque", "danger", "attention", "vigilance", "alerte", "compliqué", "difficile", "impossible",
-    "manque", "insuffisant", "dépassement", "trop cher", "hors budget", "conflit", "désaccord", "attente",
-    "en attente", "dépendance", "inquiet", "inquiétude", "point noir", "obstacle", "limite", "warn"
-  ]
+  fr: {
+    actions: [
+      "doit", "doivent", "devra", "devront", "il faut", "faut que", "à faire", "todo", "to-do", "to do",
+      "action", "tâche", "mission", "chargé de", "charge de", "s'occupe de", "s'occuper de", "va faire",
+      "penser à", "pensez à", "ne pas oublier", "envoyer", "préparer", "rédiger", "appeler", "contacter",
+      "relancer", "vérifier", "tester", "corriger", "fixer", "acheter", "commander", "planifier", "organiser",
+      "créer", "mettre à jour", "maj", "modifier", "refaire", "terminer", "finir", "livrer", "déployer",
+      "présenter", "former", "recruter", "embaucher", "payer", "facturer", "devis", "relance", "urgent",
+      "impératif", "priorité", "prioritaire", "d'ici", "avant le", "avant ", "pour lundi", "pour mardi",
+      "pour mercredi", "pour jeudi", "pour vendredi", "semaine prochaine", "demain", "ce soir", "asap"
+    ],
+    decisions: [
+      "décidé", "décision", "validé", "validation", "accord", "d'accord", "ok pour", "okay pour", "approuvé",
+      "retenu", "choisi", "choix", "adopté", "confirmé", "acté", "fixé", "arrêté", "conclu", "tranché",
+      "voté", "accepté", "signé", "officiel", "on part sur", "on garde", "on change", "on passe sur",
+      "abandonné", "annulé", "reporté", "rejeté", "refusé", "budget validé", "go pour", "feu vert"
+    ],
+    risks: [
+      "problème", "souci", "bug", "erreur", "panne", "blocage", "bloqué", "bloquant", "retard", "en retard",
+      "risque", "danger", "attention", "vigilance", "alerte", "compliqué", "difficile", "impossible",
+      "manque", "insuffisant", "dépassement", "trop cher", "hors budget", "conflit", "désaccord", "attente",
+      "en attente", "dépendance", "inquiet", "inquiétude", "point noir", "obstacle", "limite", "warn"
+    ]
+  },
+  en: {
+    actions: [
+      "must", "should", "will", "need to", "needs to", "to-do", "todo", "action", "task", "mission",
+      "in charge of", "responsible for", "will do", "remember to", "don't forget", "send", "prepare",
+      "draft", "call", "contact", "follow up", "check", "test", "fix", "correct", "buy", "order",
+      "plan", "organize", "create", "update", "modify", "redo", "finish", "deliver", "deploy",
+      "present", "train", "hire", "pay", "invoice", "quote", "urgent", "priority", "deadline", "before", "asap"
+    ],
+    decisions: [
+      "decided", "decision", "validated", "validation", "agreed", "approved", "selected", "chosen",
+      "adopted", "confirmed", "settled", "concluded", "accepted", "signed", "official", "we go with",
+      "we keep", "we change", "abandoned", "canceled", "postponed", "rejected", "budget approved", "green light"
+    ],
+    risks: [
+      "problem", "issue", "bug", "error", "failure", "blocker", "blocked", "delay", "late", "risk",
+      "danger", "warning", "alert", "complicated", "difficult", "impossible", "missing", "insufficient",
+      "over budget", "expensive", "conflict", "disagreement", "pending", "dependency", "worried", "obstacle"
+    ]
+  }
 };
 
-const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|q1|q2|q3|q4|asap|urgent|d'ici [a-z0-9\s]+|avant [a-z0-9\s]+|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre))\b/i;
+const TRANSLATIONS = {
+  fr: {
+    subtitle: "Analyse locale, édition en direct et exports professionnels propres.",
+    testBtn: "Charger l'exemple de test",
+    testText: "reunion du 12 c'est important on a parler du budget de la boite. on a validé le budget Q3 à 15000€ pour le nouveau logiciel. faut que Stephane il achete les tables pour le bureau avant vendredi prochain et aussi Charlotte elle doit refaire le contrat du client. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
+    labelInput: "1. Collez vos notes en vrac :",
+    placeholderInput: "Collez vos notes brutes ici...",
+    processBtn: "Analyser & Structurer les notes 🚀",
+    titleResult: "2. Compte-rendu Prêt à Partager",
+    descResult: "💡 Modifiez le contenu si besoin, puis copiez-le pour votre e-mail ou imprimez-le en PDF.",
+    copyEmail: "✉️ Copier pour E-mail",
+    printPdf: "🖨️ Enregistrer en PDF",
+    copyMd: "📋 Copier Markdown",
+    downloadMd: "💾 Télécharger .md",
+    addBtn: "+ Ajouter",
+    emptyCategory: "Aucun élément dans cette catégorie.",
+    adText: "Espace Publicitaire",
+    footer: "Smart Meeting Restructurer - Tous droits réservés.",
+    categories: {
+      actions: { label: "🛠️ Plan d'action (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
+      decisions: { label: '⚖️ Décisions prises', shortLabel: '⚖️ Décision', color: '#34d399' },
+      risks: { label: '⚠️ Risques & Blocages', shortLabel: '⚠️ Risque', color: '#f87171' },
+      summary: { label: '📌 Points clés & Contexte', shortLabel: '📌 Synthèse', color: '#818cf8' }
+    },
+    faqTitle: "Foire Aux Questions (FAQ)",
+    faq: [
+      { q: "Comment fonctionne le Smart Meeting Restructurer ?", a: "Il analyse localement vos notes de réunion brutes, nettoie les abréviations et sépare automatiquement le contenu en plan d'action (to-do), décisions et risques." },
+      { q: "Mes données de réunion sont-elles sécurisées ?", a: "Oui, l'intégralité du traitement de vos notes est exécutée directement dans votre navigateur. Aucune donnée confidentielle n'est stockée sur nos serveurs." },
+      { q: "Est-ce un outil gratuit ?", a: "Totalement gratuit et sans inscription requise. Vous pouvez copier ou exporter vos comptes-rendus en format Markdown, e-mail ou PDF en un clic." }
+    ]
+  },
+  en: {
+    subtitle: "Local analysis, live editing, and clean professional exports.",
+    testBtn: "Load test example",
+    testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at $15000 for the new software. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. warning: huge delay on website production due to a server bug.",
+    labelInput: "1. Paste your raw meeting notes:",
+    placeholderInput: "Paste your raw notes here...",
+    processBtn: "Analyze & Structure Notes 🚀",
+    titleResult: "2. Ready-to-Share Meeting Minutes",
+    descResult: "💡 Edit content if needed, then copy for your email or save as PDF.",
+    copyEmail: "✉️ Copy for Email",
+    printPdf: "🖨️ Save as PDF",
+    copyMd: "📋 Copy Markdown",
+    downloadMd: "💾 Download .md",
+    addBtn: "+ Add",
+    emptyCategory: "No items in this category.",
+    adText: "Advertisement",
+    footer: "Smart Meeting Restructurer - All rights reserved.",
+    categories: {
+      actions: { label: "🛠️ Action Plan (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
+      decisions: { label: '⚖️ Decisions Made', shortLabel: '⚖️ Decision', color: '#34d399' },
+      risks: { label: '⚠️ Risks & Blockers', shortLabel: '⚠️ Risk', color: '#f87171' },
+      summary: { label: '📌 Key Points & Context', shortLabel: '📌 Summary', color: '#818cf8' }
+    },
+    faqTitle: "Frequently Asked Questions (FAQ)",
+    faq: [
+      { q: "How does Smart Meeting Restructurer work?", a: "It locally analyzes your raw meeting notes, cleans abbreviations, and automatically organizes content into action items, decisions, and risks." },
+      { q: "Is my meeting data secure?", a: "Yes, all notes processing runs directly in your browser. No confidential data is ever stored on our servers." },
+      { q: "Is this tool free?", a: "Completely free with no registration required. You can copy or export your minutes as Markdown, email format, or PDF instantly." }
+    ]
+  }
+};
 
-const BUDGET_REGEX = /\b(\d+(?:[\.,]\d+)?\s*(?:k€|€|\$|k\b|euros|k euros|millions?))\b/i;
+const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|asap|urgent|before [a-z0-9\s]+|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\b/i;
 
-const CATEGORIES = [
-  { key: 'actions', label: "🛠️ Plan d'action (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
-  { key: 'decisions', label: '⚖️ Décisions prises', shortLabel: '⚖️ Décision', color: '#34d399' },
-  { key: 'risks', label: '⚠️ Risques & Blocages', shortLabel: '⚠️ Risque', color: '#f87171' },
-  { key: 'summary', label: '📌 Points clés & Contexte', shortLabel: '📌 Synthèse', color: '#818cf8' }
-];
+const BUDGET_REGEX = /\b(\d+(?:[\.,]\d+)?\s*(?:k€|€|\$|k\b|euros|dollars|k euros|millions?))\b/i;
 
 export default function App() {
+  const [lang, setLang] = useState('fr');
+  const t = TRANSLATIONS[lang];
+
   const [rawText, setRawText] = useState(() => localStorage.getItem('meeting_rawText') || '');
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem('meeting_items');
@@ -74,7 +154,6 @@ export default function App() {
     localStorage.setItem('meeting_items', JSON.stringify(items));
   }, [rawText, items]);
 
-  // Initialisation automatique des pubs AdSense lors du rendu des composants publicitaires
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -82,18 +161,21 @@ export default function App() {
     } catch (e) {
       console.error(e);
     }
-  }, [hasProcessed]);
+  }, [hasProcessed, lang]);
 
   const cleanAndFormatSentence = (str) => {
     let cleaned = str.trim();
     cleaned = cleaned.replace(/^[•\-\*\>\+\d\.\)\s]+/, '');
 
-    Object.keys(ABBREVIATIONS).forEach(abbr => {
-      const regex = new RegExp(abbr, 'gi');
-      cleaned = cleaned.replace(regex, ABBREVIATIONS[abbr]);
-    });
-
-    cleaned = cleaned.replace(/^(et aussi|et puis|sinon|du coup|alors|bon|bah|ben|ensuite|de plus|par ailleurs|aussi|et)\s+/i, '');
+    if (lang === 'fr') {
+      Object.keys(ABBREVIATIONS).forEach(abbr => {
+        const regex = new RegExp(abbr, 'gi');
+        cleaned = cleaned.replace(regex, ABBREVIATIONS[abbr]);
+      });
+      cleaned = cleaned.replace(/^(et aussi|et puis|sinon|du coup|alors|bon|bah|ben|ensuite|de plus|par ailleurs|aussi|et)\s+/i, '');
+    } else {
+      cleaned = cleaned.replace(/^(and also|also|then|so|anyway|furthermore|plus)\s+/i, '');
+    }
 
     if (cleaned.length > 0) {
       cleaned = cleaned.charAt(0).toUpperCase() + cleaned.slice(1);
@@ -117,7 +199,7 @@ export default function App() {
     const budgetMatch = sentence.match(BUDGET_REGEX);
     if (budgetMatch) budget = budgetMatch[0];
 
-    const universalNameMatch = sentence.match(/(?:par|pour|à|par|de|que)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)|([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+(?:doit|va|s'occupe|est chargé|veut)/);
+    const universalNameMatch = sentence.match(/(?:par|pour|à|by|for)\s+([A-ZÀ-Ÿ][a-zà-ÿa-zA-Z]+)|([A-ZÀ-Ÿ][a-zà-ÿa-zA-Z]+)\s+(?:doit|va|s'occupe|est chargé|needs|must|will)/);
     if (universalNameMatch) {
       assignee = universalNameMatch[1] || universalNameMatch[2];
     } else {
@@ -138,13 +220,15 @@ export default function App() {
     if (!rawText.trim()) return;
 
     let preProcessed = rawText
-      .replace(/\s+(et aussi|sinon|par ailleurs|de plus|concernant|autre point|ah oui et)\s+/gi, '. ')
-      .replace(/\s+(mais il faut|mais faut|et il faut|et faut)\s+/gi, '. Il faut ');
+      .replace(/\s+(et aussi|sinon|par ailleurs|de plus|and also|furthermore)\s+/gi, '. ')
+      .replace(/\s+(mais il faut|mais faut|et il faut|but we must)\s+/gi, '. ');
 
     const rawSegments = preProcessed
       .split(/[\.\n;\!\?]+/)
       .map(s => s.trim())
       .filter(s => s.length > 3);
+
+    const activeKeywords = KEYWORDS[lang];
 
     const parsedItems = rawSegments.map((segment, index) => {
       const lower = segment.toLowerCase();
@@ -155,13 +239,12 @@ export default function App() {
       let scoreDecision = 0;
       let scoreRisk = 0;
 
-      KEYWORDS.actions.forEach(kw => { if (lower.includes(kw)) scoreAction += 2; });
-      KEYWORDS.decisions.forEach(kw => { if (lower.includes(kw)) scoreDecision += 2; });
-      KEYWORDS.risks.forEach(kw => { if (lower.includes(kw)) scoreRisk += 2; });
+      activeKeywords.actions.forEach(kw => { if (lower.includes(kw)) scoreAction += 2; });
+      activeKeywords.decisions.forEach(kw => { if (lower.includes(kw)) scoreDecision += 2; });
+      activeKeywords.risks.forEach(kw => { if (lower.includes(kw)) scoreRisk += 2; });
 
       if (meta.deadline) scoreAction += 1;
       if (meta.budget) scoreDecision += 1;
-      if (meta.assignee && (lower.includes('doit') || lower.includes('faut') || lower.includes('va '))) scoreAction += 3;
 
       const maxScore = Math.max(scoreAction, scoreDecision, scoreRisk);
       let category = 'summary';
@@ -198,7 +281,7 @@ export default function App() {
   const addItem = (category) => {
     const newItem = {
       id: `item-${Date.now()}-${Math.random()}`,
-      text: 'Nouveau point à compléter...',
+      text: lang === 'fr' ? 'Nouveau point à compléter...' : 'New point to complete...',
       category,
       assignee: '',
       deadline: '',
@@ -214,32 +297,32 @@ export default function App() {
     const actions = items.filter(i => i.category === 'actions');
     const risks = items.filter(i => i.category === 'risks');
 
-    return `# 📋 Compte-Rendu de Réunion
-*Généré le ${new Date().toLocaleDateString('fr-FR')}*
+    return `# 📋 ${lang === 'fr' ? 'Compte-Rendu de Réunion' : 'Meeting Minutes'}
+*${lang === 'fr' ? 'Généré le' : 'Generated on'} ${new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}*
 
-## 🛠️ Plan d'Action (To-Do)
-${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] ${i.text}${i.assignee ? ` **(👤 ${i.assignee})**` : ''}${i.deadline ? ` *(📅 ${i.deadline})*` : ''}${i.budget ? ` **(💰 ${i.budget})**` : ''}`).join('\n') : '_Aucune action détectée._'}
+## ${t.categories.actions.label}
+${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] ${i.text}${i.assignee ? ` **(👤 ${i.assignee})**` : ''}${i.deadline ? ` *(📅 ${i.deadline})*` : ''}${i.budget ? ` **(💰 ${i.budget})**` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune action détectée.' : 'No action detected.'}_`}
 
-## ⚖️ Décisions Actées
-${decisions.length > 0 ? decisions.map(i => `- **Décision :** ${i.text}${i.budget ? ` *(💰 ${i.budget})*` : ''}`).join('\n') : '_Aucune décision explicite._'}
+## ${t.categories.decisions.label}
+${decisions.length > 0 ? decisions.map(i => `- **${lang === 'fr' ? 'Décision :' : 'Decision:'}** ${i.text}${i.budget ? ` *(💰 ${i.budget})*` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune décision explicite.' : 'No explicit decision.'}_`}
 
-## ⚠️ Risques & Points de Blocage
-${risks.length > 0 ? risks.map(i => `- ${i.text}`).join('\n') : '_Aucun risque signalé._'}
+## ${t.categories.risks.label}
+${risks.length > 0 ? risks.map(i => `- ${i.text}`).join('\n') : `_${lang === 'fr' ? 'Aucun risque signalé.' : 'No risk reported.'}_`}
 
-## 📌 Synthèse & Informations Générales
-${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun point général._'}
+## ${t.categories.summary.label}
+${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang === 'fr' ? 'Aucun point général.' : 'No general point.'}_`}
 `;
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generateMarkdown());
-    alert("Compte-rendu copié au format Markdown !");
+    alert(lang === 'fr' ? "Compte-rendu copié au format Markdown !" : "Meeting minutes copied in Markdown!");
   };
 
   const copyEmailReady = () => {
-    const emailText = `Bonjour à tous,\n\nVoici le compte-rendu de notre réunion :\n\n` + generateMarkdown() + `\n\nBien cordialement,\n`;
+    const emailText = `${lang === 'fr' ? 'Bonjour à tous,\n\nVoici le compte-rendu de notre réunion :\n\n' : 'Hello everyone,\n\nHere are the meeting minutes:\n\n'}` + generateMarkdown() + `\n\n${lang === 'fr' ? 'Bien cordialement,\n' : 'Best regards,\n'}`;
     navigator.clipboard.writeText(emailText);
-    alert("✉️ E-mail copié ! Il vous suffit de faire Ctrl + V dans votre boîte mail.");
+    alert(lang === 'fr' ? "✉️ E-mail copié ! Il vous suffit de faire Ctrl + V." : "✉️ Email copied! Just paste it.");
   };
 
   const downloadMarkdown = () => {
@@ -248,7 +331,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `compte-rendu-${new Date().toISOString().slice(0,10)}.md`);
+    link.setAttribute('download', `meeting-minutes-${new Date().toISOString().slice(0,10)}.md`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -269,13 +352,30 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
       justifyContent: 'space-between'
     }}>
       
-      {/* En-tête */}
-      <header style={{ textAlign: 'center', padding: '30px 20px 10px 20px' }} className="no-print">
+      {/* En-tête avec sélecteur de langue drapeau */}
+      <header style={{ textAlign: 'center', padding: '30px 20px 10px 20px', position: 'relative' }} className="no-print">
+        <div style={{ position: 'absolute', top: '20px', right: '30px', display: 'flex', gap: '8px' }}>
+          <button 
+            onClick={() => setLang('fr')} 
+            style={{ background: lang === 'fr' ? '#334155' : 'transparent', border: '1px solid #475569', borderRadius: '6px', padding: '6px 10px', cursor: 'pointer', fontSize: '1.1rem' }}
+            title="Français"
+          >
+            🇫🇷
+          </button>
+          <button 
+            onClick={() => setLang('en')} 
+            style={{ background: lang === 'en' ? '#334155' : 'transparent', border: '1px solid #475569', borderRadius: '6px', padding: '6px 10px', cursor: 'pointer', fontSize: '1.1rem' }}
+            title="English"
+          >
+            🇬🇧
+          </button>
+        </div>
+
         <h1 style={{ fontSize: '2.2rem', marginBottom: '0.5rem', background: 'linear-gradient(90deg, #818cf8, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
           ⚡ Smart Meeting Restructurer Pro
         </h1>
         <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>
-          Analyse locale, édition en direct et exports professionnels propres.
+          {t.subtitle}
         </p>
       </header>
 
@@ -303,7 +403,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
           textAlign: 'center',
           flexShrink: 0
         }}>
-          <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginBottom: '10px' }}>Espace Publicitaire</span>
+          <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginBottom: '10px' }}>{t.adText}</span>
           <ins className="adsbygoogle"
                style={{ display: 'block' }}
                data-ad-client="ca-pub-8413572558669192"
@@ -318,19 +418,19 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
           {/* Zone de saisie */}
           <div style={{ background: '#1e293b', padding: '1.5rem', borderRadius: '12px', border: '1px solid #334155', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.3)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem', flexWrap: 'wrap', gap: '8px' }}>
-              <label style={{ fontWeight: '600', color: '#e2e8f0' }}>1. Collez vos notes en vrac :</label>
+              <label style={{ fontWeight: '600', color: '#e2e8f0' }}>{t.labelInput}</label>
               <button 
-                onClick={() => setRawText("reunion du 12 c'est important on a parler du budget de la boite. on a validé le budget Q3 à 15000€ pour le nouveau logiciel. faut que Stephane il achete les tables pour le bureau avant vendredi prochain et aussi Charlotte elle doit refaire le contrat du client. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.")}
+                onClick={() => setRawText(t.testText)}
                 style={{ background: 'transparent', color: '#818cf8', border: '1px solid #818cf8', borderRadius: '6px', padding: '4px 10px', fontSize: '0.8rem', cursor: 'pointer' }}
               >
-                Charger l'exemple de test
+                {t.testBtn}
               </button>
             </div>
             
             <textarea 
               rows="5"
               style={{ width: '100%', padding: '14px', background: '#0f172a', color: '#f8fafc', border: '1px solid #475569', borderRadius: '8px', fontSize: '0.95rem', boxSizing: 'border-box', lineHeight: '1.5' }}
-              placeholder="Collez vos notes brutes ici..."
+              placeholder={t.placeholderInput}
               value={rawText}
               onChange={(e) => setRawText(e.target.value)}
             />
@@ -339,7 +439,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
               onClick={handleProcess}
               style={{ marginTop: '1rem', background: 'linear-gradient(90deg, #4f46e5, #6366f1)', color: 'white', border: 'none', padding: '14px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', width: '100%', fontSize: '1rem', boxShadow: '0 4px 6px -1px rgba(99, 102, 241, 0.4)' }}
             >
-              Analyser & Structurer les notes 🚀
+              {t.processBtn}
             </button>
           </div>
 
@@ -347,9 +447,9 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
             <div className="printable-result" style={{ marginTop: '2rem', background: '#1e293b', padding: '1.5rem', borderRadius: '12px', border: '1px solid #334155' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #334155', paddingBottom: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '10px' }} className="no-print">
                 <div>
-                  <h2 style={{ fontSize: '1.4rem', margin: 0 }}>✨ 2. Compte-rendu Prêt à Partager</h2>
+                  <h2 style={{ fontSize: '1.4rem', margin: 0 }}>✨ {t.titleResult}</h2>
                   <p style={{ color: '#94a3b8', fontSize: '0.8rem', margin: '4px 0 0 0' }}>
-                    💡 Modifiez le contenu si besoin, puis copiez-le pour votre e-mail ou imprimez-le en PDF.
+                    {t.descResult}
                   </p>
                 </div>
                 
@@ -357,37 +457,36 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
                   <button 
                     onClick={copyEmailReady}
                     style={{ background: '#2563eb', color: '#f8fafc', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}
-                    title="Copie un format e-mail prêt à coller"
                   >
-                    ✉️ Copier pour E-mail
+                    {t.copyEmail}
                   </button>
                   <button 
                     onClick={handlePrint}
                     style={{ background: '#7c3aed', color: '#f8fafc', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}
-                    title="Imprimer ou enregistrer en PDF proprement"
                   >
-                    🖨️ Enregistrer en PDF
+                    {t.printPdf}
                   </button>
                   <button 
                     onClick={copyToClipboard}
                     style={{ background: '#334155', color: '#f8fafc', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}
                   >
-                    📋 Copier Markdown
+                    {t.copyMd}
                   </button>
                   <button 
                     onClick={downloadMarkdown}
                     style={{ background: '#059669', color: '#f8fafc', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}
                   >
-                    💾 Télécharger .md
+                    {t.downloadMd}
                   </button>
                 </div>
               </div>
 
               <div style={{ display: 'grid', gap: '1.5rem' }}>
-                {CATEGORIES.map(cat => {
-                  const catItems = items.filter(i => i.category === cat.key);
+                {Object.keys(t.categories).map(catKey => {
+                  const cat = t.categories[catKey];
+                  const catItems = items.filter(i => i.category === catKey);
                   return (
-                    <div key={cat.key} className="category-card" style={{ background: '#0f172a', padding: '1.2rem', borderRadius: '8px', borderLeft: `4px solid ${cat.color}` }}>
+                    <div key={catKey} className="category-card" style={{ background: '#0f172a', padding: '1.2rem', borderRadius: '8px', borderLeft: `4px solid ${cat.color}` }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
                         <h3 style={{ color: cat.color, fontSize: '1.05rem', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                           {cat.label}
@@ -396,11 +495,11 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
                           </span>
                         </h3>
                         <button
-                          onClick={() => addItem(cat.key)}
+                          onClick={() => addItem(catKey)}
                           style={{ background: '#1e293b', color: cat.color, border: `1px solid ${cat.color}50`, borderRadius: '6px', padding: '4px 10px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: '600' }}
                           className="no-print"
                         >
-                          + Ajouter
+                          {t.addBtn}
                         </button>
                       </div>
 
@@ -409,7 +508,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
                           {catItems.map(item => (
                             <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#1e293b', padding: '10px 12px', borderRadius: '6px', border: '1px solid #334155' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                {cat.key === 'actions' && (
+                                {catKey === 'actions' && (
                                   <input 
                                     type="checkbox" 
                                     checked={item.done}
@@ -439,18 +538,16 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
                                 <select
                                   value={item.category}
                                   onChange={(e) => updateItem(item.id, 'category', e.target.value)}
-                                  title="Déplacer vers une autre catégorie"
                                   style={{ background: '#0f172a', color: '#cbd5e1', border: '1px solid #475569', borderRadius: '4px', padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}
                                   className="no-print"
                                 >
-                                  {CATEGORIES.map(c => (
-                                    <option key={c.key} value={c.key}>{c.shortLabel}</option>
+                                  {Object.keys(t.categories).map(cKey => (
+                                    <option key={cKey} value={cKey}>{t.categories[cKey].shortLabel}</option>
                                   ))}
                                 </select>
 
                                 <button
                                   onClick={() => deleteItem(item.id)}
-                                  title="Supprimer cette ligne"
                                   style={{ background: 'transparent', color: '#ef4444', border: 'none', cursor: 'pointer', fontSize: '0.9rem', padding: '4px' }}
                                   className="no-print"
                                 >
@@ -458,13 +555,13 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
                                 </button>
                               </div>
 
-                              <div style={{ display: 'flex', gap: '8px', paddingLeft: cat.key === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
+                              <div style={{ display: 'flex', gap: '8px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
                                 {item.assignee !== undefined && (
                                   <div style={{ display: 'flex', alignItems: 'center', background: '#3b82f620', border: '1px solid #3b82f640', borderRadius: '4px', padding: '2px 8px' }}>
                                     <span style={{ fontSize: '0.75rem', marginRight: '4px' }}>👤</span>
                                     <input
                                       type="text"
-                                      placeholder="Responsable..."
+                                      placeholder={lang === 'fr' ? "Responsable..." : "Assignee..."}
                                       value={item.assignee}
                                       onChange={(e) => updateItem(item.id, 'assignee', e.target.value)}
                                       style={{ background: 'transparent', color: '#93c5fd', border: 'none', fontSize: '0.75rem', fontWeight: '600', width: '100px', outline: 'none' }}
@@ -476,7 +573,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
                                   <span style={{ fontSize: '0.75rem', marginRight: '4px' }}>📅</span>
                                   <input
                                     type="text"
-                                    placeholder="Échéance..."
+                                    placeholder={lang === 'fr' ? "Échéance..." : "Deadline..."}
                                     value={item.deadline}
                                     onChange={(e) => updateItem(item.id, 'deadline', e.target.value)}
                                     style={{ background: 'transparent', color: '#fca5a5', border: 'none', fontSize: '0.75rem', fontWeight: '600', width: '100px', outline: 'none' }}
@@ -487,7 +584,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
                                   <span style={{ fontSize: '0.75rem', marginRight: '4px' }}>💰</span>
                                   <input
                                     type="text"
-                                    placeholder="Budget..."
+                                    placeholder={lang === 'fr' ? "Budget..." : "Budget..."}
                                     value={item.budget}
                                     onChange={(e) => updateItem(item.id, 'budget', e.target.value)}
                                     style={{ background: 'transparent', color: '#6ee7b7', border: 'none', fontSize: '0.75rem', fontWeight: '600', width: '90px', outline: 'none' }}
@@ -499,7 +596,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
                         </div>
                       ) : (
                         <p style={{ color: '#64748b', margin: 0, fontStyle: 'italic', fontSize: '0.9rem' }}>
-                          Aucun élément dans cette catégorie.
+                          {t.emptyCategory}
                         </p>
                       )}
                     </div>
@@ -509,24 +606,15 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
             </div>
           )}
 
-          {/* Section FAQ SEO intégrée proprement */}
+          {/* Section FAQ SEO bilingue */}
           <section style={{ maxWidth: '850px', margin: '40px auto 20px auto', padding: '20px', backgroundColor: '#1e293b', borderRadius: '12px', border: '1px solid #334155', color: '#94a3b8', fontSize: '0.9rem' }} className="no-print">
-            <h3 style={{ color: '#cbd5e1', fontSize: '1.1rem', marginBottom: '15px', marginTop: 0 }}>Foire Aux Questions (FAQ)</h3>
-            
-            <div style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#f8fafc' }}>Comment fonctionne le Smart Meeting Restructurer ?</strong>
-              <p style={{ margin: '5px 0 0 0', lineHeight: '1.4' }}>Il analyse localement vos notes de réunion brutes, nettoie les abréviations et sépare automatiquement le contenu en plan d'action (to-do), décisions et risques.</p>
-            </div>
-
-            <div style={{ marginBottom: '15px' }}>
-              <strong style={{ color: '#f8fafc' }}>Mes données de réunion sont-elles sécurisées ?</strong>
-              <p style={{ margin: '5px 0 0 0', lineHeight: '1.4' }}>Oui, l'intégralité du traitement de vos notes est exécutée directement dans votre navigateur. Aucune donnée confidentielle n'est stockée sur nos serveurs.</p>
-            </div>
-
-            <div>
-              <strong style={{ color: '#f8fafc' }}>Est-ce un outil gratuit ?</strong>
-              <p style={{ margin: '5px 0 0 0', lineHeight: '1.4' }}>Totalement gratuit et sans inscription requise. Vous pouvez copier ou exporter vos comptes-rendus en format Markdown, e-mail ou PDF en un clic.</p>
-            </div>
+            <h3 style={{ color: '#cbd5e1', fontSize: '1.1rem', marginBottom: '15px', marginTop: 0 }}>{t.faqTitle}</h3>
+            {t.faq.map((item, idx) => (
+              <div key={idx} style={{ marginBottom: idx < t.faq.length - 1 ? '15px' : '0' }}>
+                <strong style={{ color: '#f8fafc' }}>{item.q}</strong>
+                <p style={{ margin: '5px 0 0 0', lineHeight: '1.4' }}>{item.a}</p>
+              </div>
+            ))}
           </section>
 
         </main>
@@ -542,7 +630,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
           textAlign: 'center',
           flexShrink: 0
         }}>
-          <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginBottom: '10px' }}>Espace Publicitaire</span>
+          <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginBottom: '10px' }}>{t.adText}</span>
           <ins className="adsbygoogle"
                style={{ display: 'block' }}
                data-ad-client="ca-pub-8413572558669192"
@@ -555,7 +643,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
 
       {/* Pied de page */}
       <footer style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '0.85rem' }} className="no-print">
-        Smart Meeting Restructurer - Tous droits réservés.
+        {t.footer}
       </footer>
 
     </div>
