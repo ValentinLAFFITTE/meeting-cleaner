@@ -508,6 +508,27 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : '_Aucun poin
               </div>
             </div>
           )}
+
+          {/* Section FAQ SEO intégrée proprement */}
+          <section style={{ maxWidth: '850px', margin: '40px auto 20px auto', padding: '20px', backgroundColor: '#1e293b', borderRadius: '12px', border: '1px solid #334155', color: '#94a3b8', fontSize: '0.9rem' }} className="no-print">
+            <h3 style={{ color: '#cbd5e1', fontSize: '1.1rem', marginBottom: '15px', marginTop: 0 }}>Foire Aux Questions (FAQ)</h3>
+            
+            <div style={{ marginBottom: '15px' }}>
+              <strong style={{ color: '#f8fafc' }}>Comment fonctionne le Smart Meeting Restructurer ?</strong>
+              <p style={{ margin: '5px 0 0 0', lineHeight: '1.4' }}>Il analyse localement vos notes de réunion brutes, nettoie les abréviations et sépare automatiquement le contenu en plan d'action (to-do), décisions et risques.</p>
+            </div>
+
+            <div style={{ marginBottom: '15px' }}>
+              <strong style={{ color: '#f8fafc' }}>Mes données de réunion sont-elles sécurisées ?</strong>
+              <p style={{ margin: '5px 0 0 0', lineHeight: '1.4' }}>Oui, l'intégralité du traitement de vos notes est exécutée directement dans votre navigateur. Aucune donnée confidentielle n'est stockée sur nos serveurs.</p>
+            </div>
+
+            <div>
+              <strong style={{ color: '#f8fafc' }}>Est-ce un outil gratuit ?</strong>
+              <p style={{ margin: '5px 0 0 0', lineHeight: '1.4' }}>Totalement gratuit et sans inscription requise. Vous pouvez copier ou exporter vos comptes-rendus en format Markdown, e-mail ou PDF en un clic.</p>
+            </div>
+          </section>
+
         </main>
 
         {/* Barre latérale droite (Publicité) */}
