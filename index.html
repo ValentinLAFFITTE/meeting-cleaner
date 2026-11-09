@@ -6,36 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- ========================================== -->
-    <!-- SEO PRINCIPAL & MÉTADONNÉES                 -->
+    <!-- SEO PRINCIPAL & MÉTADONNÉES (100% FR)      -->
     <!-- ========================================== -->
-    <title>Smart Meeting Restructurer Pro | AI Meeting Notes Cleaner & Action Items</title>
-    <meta name="description" content="Outil web intelligent et gratuit pour restructurer instantanément vos notes de réunion en vrac, détecter les budgets, les échéances et générer un plan d'action professionnel." />
-    <meta name="keywords" content="compte-rendu, réunion, meeting notes, AI meeting restructurer, productivité, plan d'action, markdown, project management, budget" />
+    <title>Générateur de Compte Rendu de Réunion Gratuit | Synthèse & Plan d'Action - MeetClean</title>
+    <meta name="description" content="Transformez vos notes de réunion en vrac en un compte rendu structuré (plan d'action, décisions, budgets, risques). Outil gratuit, instantané, export PDF et Markdown." />
+    <meta name="keywords" content="compte rendu de réunion, synthèse réunion automatique, structurer notes de réunion, générateur compte rendu gratuit, plan d'action réunion, modèle compte rendu" />
     <meta name="author" content="Valentin Laffitte" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://meetclean.app/" />
 
-    <!-- Balises d'internationalisation (Hreflang pour le multilingue mondial) -->
-    <link rel="alternate" hreflang="fr" href="https://meetclean.app/" />
-    <link rel="alternate" hreflang="en" href="https://meetclean.app/" />
-    <link rel="alternate" hreflang="x-default" href="https://meetclean.app/" />
-
     <!-- ========================================== -->
-    <!-- OPEN GRAPH (RÉSEAUX SOCIAUX : FB, LinkedIn)-->
+    <!-- OPEN GRAPH (RÉSEAUX SOCIAUX : LinkedIn, FB)-->
     <!-- ========================================== -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://meetclean.app/" />
-    <meta property="og:title" content="Smart Meeting Restructurer Pro | Instant Meeting Summaries" />
-    <meta property="og:description" content="Paste your raw notes, and the app automatically extracts actions, decisions, and budgets. Clean, fast, and no registration required." />
+    <meta property="og:title" content="MeetClean | Transformez vos notes de réunion en compte rendu pro" />
+    <meta property="og:description" content="Collez vos notes en vrac : l'outil extrait automatiquement le plan d'action, les décisions, les budgets et les risques. Gratuit et sans inscription." />
     <meta property="og:locale" content="fr_FR" />
-    <meta property="og:locale:alternate" content="en_US" />
 
     <!-- ========================================== -->
     <!-- TWITTER CARDS                              -->
     <!-- ========================================== -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Smart Meeting Restructurer Pro" />
-    <meta name="twitter:description" content="Transform your raw meeting notes into structured professional reports instantly." />
+    <meta name="twitter:title" content="MeetClean | Générateur de Compte Rendu de Réunion" />
+    <meta name="twitter:description" content="Restructurez vos notes de réunion brutes en un rapport professionnel (PDF, E-mail, Markdown) en un clic." />
+
+    <!-- ========================================== -->
+    <!-- DONNÉES STRUCTURÉES (SCHEMA.ORG POUR GOOGLE)-->
+    <!-- ========================================== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "MeetClean - Smart Meeting Restructurer Pro",
+      "url": "https://meetclean.app/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All",
+      "description": "Outil web gratuit pour restructurer instantanément vos notes de réunion en vrac en plan d'action, décisions prises et gestion des risques.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    }
+    </script>
 
     <!-- ========================================== -->
     <!-- GOOGLE ADSENSE (MONÉTISATION)              -->
@@ -53,12 +67,40 @@
       body {
         margin: 0;
         background-color: #0d1117;
+        color: #e6edf3;
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+      /* Style discret pour le contenu pré-chargé avant React */
+      .seo-fallback {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 20px;
+        line-height: 1.6;
       }
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <!-- Le contenu dans #root est lu par les robots SEO/AdSense puis remplacé instantanément par React -->
+    <div id="root">
+      <main class="seo-fallback">
+        <h1>Générateur de Compte Rendu de Réunion & Plan d'Action (MeetClean)</h1>
+        <p>Transformez instantanément vos notes de réunion prises en vrac en un compte rendu professionnel, clair et structuré. Analyse locale, édition en direct et exports gratuits en PDF, Markdown ou E-mail.</p>
+        
+        <h2>Pourquoi utiliser notre outil de synthèse de réunion ?</h2>
+        <ul>
+          <li><strong>Plan d'action (To-Do) automatique :</strong> Détection des tâches, des responsables et des dates d'échéance.</li>
+          <li><strong>Suivi des décisions et budgets :</strong> Isolement automatique des montants financiers validés et des choix stratégiques.</li>
+          <li><strong>Gestion des risques et blocages :</strong> Mise en évidence des problèmes techniques ou retards de production.</li>
+          <li><strong>100% Confidentiel et Gratuit :</strong> Vos notes sont traitées localement dans votre navigateur, aucune donnée n'est envoyée sur un serveur externe.</li>
+        </ul>
+
+        <h2>Foire Aux Questions (FAQ)</h2>
+        <h3>Comment fonctionne MeetClean (Smart Meeting Restructurer) ?</h3>
+        <p>Il analyse localement vos notes de réunion brutes, nettoie les abréviations et sépare automatiquement le contenu en plan d'action (to-do), décisions prises, risques et points clés.</p>
+        <h3>Mes données de réunion sont-elles sécurisées ?</h3>
+        <p>Oui, l'intégralité du traitement de vos notes est exécutée directement dans votre navigateur. Aucune donnée confidentielle n'est stockée sur nos serveurs.</p>
+      </main>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
