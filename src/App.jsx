@@ -90,6 +90,7 @@ const TRANSLATIONS = {
     emptyCategory: "Aucun élément dans cette catégorie.",
     adText: "Espace Publicitaire",
     footer: "MeetClean - Vos notes ne quittent pas votre navigateur.",
+    privacyLink: "Politique de confidentialité",
     categories: {
       actions: { label: "🛠️ Plan d'action (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
       decisions: { label: '⚖️ Décisions prises', shortLabel: '⚖️ Décision', color: '#34d399' },
@@ -121,6 +122,7 @@ const TRANSLATIONS = {
     emptyCategory: "No items in this category.",
     adText: "Advertisement",
     footer: "MeetClean - Your notes never leave your browser.",
+    privacyLink: "Privacy Policy",
     categories: {
       actions: { label: "🛠️ Action Plan (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
       decisions: { label: '⚖️ Decisions Made', shortLabel: '⚖️ Decision', color: '#34d399' },
@@ -137,13 +139,27 @@ const TRANSLATIONS = {
 };
 
 const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|asap|urgent|before [a-z0-9\s]+|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\b/i;
-
-// Regex corrigée pour capturer le budget sans bloquer sur le symbole de fin
 const BUDGET_REGEX = /\b(\d+(?:[\.,]\d+)?\s*(?:k€|€|\$|k\b|euros|dollars|k euros|millions?))(?!\w)/i;
 
 export default function App() {
   const [lang, setLang] = useState('fr');
   const t = TRANSLATIONS[lang];
+
+  // Gestion simple des routes (accueil vs /privacy)
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => setCurrentPath(window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  const navigateTo = (path, e) => {
+    e.preventDefault();
+    window.history.pushState({}, '', path);
+    setCurrentPath(path);
+    window.scrollTo(0, 0);
+  };
 
   const [rawText, setRawText] = useState(() => localStorage.getItem('meeting_rawText') || '');
   const [items, setItems] = useState(() => {
@@ -157,7 +173,6 @@ export default function App() {
     localStorage.setItem('meeting_items', JSON.stringify(items));
   }, [rawText, items]);
 
-  // Correction du bug AdSense : Exécuté une seule fois au montage de l'application
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -345,6 +360,30 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
     window.print();
   };
 
+  // SI LA ROUTE EST /privacy, ON AFFICHE LA PAGE DE CONFIDENTIALITÉ
+  if (currentPath === '/privacy') {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#0d1117', color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif', padding: '40px 20px', maxWidth: '800px', margin: '0 auto', lineHeight: '1.6' }}>
+        <p><a href="/" onClick={(e) => navigateTo('/', e)} style={{ color: '#818cf8', textDecoration: 'none' }}>← Retour à MeetClean</a></p>
+        <h1 style={{ color: '#ffffff', fontSize: '2rem', marginTop: '20px' }}>Politique de confidentialité</h1>
+        <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Dernière mise à jour : Novembre 2026</p>
+        
+        <h2 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginTop: '30px' }}>1. Traitement des données locales</h2>
+        <p>MeetClean est un outil de restructuration de notes de réunion fonctionnant entièrement dans votre navigateur web (côté client). Aucune note de réunion ni donnée confidentielle n'est envoyée, lue ou stockée sur nos serveurs.</p>
+
+        <h2 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginTop: '30px' }}>2. Utilisation de cookies et publicités (Google AdSense)</h2>
+        <p>Nous utilisons des services tiers, notamment Google AdSense, pour diffuser des annonces publicitaires. Google utilise des cookies pour diffuser des annonces basées sur vos visites précédentes sur notre site Web ou d'autres sites Web.</p>
+        <p>Vous pouvez désactiver la publicité personnalisée en consultant les <a href="https://adssettings.google.com" target="_blank" rel="noreferrer" style={{ color: '#818cf8' }}>Paramètres des annonces Google</a>.</p>
+
+        <h2 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginTop: '30px' }}>3. Contact</h2>
+        <p>Pour toute question concernant cette politique de confidentialité, vous pouvez nous contacter via notre support.</p>
+        
+        <p style={{ marginTop: '40px' }}><a href="/" onClick={(e) => navigateTo('/', e)} style={{ color: '#818cf8', textDecoration: 'none' }}>← Retour à l'accueil</a></p>
+      </div>
+    );
+  }
+
+  // ACCUEIL STANDARD
   return (
     <div style={{ 
       minHeight: '100vh', 
@@ -356,7 +395,6 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
       justifyContent: 'space-between'
     }}>
       
-      {/* En-tête sémantique H1 pour le SEO et sélecteur de langue */}
       <header style={{ textAlign: 'center', padding: '30px 20px 10px 20px', position: 'relative' }} className="no-print">
         <div style={{ position: 'absolute', top: '20px', right: '30px', display: 'flex', gap: '8px' }}>
           <button 
@@ -383,7 +421,6 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
         </p>
       </header>
 
-      {/* Disposition en 3 colonnes : Pub gauche (masquée sur mobile) | Application | Pub droite (masquée sur mobile) */}
       <div style={{ 
         display: 'flex', 
         justifyContent: 'center', 
@@ -396,7 +433,6 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
         boxSizing: 'border-box'
       }} className="no-print">
         
-        {/* Barre latérale gauche (Publicité - cachée sur petits écrans via classe responsive) */}
         <aside className="sidebar-ad" style={{ 
           width: '160px', 
           minHeight: '600px', 
@@ -416,10 +452,8 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                data-full-width-responsive="true"></ins>
         </aside>
 
-        {/* Cœur de l'application (Au milieu) */}
         <main style={{ flex: 1, maxWidth: '850px', width: '100%' }}>
           
-          {/* Zone de saisie */}
           <div style={{ background: '#1e293b', padding: '1.5rem', borderRadius: '12px', border: '1px solid #334155', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.3)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem', flexWrap: 'wrap', gap: '8px' }}>
               <label style={{ fontWeight: '600', color: '#e2e8f0' }}>{t.labelInput}</label>
@@ -610,7 +644,6 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
             </div>
           )}
 
-          {/* Section FAQ SEO enrichie pour contrer le contenu "léger" d'AdSense */}
           <section style={{ maxWidth: '850px', margin: '40px auto 20px auto', padding: '20px', backgroundColor: '#1e293b', borderRadius: '12px', border: '1px solid #334155', color: '#94a3b8', fontSize: '0.9rem' }} className="no-print">
             <h3 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginBottom: '15px', marginTop: 0 }}>{t.faqTitle}</h3>
             {t.faq.map((item, idx) => (
@@ -623,7 +656,6 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
 
         </main>
 
-        {/* Barre latérale droite (Publicité - cachée sur petits écrans) */}
         <aside className="sidebar-ad" style={{ 
           width: '160px', 
           minHeight: '600px', 
@@ -645,7 +677,6 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
 
       </div>
 
-      {/* Styles CSS injectés pour masquer proprement les pubs sur mobile et éviter la casse */}
       <style>{`
         @media (max-width: 1024px) {
           .sidebar-ad {
@@ -654,9 +685,10 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
         }
       `}</style>
 
-      {/* Pied de page */}
-      <footer style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '0.85rem' }} className="no-print">
-        {t.footer}
+      <footer style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '0.85rem', display: 'flex', justifyContent: 'center', gap: '15px', alignItems: 'center' }} className="no-print">
+        <span>{t.footer}</span>
+        <span>•</span>
+        <a href="/privacy" onClick={(e) => navigateTo('/privacy', e)} style={{ color: '#818cf8', textDecoration: 'none' }}>{t.privacyLink}</a>
       </footer>
 
     </div>
