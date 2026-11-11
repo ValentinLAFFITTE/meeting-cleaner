@@ -73,14 +73,15 @@ const KEYWORDS = {
 
 const TRANSLATIONS = {
   fr: {
-    subtitle: "Analyse locale, édition en direct et exports professionnels propres.",
+    h1Title: "MeetClean – Générateur de compte rendu de réunion",
+    subtitle: "Collez vos notes brutes, extrayez instantanément vos actions, décisions et budgets. 100 % local, gratuit et sans inscription.",
     testBtn: "Charger l'exemple de test",
-    testText: "reunion du 12 c'est important on a parler du budget de la boite. on a validé le budget Q3 à 15000€ pour le nouveau logiciel. faut que Stephane il achete les tables pour le bureau avant vendredi prochain et aussi Charlotte elle doit refaire le contrat du client. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
+    testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "1. Collez vos notes en vrac :",
     placeholderInput: "Collez vos notes brutes ici...",
     processBtn: "Analyser & Structurer les notes 🚀",
-    titleResult: "2. Compte-rendu Prêt à Partager",
-    descResult: "💡 Modifiez le contenu si besoin, puis copiez-le pour votre e-mail ou imprimez-le en PDF.",
+    titleResult: "2. Compte-rendu prêt à partager",
+    descResult: "💡 Modifiez le contenu si besoin, puis copiez-le ou exportez-le en un clic.",
     copyEmail: "✉️ Copier pour E-mail",
     printPdf: "🖨️ Enregistrer en PDF",
     copyMd: "📋 Copier Markdown",
@@ -88,7 +89,7 @@ const TRANSLATIONS = {
     addBtn: "+ Ajouter",
     emptyCategory: "Aucun élément dans cette catégorie.",
     adText: "Espace Publicitaire",
-    footer: "Smart Meeting Restructurer - Tous droits réservés.",
+    footer: "MeetClean - Vos notes ne quittent pas votre navigateur.",
     categories: {
       actions: { label: "🛠️ Plan d'action (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
       decisions: { label: '⚖️ Décisions prises', shortLabel: '⚖️ Décision', color: '#34d399' },
@@ -97,20 +98,21 @@ const TRANSLATIONS = {
     },
     faqTitle: "Foire Aux Questions (FAQ)",
     faq: [
-      { q: "Comment fonctionne le Smart Meeting Restructurer ?", a: "Il analyse localement vos notes de réunion brutes, nettoie les abréviations et sépare automatiquement le contenu en plan d'action (to-do), décisions et risques." },
-      { q: "Mes données de réunion sont-elles sécurisées ?", a: "Oui, l'intégralité du traitement de vos notes est exécutée directement dans votre navigateur. Aucune donnée confidentielle n'est stockée sur nos serveurs." },
-      { q: "Est-ce un outil gratuit ?", a: "Totalement gratuit et sans inscription requise. Vous pouvez copier ou exporter vos comptes-rendus en format Markdown, e-mail ou PDF en un clic." }
+      { q: "Comment fonctionne MeetClean ?", a: "Il analyse localement vos notes de réunion brutes, nettoie les abréviations et sépare automatiquement le contenu en plan d'action (to-do), décisions et risques." },
+      { q: "Mes données de réunion sont-elles sécurisées ?", a: "Oui, l'intégralité du traitement de vos notes est exécutée directement dans votre navigateur. Vos notes ne quittent pas votre appareil." },
+      { q: "Est-ce un outil vraiment gratuit ?", a: "Totalement gratuit et sans inscription requise, financé par la publicité légère." }
     ]
   },
   en: {
-    subtitle: "Local analysis, live editing, and clean professional exports.",
+    h1Title: "MeetClean – Free Meeting Minutes Generator",
+    subtitle: "Paste raw notes and instantly extract actions, decisions, and budgets. 100% local, free, no registration.",
     testBtn: "Load test example",
-    testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at $15000 for the new software. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. warning: huge delay on website production due to a server bug.",
+    testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15000€ for the new software. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. warning: huge delay on website production due to a server bug.",
     labelInput: "1. Paste your raw meeting notes:",
     placeholderInput: "Paste your raw notes here...",
     processBtn: "Analyze & Structure Notes 🚀",
     titleResult: "2. Ready-to-Share Meeting Minutes",
-    descResult: "💡 Edit content if needed, then copy for your email or save as PDF.",
+    descResult: "💡 Edit content if needed, then copy or export.",
     copyEmail: "✉️ Copy for Email",
     printPdf: "🖨️ Save as PDF",
     copyMd: "📋 Copy Markdown",
@@ -118,7 +120,7 @@ const TRANSLATIONS = {
     addBtn: "+ Add",
     emptyCategory: "No items in this category.",
     adText: "Advertisement",
-    footer: "Smart Meeting Restructurer - All rights reserved.",
+    footer: "MeetClean - Your notes never leave your browser.",
     categories: {
       actions: { label: "🛠️ Action Plan (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
       decisions: { label: '⚖️ Decisions Made', shortLabel: '⚖️ Decision', color: '#34d399' },
@@ -127,16 +129,17 @@ const TRANSLATIONS = {
     },
     faqTitle: "Frequently Asked Questions (FAQ)",
     faq: [
-      { q: "How does Smart Meeting Restructurer work?", a: "It locally analyzes your raw meeting notes, cleans abbreviations, and automatically organizes content into action items, decisions, and risks." },
-      { q: "Is my meeting data secure?", a: "Yes, all notes processing runs directly in your browser. No confidential data is ever stored on our servers." },
-      { q: "Is this tool free?", a: "Completely free with no registration required. You can copy or export your minutes as Markdown, email format, or PDF instantly." }
+      { q: "How does MeetClean work?", a: "It locally analyzes raw meeting notes, cleans abbreviations, and organizes content into actions, decisions, and risks." },
+      { q: "Is my meeting data secure?", a: "Yes, all processing runs directly in your browser. Your notes never leave your device." },
+      { q: "Is this tool free?", a: "Completely free with no registration required." }
     ]
   }
 };
 
 const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|asap|urgent|before [a-z0-9\s]+|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\b/i;
 
-const BUDGET_REGEX = /\b(\d+(?:[\.,]\d+)?\s*(?:k€|€|\$|k\b|euros|dollars|k euros|millions?))\b/i;
+// Regex corrigée pour capturer le budget sans bloquer sur le symbole de fin
+const BUDGET_REGEX = /\b(\d+(?:[\.,]\d+)?\s*(?:k€|€|\$|k\b|euros|dollars|k euros|millions?))(?!\w)/i;
 
 export default function App() {
   const [lang, setLang] = useState('fr');
@@ -154,6 +157,7 @@ export default function App() {
     localStorage.setItem('meeting_items', JSON.stringify(items));
   }, [rawText, items]);
 
+  // Correction du bug AdSense : Exécuté une seule fois au montage de l'application
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -161,7 +165,7 @@ export default function App() {
     } catch (e) {
       console.error(e);
     }
-  }, [hasProcessed, lang]);
+  }, []);
 
   const cleanAndFormatSentence = (str) => {
     let cleaned = str.trim();
@@ -298,7 +302,7 @@ export default function App() {
     const risks = items.filter(i => i.category === 'risks');
 
     return `# 📋 ${lang === 'fr' ? 'Compte-Rendu de Réunion' : 'Meeting Minutes'}
-*${lang === 'fr' ? 'Généré le' : 'Generated on'} ${new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}*
+*${lang === 'fr' ? 'Généré par MeetClean le' : 'Generated by MeetClean on'} ${new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}*
 
 ## ${t.categories.actions.label}
 ${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] ${i.text}${i.assignee ? ` **(👤 ${i.assignee})**` : ''}${i.deadline ? ` *(📅 ${i.deadline})*` : ''}${i.budget ? ` **(💰 ${i.budget})**` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune action détectée.' : 'No action detected.'}_`}
@@ -320,7 +324,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
   };
 
   const copyEmailReady = () => {
-    const emailText = `${lang === 'fr' ? 'Bonjour à tous,\n\nVoici le compte-rendu de notre réunion :\n\n' : 'Hello everyone,\n\nHere are the meeting minutes:\n\n'}` + generateMarkdown() + `\n\n${lang === 'fr' ? 'Bien cordialement,\n' : 'Best regards,\n'}`;
+    const emailText = `${lang === 'fr' ? 'Bonjour à tous,\n\nVoici le compte-rendu de notre réunion généré via MeetClean :\n\n' : 'Hello everyone,\n\nHere are the meeting minutes generated via MeetClean:\n\n'}` + generateMarkdown() + `\n\n${lang === 'fr' ? 'Bien cordialement,\n' : 'Best regards,\n'}`;
     navigator.clipboard.writeText(emailText);
     alert(lang === 'fr' ? "✉️ E-mail copié ! Il vous suffit de faire Ctrl + V." : "✉️ Email copied! Just paste it.");
   };
@@ -331,7 +335,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `meeting-minutes-${new Date().toISOString().slice(0,10)}.md`);
+    link.setAttribute('download', `meetclean-minutes-${new Date().toISOString().slice(0,10)}.md`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -352,7 +356,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
       justifyContent: 'space-between'
     }}>
       
-      {/* En-tête avec sélecteur de langue drapeau */}
+      {/* En-tête sémantique H1 pour le SEO et sélecteur de langue */}
       <header style={{ textAlign: 'center', padding: '30px 20px 10px 20px', position: 'relative' }} className="no-print">
         <div style={{ position: 'absolute', top: '20px', right: '30px', display: 'flex', gap: '8px' }}>
           <button 
@@ -371,15 +375,15 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
           </button>
         </div>
 
-        <h1 style={{ fontSize: '2.2rem', marginBottom: '0.5rem', background: 'linear-gradient(90deg, #818cf8, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
-          ⚡ Smart Meeting Restructurer Pro
+        <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', background: 'linear-gradient(90deg, #818cf8, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          {t.h1Title}
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>
+        <p style={{ color: '#94a3b8', fontSize: '0.95rem', maxWidth: '700px', margin: '0 auto' }}>
           {t.subtitle}
         </p>
       </header>
 
-      {/* Disposition en 3 colonnes : Pub gauche | Application au centre | Pub droite */}
+      {/* Disposition en 3 colonnes : Pub gauche (masquée sur mobile) | Application | Pub droite (masquée sur mobile) */}
       <div style={{ 
         display: 'flex', 
         justifyContent: 'center', 
@@ -392,8 +396,8 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
         boxSizing: 'border-box'
       }} className="no-print">
         
-        {/* Barre latérale gauche (Publicité) */}
-        <aside style={{ 
+        {/* Barre latérale gauche (Publicité - cachée sur petits écrans via classe responsive) */}
+        <aside className="sidebar-ad" style={{ 
           width: '160px', 
           minHeight: '600px', 
           background: 'rgba(255,255,255,0.02)', 
@@ -606,9 +610,9 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
             </div>
           )}
 
-          {/* Section FAQ SEO bilingue */}
+          {/* Section FAQ SEO enrichie pour contrer le contenu "léger" d'AdSense */}
           <section style={{ maxWidth: '850px', margin: '40px auto 20px auto', padding: '20px', backgroundColor: '#1e293b', borderRadius: '12px', border: '1px solid #334155', color: '#94a3b8', fontSize: '0.9rem' }} className="no-print">
-            <h3 style={{ color: '#cbd5e1', fontSize: '1.1rem', marginBottom: '15px', marginTop: 0 }}>{t.faqTitle}</h3>
+            <h3 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginBottom: '15px', marginTop: 0 }}>{t.faqTitle}</h3>
             {t.faq.map((item, idx) => (
               <div key={idx} style={{ marginBottom: idx < t.faq.length - 1 ? '15px' : '0' }}>
                 <strong style={{ color: '#f8fafc' }}>{item.q}</strong>
@@ -619,8 +623,8 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
 
         </main>
 
-        {/* Barre latérale droite (Publicité) */}
-        <aside style={{ 
+        {/* Barre latérale droite (Publicité - cachée sur petits écrans) */}
+        <aside className="sidebar-ad" style={{ 
           width: '160px', 
           minHeight: '600px', 
           background: 'rgba(255,255,255,0.02)', 
@@ -640,6 +644,15 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
         </aside>
 
       </div>
+
+      {/* Styles CSS injectés pour masquer proprement les pubs sur mobile et éviter la casse */}
+      <style>{`
+        @media (max-width: 1024px) {
+          .sidebar-ad {
+            display: none !important;
+          }
+        }
+      `}</style>
 
       {/* Pied de page */}
       <footer style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '0.85rem' }} className="no-print">
