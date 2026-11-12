@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-// Palette inspirée de Paperback-2 & 2Bit Demichrome + Couleurs sémantiques d'édition
+// Palette stricte à 3 couleurs (Paperback-2 & 2Bit Demichrome - Lospec)
 const THEME = {
   bg: '#f4f1ea',          // Papier crème doux
   surface: '#ffffff',     // Blanc franc
   surfaceAlt: '#eae6df',  // Gris-beige secondaire
   ink: '#1c1c21',         // Noir charbon profond
   inkMuted: '#5a5a66',    // Gris ardoise pour textes secondaires
-  accent: '#c84b31',      // Terre cuite éditorial
+  accent: '#c84b31',      // Terre cuite éditorial (unique couleur d'accent sur le site)
   border: '#1c1c21',      // Bordure franche
   borderSubtle: '#d0cbc1' // Bordure légère interne
 };
@@ -37,7 +37,6 @@ const ABBREVIATIONS = {
   "\\bcompta\\b": "comptabilité"
 };
 
-// Dictionnaire de passage du verbe conjugué vers l'infinitif professionnel
 const VERB_TO_INFINITIVE = {
   "achète": "Acheter",
   "achete": "Acheter",
@@ -55,7 +54,7 @@ const VERB_TO_INFINITIVE = {
   "verifie": "Vérifier",
   "corrige": "Corriger",
   "teste": "Tester",
-  " rédige": " Rédiger",
+  "rédige": "Rédiger",
   "planifie": "Planifier",
   "organise": "Organiser",
   "termine": "Terminer",
@@ -116,41 +115,42 @@ const TRANSLATIONS = {
   fr: {
     badge: "OUTIL DE BUREAUTIQUE LOCAL • SANS COMPTE",
     h1Title: "MeetClean — Structuration de comptes rendus de réunion",
-    subtitle: "Transformez vos prises de notes brutes en un document exécutif : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
+    subtitle: "Transformez vos prises de notes brutes en un document clair : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
     testBtn: "Insérer un jeu de notes exemple",
     clearBtn: "Effacer",
     testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "NOTES BRUTES DE LA RÉUNION",
     placeholderInput: "Saisissez ou collez vos notes prises au kilomètre (ex: Thomas -> envoyer le devis avant jeudi. Budget validé à 4500€. Attention retard possible sur la livraison...)",
-    processBtn: "Structurer & Reformuler le compte rendu →",
-    titleResult: "COMPTE RENDU EXÉCUTIF",
-    descResult: "Texte reformulé automatiquement. Cliquez sur un intitulé pour l'ajuster avant de le coller avec couleurs dans Gmail/Outlook ou de l'exporter en PDF.",
+    processBtn: "Structurer le compte rendu →",
+    titleResult: "DOCUMENT STRUCTURÉ",
+    descResult: "Cliquez sur n'importe quel intitulé pour le corriger avant de l'exporter (les couleurs et la mise en page riche s'appliquent dans l'E-mail et le PDF).",
     meetingTitlePlaceholder: "Compte rendu de réunion — Suivi opérationnel",
-    copyEmail: "✉️ Copier pour E-mail (Couleurs & Gras)",
-    printPdf: "🖨️ Exporter en PDF Pro",
-    copyMd: "📋 Copier Markdown",
-    downloadMd: "💾 Fichier .md",
-    addBtn: "+ Ajouter",
+    copyEmail: "Copier format E-mail",
+    printPdf: "Imprimer / PDF",
+    copyMd: "Copier Markdown",
+    downloadMd: "Exporter .md",
+    addBtn: "+ Ajouter une ligne",
     emptyCategory: "Aucun élément classé dans cette section.",
     adText: "PUBLICITÉ",
     footer: "MeetClean — Outil d'organisation de notes professionnelles.",
     privacyLink: "Confidentialité & Mentions légales",
     aboutLink: "Guide méthodologique",
+    // Les couleurs ci-dessous servent UNIQUEMENT aux exports (Gmail / PDF)
     categories: {
-      actions: { label: "PLAN D'ACTION OPÉRATIONNEL", shortLabel: 'ACTION', tag: '01', color: '#c84b31', bgLight: '#fdf3f1', borderLight: '#f3c6bd' },
-      decisions: { label: 'DÉCISIONS ACTÉES & BUDGETS', shortLabel: 'DÉCISION', tag: '02', color: '#15803d', bgLight: '#f0fdf4', borderLight: '#bbf7d0' },
-      risks: { label: 'POINTS DE VIGILANCE & BLOCAGES', shortLabel: 'RISQUE', tag: '03', color: '#b91c1c', bgLight: '#fef2f2', borderLight: '#fecaca' },
-      summary: { label: 'SYNTHÈSE & CONTEXTE GÉNÉRAL', shortLabel: 'SYNTHÈSE', tag: '04', color: '#1d4ed8', bgLight: '#eff6ff', borderLight: '#bfdbfe' }
+      actions: { label: "PLAN D'ACTION (TO-DO)", shortLabel: 'ACTION', tag: '01', exportColor: '#c84b31', exportBg: '#fdf3f1', exportBorder: '#f3c6bd' },
+      decisions: { label: 'DÉCISIONS ACTÉES', shortLabel: 'DÉCISION', tag: '02', exportColor: '#15803d', exportBg: '#f0fdf4', exportBorder: '#bbf7d0' },
+      risks: { label: 'RISQUES & POINTS DE BLOCAGE', shortLabel: 'RISQUE', tag: '03', exportColor: '#b91c1c', exportBg: '#fef2f2', exportBorder: '#fecaca' },
+      summary: { label: 'SYNTHÈSE & CONTEXTE GÉNÉRAL', shortLabel: 'SYNTHÈSE', tag: '04', exportColor: '#1d4ed8', exportBg: '#eff6ff', exportBorder: '#bfdbfe' }
     },
-    beforeAfterTitle: "Exemple concret : du brouillon oral au livrable exécutif",
+    beforeAfterTitle: "Exemple concret : du brouillon au livrable",
     beforeLabel: "AVANT — Notes prises à la volée",
-    beforeSample: "« reu lancement projet alpha. on a validé le budget à 12k€. fo que Marc achète le serveur avant mardi. pb sur les licences actuelles qui expirent fin du mois. »",
-    afterLabel: "APRÈS — Reformulation & Mise en forme MeetClean",
+    beforeSample: "« reu lancement projet alpha. ok pour budget 12k€. fo que Marc relance le prestataire pr le serveur avant mardi. pb sur les licences actuelles qui expirent fin du mois. »",
+    afterLabel: "APRÈS — Analyse syntaxique MeetClean",
     afterSample: [
-      "🛠️ [ACTION] Marc : Acheter le serveur (📅 Échéance : avant mardi)",
-      "✅ [DÉCISION] Validation : Budget à 12k€ pour le projet (💰 Budget : 12k€)",
-      "⚠️ [RISQUE] Point de vigilance : Licences actuelles qui expirent fin du mois",
-      "📌 [SYNTHÈSE] Réunion lancement projet alpha."
+      "[ACTION] Marc : Relancer le prestataire pour le serveur (Échéance : avant mardi)",
+      "[DÉCISION] Accord validé : Budget (Montant : 12k€)",
+      "[RISQUE] Alerte — Problème sur les licences actuelles qui expirent fin du mois",
+      "[SYNTHÈSE] Réunion lancement projet alpha."
     ],
     guideTitle: "Guide pratique : Comment rédiger un compte rendu de réunion réellement lu ?",
     guideIntro: "Un bon compte rendu ne retranscrit pas mot à mot les échanges : il isole les engagements opérationnels. C'est sur ce principe d'ingénierie documentaire que repose l'algorithme syntaxique de MeetClean.",
@@ -178,26 +178,26 @@ const TRANSLATIONS = {
       { q: "En quoi MeetClean diffère-t-il d'un générateur par IA générative ?", a: "Contrairement aux grands modèles de langage (LLM) qui peuvent inventer des chiffres (hallucinations) ou reformuler vos propos de manière générique, MeetClean utilise un moteur d'analyse lexicale et grammaticale déterministe. Vos phrases restent fidèles à vos notes, les abréviations courantes sont nettoyées et aucune donnée ne transite vers un serveur distant." },
       { q: "Comment sont détectés les budgets, dates et responsables ?", a: "L'application utilise des expressions régulières avancées (Regex) couplées à un système de pondération sémantique. Lorsqu'une somme (en €, k€ ou $), une échéance temporelle ou un prénom suivi d'un verbe d'action est repéré, le segment gagne des points vers la catégorie correspondante." },
       { q: "Mes notes confidentielles d'entreprise sont-elles stockées ?", a: "Non. Le code s'exécute intégralement en JavaScript au sein de la mémoire locale (localStorage) de votre propre navigateur. Vous pouvez même couper votre connexion Internet après le chargement de la page et continuer à structurer vos comptes rendus." },
-      { q: "Comment fonctionne le collage en couleur dans Gmail ou Outlook ?", a: "Le bouton « Copier pour E-mail » écrit simultanément une version HTML riche (avec couleurs, tableaux, soulignements et badges) et une version texte propre dans votre presse-papiers. En faisant Ctrl+V dans Gmail, Outlook ou Word, la mise en page professionnelle s'affiche instantanément sans code Markdown parasite." }
+      { q: "Comment exporter le résultat vers Gmail, Outlook, Notion ou PDF ?", a: "Le bouton « Copier format E-mail » génère un compte rendu mis en forme en couleurs (gras, souligné, étiquettes visuelles) directement collable dans Gmail ou Outlook. Le bouton « Imprimer / PDF » génère une fiche de synthèse prête à partager." }
     ]
   },
   en: {
     badge: "LOCAL OFFICE UTILITY • NO ACCOUNT REQUIRED",
     h1Title: "MeetClean — Structured Meeting Minutes Utility",
-    subtitle: "Turn raw, messy meeting notes into an executive document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
+    subtitle: "Turn raw, messy meeting notes into a clean operational document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
     testBtn: "Load sample notes",
     clearBtn: "Clear",
     testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15.5k€ for the new software, but Thomas -> send final quote to Marc before Thursday. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. [x] Follow up with accounting (@Julie). no issue on cloud migration. warning: huge delay on website production due to a server bug.",
     labelInput: "RAW MEETING NOTES",
     placeholderInput: "Type or paste your raw notes here (e.g., John -> send the quote before Thursday. Approved budget at $4500. Warning: server delay...)",
-    processBtn: "Structure & Polish Meeting Minutes →",
-    titleResult: "EXECUTIVE MEETING MINUTES",
-    descResult: "Automatically polished text. Click any line to edit before pasting with rich colors into Gmail/Outlook or exporting as a clean PDF.",
+    processBtn: "Structure meeting minutes →",
+    titleResult: "STRUCTURED DOCUMENT",
+    descResult: "Click any line to edit before exporting (rich colors and executive formatting are automatically applied to Email and PDF exports).",
     meetingTitlePlaceholder: "Meeting Minutes — Operational Follow-up",
-    copyEmail: "✉️ Copy for Email (Rich Colors & Bold)",
-    printPdf: "🖨️ Export Clean PDF",
-    copyMd: "📋 Copy Markdown",
-    downloadMd: "💾 .md File",
+    copyEmail: "Copy Email Format",
+    printPdf: "Print / Save PDF",
+    copyMd: "Copy Markdown",
+    downloadMd: "Export .md",
     addBtn: "+ Add item",
     emptyCategory: "No items classified in this section.",
     adText: "ADVERTISEMENT",
@@ -205,20 +205,20 @@ const TRANSLATIONS = {
     privacyLink: "Privacy & Legal Notice",
     aboutLink: "Methodology Guide",
     categories: {
-      actions: { label: "OPERATIONAL ACTION PLAN", shortLabel: 'ACTION', tag: '01', color: '#c84b31', bgLight: '#fdf3f1', borderLight: '#f3c6bd' },
-      decisions: { label: 'DECISIONS MADE & BUDGETS', shortLabel: 'DECISION', tag: '02', color: '#15803d', bgLight: '#f0fdf4', borderLight: '#bbf7d0' },
-      risks: { label: 'RISKS & CRITICAL BLOCKERS', shortLabel: 'RISK', tag: '03', color: '#b91c1c', bgLight: '#fef2f2', borderLight: '#fecaca' },
-      summary: { label: 'KEY POINTS & GENERAL CONTEXT', shortLabel: 'SUMMARY', tag: '04', color: '#1d4ed8', bgLight: '#eff6ff', borderLight: '#bfdbfe' }
+      actions: { label: "ACTION PLAN (TO-DO)", shortLabel: 'ACTION', tag: '01', exportColor: '#c84b31', exportBg: '#fdf3f1', exportBorder: '#f3c6bd' },
+      decisions: { label: 'DECISIONS MADE', shortLabel: 'DECISION', tag: '02', exportColor: '#15803d', exportBg: '#f0fdf4', exportBorder: '#bbf7d0' },
+      risks: { label: 'RISKS & BLOCKERS', shortLabel: 'RISK', tag: '03', exportColor: '#b91c1c', exportBg: '#fef2f2', exportBorder: '#fecaca' },
+      summary: { label: 'KEY POINTS & GENERAL CONTEXT', shortLabel: 'SUMMARY', tag: '04', exportColor: '#1d4ed8', exportBg: '#eff6ff', exportBorder: '#bfdbfe' }
     },
-    beforeAfterTitle: "Real-world example: from rough draft to executive deliverable",
+    beforeAfterTitle: "Real-world example: from rough draft to deliverable",
     beforeLabel: "BEFORE — Raw notes typed on the fly",
     beforeSample: "“alpha project kickoff. agreed on $12k budget. Mark needs to follow up with hosting provider before Tuesday. issue with current licenses expiring end of month.”",
-    afterLabel: "AFTER — MeetClean Executive Formatting",
+    afterLabel: "AFTER — MeetClean Syntactic Parsing",
     afterSample: [
-      "🛠️ [ACTION] Mark: Follow up with hosting provider (📅 Deadline: before Tuesday)",
-      "✅ [DECISION] Approved: $12k budget for the project (💰 Budget: $12k)",
-      "⚠️ [RISK] Point of attention: Current licenses expiring end of month",
-      "📌 [SUMMARY] Alpha project kickoff."
+      "[ACTION] Mark: Follow up with hosting provider (Deadline: before Tuesday)",
+      "[DECISION] Agreed: $12k budget (Amount: $12k)",
+      "[RISK] Risk Alert: Issue with current licenses expiring end of month",
+      "[SUMMARY] Alpha project kickoff."
     ],
     guideTitle: "Practical Guide: How to write meeting minutes people actually read",
     guideIntro: "Effective minutes never transcribe every word spoken: they isolate operational commitments. MeetClean's syntactic engine is built around this exact documentary principle.",
@@ -246,7 +246,7 @@ const TRANSLATIONS = {
       { q: "How is MeetClean different from generative AI wrappers?", a: "Unlike Large Language Models (LLMs) that can hallucinate numbers or rewrite your thoughts into generic corporate jargon, MeetClean uses a deterministic lexical and grammatical rule engine. Your facts stay accurate, French shorthand is expanded, and zero data leaves your computer." },
       { q: "How are budgets, dates, and assignees extracted?", a: "The utility combines pattern-matching regular expressions with a semantic scoring matrix. Whenever a currency figure, a calendar reference, or a capitalized name paired with an action verb is detected, the sentence is weighted accordingly." },
       { q: "Are my confidential corporate notes stored on a server?", a: "Never. Everything runs in client-side JavaScript using your browser's localStorage. You can even disconnect from Wi-Fi once the page is loaded and process your notes completely offline." },
-      { q: "How does rich color pasting work in Gmail, Outlook, or Word?", a: "'Copy for Email' writes both a styled HTML document (with colors, underlines, bold headers, and metadata badges) and a clean plain-text fallback to your clipboard. Simply press Ctrl+V in Gmail or Outlook for an instant executive layout." }
+      { q: "How do I export to Gmail, Outlook, Notion, or PDF?", a: "'Copy Email Format' writes a rich colored HTML layout directly to your clipboard for Gmail, Outlook, or Word. 'Copy Markdown' is tailored for Notion, Obsidian, or Slack." }
     ]
   }
 };
@@ -304,10 +304,9 @@ export default function App() {
 
   const showFeedback = (msg) => {
     setCopyFeedback(msg);
-    setTimeout(() => setCopyFeedback(''), 3200);
+    setTimeout(() => setCopyFeedback(''), 2800);
   };
 
-  // Nettoyage initial + Correction des doublons ("il il faut")
   const cleanAndFormatSentence = (str) => {
     let cleaned = str.trim();
     cleaned = cleaned.replace(/^(?:[\-\*\•\>\+]+|\[\s*[xX]?\s*\]|\d+[\.\)\-])\s*/, '');
@@ -318,7 +317,6 @@ export default function App() {
         const regex = new RegExp(abbr, 'gi');
         cleaned = cleaned.replace(regex, ABBREVIATIONS[abbr]);
       });
-      // Évite le bug "il il faut" si l'utilisateur avait écrit "il fo"
       cleaned = cleaned.replace(/\bil\s+il\s+faut\b/gi, 'il faut');
       cleaned = cleaned.replace(/^(et aussi|et puis|sinon|du coup|alors|bon|bah|ben|ensuite|de plus|par ailleurs|aussi|et|mais)\s+/i, '');
     } else {
@@ -336,12 +334,10 @@ export default function App() {
     return cleaned;
   };
 
-  // NOUVEAU : Reformulation professionnelle selon la catégorie (Style Corporate)
   const polishCorporateExpression = (sentence, category, assignee) => {
     let s = sentence.trim();
 
     if (lang === 'fr') {
-      // 1. Nettoyage des tics de langage oraux
       s = s.replace(/\bde la boîte\b/gi, "de l'entreprise");
       s = s.replace(/\bc'est important on a parlé du\b/gi, " — Point sur le");
       s = s.replace(/\bon a parlé de la\b/gi, "Point sur la");
@@ -349,8 +345,7 @@ export default function App() {
       s = s.replace(/\s*\(@[A-Za-zÀ-ÿ]+\)/g, '');
 
       if (category === 'actions') {
-        // Transforme "Il faut que Stéphane achète..." -> "Stéphane : Acheter..."
-        const ilFautMatch = s.match(/^(?:Il faut que|Faut que)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+([a-zà-ÿ]+)\s+(.+)/i);
+        const ilFautMatch = s.match(/^(?:Il\s+)?(?:il\s+)?faut que\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+([a-zà-ÿ]+)\s+(.+)/i);
         if (ilFautMatch) {
           const name = ilFautMatch[1];
           const rawVerb = ilFautMatch[2].toLowerCase();
@@ -358,7 +353,6 @@ export default function App() {
           const inf = VERB_TO_INFINITIVE[rawVerb] || (rawVerb.charAt(0).toUpperCase() + rawVerb.slice(1));
           s = `${name} : ${inf} ${rest}`;
         } else {
-          // Transforme "Charlotte doit refaire..." ou "Thomas -> envoyer..." -> "Charlotte : Refaire..."
           const doitMatch = s.match(/^([A-ZÀ-Ÿ][a-zà-ÿ]+)\s*(?:->|→|:|\s+(?:elle\s+|il\s+)?(?:doit|devra|va))\s*([a-zà-ÿ]+)\s+(.+)/i);
           if (doitMatch) {
             const name = doitMatch[1];
@@ -371,12 +365,10 @@ export default function App() {
           }
         }
       } else if (category === 'decisions') {
-        // Transforme "On a validé le budget..." -> "Validation : Budget..."
         s = s.replace(/^(?:On a validé|Nous avons validé|Validé)\s+(?:le\s+|la\s+|l'\s*)?/i, 'Validation : ');
         s = s.replace(/^(?:On a décidé de|On a décidé|Décidé de|Décidé)\s*/i, 'Décision actée : ');
         s = s.replace(/^(?:Ok pour|Okay pour|Accord pour|Go pour)\s+(?:le\s+|la\s+)?/i, 'Accord validé : ');
       } else if (category === 'risks') {
-        // Transforme "Attention on a un gros retard..." -> "Point de vigilance : Gros retard..."
         s = s.replace(/^(?:Attention\s*,?\s*)?(?:on a un|il y a un|nous avons un)\s+/i, 'Point de vigilance : ');
         s = s.replace(/^Attention\s*[:\-]?\s*/i, 'Point de vigilance : ');
         s = s.replace(/^Problème\s+sur\s+/i, 'Alerte — Problème sur ');
@@ -384,7 +376,6 @@ export default function App() {
         s = s.replace(/^Pas de problème sur\s+/i, 'RAS (Conforme) : ');
       }
     } else {
-      // Polissage Anglais
       s = s.replace(/\s*\(@[A-Za-zÀ-ÿ]+\)/g, '');
       if (category === 'actions') {
         const enMatch = s.match(/^([A-ZÀ-Ÿ][a-zà-ÿ]+)\s*(?:->|→|:|\s+(?:needs to|has to|must|will|should))\s*([a-z]+)\s+(.+)/i);
@@ -403,7 +394,6 @@ export default function App() {
       }
     }
 
-    // Assure une majuscule après les deux-points ("Validation : budget" -> "Validation : Budget")
     s = s.replace(/:\s+([a-zà-ÿ])/, (match, p1) => `: ${p1.toUpperCase()}`);
     if (s.length > 0 && !/[\.\!\?]$/.test(s)) s += '.';
     return s;
@@ -559,7 +549,6 @@ export default function App() {
     setItems(prev => [...prev, newItem]);
   };
 
-  // Génération Markdown propre (pour Notion, Slack, Obsidian)
   const generateMarkdown = () => {
     const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US');
     const summary = items.filter(i => i.category === 'summary');
@@ -567,26 +556,24 @@ export default function App() {
     const actions = items.filter(i => i.category === 'actions');
     const risks = items.filter(i => i.category === 'risks');
 
-    return `# 📋 ${meetingTitle}
-*${lang === 'fr' ? 'Document structuré le' : 'Structured on'} ${dateStr} via MeetClean*
+    return `# ${meetingTitle}
+*${lang === 'fr' ? 'Structuré via MeetClean le' : 'Structured via MeetClean on'} ${dateStr}*
 
----
+## ${t.categories.actions.label}
+${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] **${i.text}**${i.assignee ? ` **[Resp: ${i.assignee}]**` : ''}${i.deadline ? ` *(Échéance: ${i.deadline})*` : ''}${i.budget ? ` **[Budget: ${i.budget}]**` : ''}`).join('\n') : `_${t.emptyCategory}_`}
 
-## 🛠️ ${t.categories.actions.label} (${actions.length})
-${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] **${i.text}**${i.assignee ? ` — 👤 *Resp : ${i.assignee}*` : ''}${i.deadline ? ` | 📅 *Échéance : ${i.deadline}*` : ''}${i.budget ? ` | 💰 *Budget : ${i.budget}*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
+## ${t.categories.decisions.label}
+${decisions.length > 0 ? decisions.map(i => `- **${i.text}**${i.budget ? ` *(Budget: ${i.budget})*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
 
-## ✅ ${t.categories.decisions.label} (${decisions.length})
-${decisions.length > 0 ? decisions.map(i => `- **${i.text}**${i.budget ? ` — 💰 **Budget : ${i.budget}**` : ''}${i.deadline ? ` *(Période : ${i.deadline})*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
+## ${t.categories.risks.label}
+${risks.length > 0 ? risks.map(i => `- **${i.text}**`).join('\n') : `_${t.emptyCategory}_`}
 
-## ⚠️ ${t.categories.risks.label} (${risks.length})
-${risks.length > 0 ? risks.map(i => `- **${i.text}**${i.assignee ? ` *(Référent : ${i.assignee})*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
-
-## 📌 ${t.categories.summary.label} (${summary.length})
+## ${t.categories.summary.label}
 ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${t.emptyCategory}_`}
 `;
   };
 
-  // NOUVEAU : Génération d'un E-mail Riche (HTML avec couleurs, gras, souligné + Fallback texte propre SANS ** ni ##)
+  // EXPORT E-MAIL EN COULEUR (Uniquement dans le presse-papiers pour Gmail / Outlook)
   const copyEmailReady = async () => {
     const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
       day: '2-digit', month: 'long', year: 'numeric'
@@ -597,33 +584,30 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${t.emptyC
     const risks = items.filter(i => i.category === 'risks');
     const summary = items.filter(i => i.category === 'summary');
 
-    // 1. Version Texte Brut ultra-propre (aucun symbole ** ou ##)
     const plainText = `${lang === 'fr' ? 'Bonjour à tous,\n\nVeuillez trouver ci-dessous le compte rendu structuré de notre réunion :' : 'Hello everyone,\n\nPlease find below the structured minutes from our meeting:'}
 
 ==================================================
-📋 ${meetingTitle.toUpperCase()}
-📅 Date : ${dateStr}
+${meetingTitle.toUpperCase()} (${dateStr})
 ==================================================
 
-🛠️ ${t.categories.actions.label} (${actions.length})
+01. ${t.categories.actions.label} (${actions.length})
 --------------------------------------------------
-${actions.length > 0 ? actions.map(i => `${i.done ? '☑' : '☐'} ${i.text}${i.assignee ? `\n   ↳ 👤 Responsable : ${i.assignee}` : ''}${i.deadline ? `  |  📅 Échéance : ${i.deadline}` : ''}${i.budget ? `  |  💰 Budget : ${i.budget}` : ''}`).join('\n\n') : `• ${t.emptyCategory}`}
+${actions.length > 0 ? actions.map(i => `${i.done ? '[x]' : '[ ]'} ${i.text}${i.assignee ? ` | Resp : ${i.assignee}` : ''}${i.deadline ? ` | Échéance : ${i.deadline}` : ''}${i.budget ? ` | Budget : ${i.budget}` : ''}`).join('\n') : `- ${t.emptyCategory}`}
 
-✅ ${t.categories.decisions.label} (${decisions.length})
+02. ${t.categories.decisions.label} (${decisions.length})
 --------------------------------------------------
-${decisions.length > 0 ? decisions.map(i => `• ${i.text}${i.budget ? `\n   ↳ 💰 Montant validé : ${i.budget}` : ''}${i.deadline ? `  |  📅 Période : ${i.deadline}` : ''}`).join('\n\n') : `• ${t.emptyCategory}`}
+${decisions.length > 0 ? decisions.map(i => `• ${i.text}${i.budget ? ` | Budget : ${i.budget}` : ''}${i.deadline ? ` | Période : ${i.deadline}` : ''}`).join('\n') : `- ${t.emptyCategory}`}
 
-⚠️ ${t.categories.risks.label} (${risks.length})
+03. ${t.categories.risks.label} (${risks.length})
 --------------------------------------------------
-${risks.length > 0 ? risks.map(i => `• ${i.text}`).join('\n') : `• ${t.emptyCategory}`}
+${risks.length > 0 ? risks.map(i => `• ${i.text}`).join('\n') : `- ${t.emptyCategory}`}
 
-📌 ${t.categories.summary.label} (${summary.length})
+04. ${t.categories.summary.label} (${summary.length})
 --------------------------------------------------
-${summary.length > 0 ? summary.map(i => `• ${i.text}`).join('\n') : `• ${t.emptyCategory}`}
+${summary.length > 0 ? summary.map(i => `• ${i.text}`).join('\n') : `- ${t.emptyCategory}`}
 
 ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
-    // 2. Version HTML Riche avec couleurs inline (Pour Gmail, Outlook, Apple Mail, Word)
     const renderHtmlBadges = (item) => {
       const badges = [];
       if (item.assignee) {
@@ -656,7 +640,6 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     <div style="font-size: 12px; color: #5a5a66;">📅 <strong>Date :</strong> ${dateStr} &nbsp;|&nbsp; 🛠️ <strong>${actions.length} Action(s)</strong> &nbsp;|&nbsp; ✅ <strong>${decisions.length} Décision(s)</strong> &nbsp;|&nbsp; ⚠️ <strong>${risks.length} Point(s) de vigilance</strong></div>
   </div>
 
-  <!-- SECTION 1 : ACTIONS -->
   <div style="margin-bottom: 22px;">
     <h2 style="font-size: 15px; color: #c84b31; border-bottom: 2px solid #c84b31; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
       🛠️ 01. <u>${t.categories.actions.label}</u> (${actions.length})
@@ -664,14 +647,13 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     ${actions.length > 0 ? actions.map(i => `
       <div style="background-color: #fdf3f1; border-left: 4px solid #c84b31; padding: 10px 14px; margin-bottom: 8px;">
         <div style="font-size: 14px; ${i.done ? 'text-decoration: line-through; color: #6b7280;' : ''}">
-          ${i.done ? '✅' : '⬜'} ${formatRichText(i.text)}
+          ${i.done ? '☑' : '☐'} ${formatRichText(i.text)}
         </div>
         ${renderHtmlBadges(i)}
       </div>
     `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
   </div>
 
-  <!-- SECTION 2 : DÉCISIONS -->
   <div style="margin-bottom: 22px;">
     <h2 style="font-size: 15px; color: #15803d; border-bottom: 2px solid #15803d; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
       ✅ 02. <u>${t.categories.decisions.label}</u> (${decisions.length})
@@ -684,7 +666,6 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
   </div>
 
-  <!-- SECTION 3 : RISQUES -->
   <div style="margin-bottom: 22px;">
     <h2 style="font-size: 15px; color: #b91c1c; border-bottom: 2px solid #b91c1c; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
       ⚠️ 03. <u>${t.categories.risks.label}</u> (${risks.length})
@@ -697,7 +678,6 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
   </div>
 
-  <!-- SECTION 4 : SYNTHÈSE -->
   <div style="margin-bottom: 22px;">
     <h2 style="font-size: 15px; color: #1d4ed8; border-bottom: 2px solid #1d4ed8; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
       📌 04. <u>${t.categories.summary.label}</u> (${summary.length})
@@ -727,16 +707,16 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
       } else {
         await navigator.clipboard.writeText(plainText);
       }
-      showFeedback(lang === 'fr' ? "E-mail riche (couleurs & gras) copié ! Faites Ctrl+V dans Gmail" : "Rich email copied! Paste into Gmail/Outlook");
+      showFeedback(lang === 'fr' ? "Format E-mail (en couleur) copié" : "Colored Email format copied");
     } catch (err) {
       await navigator.clipboard.writeText(plainText);
-      showFeedback(lang === 'fr' ? "Texte structuré copié !" : "Structured text copied!");
+      showFeedback(lang === 'fr' ? "Format E-mail copié" : "Email format copied");
     }
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generateMarkdown());
-    showFeedback(lang === 'fr' ? "Copié en Markdown (Notion / Slack)" : "Markdown copied");
+    showFeedback(lang === 'fr' ? "Copié en Markdown" : "Markdown copied");
   };
 
   const downloadMarkdown = () => {
@@ -923,109 +903,85 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
             </button>
           </div>
 
-          {/* RÉSULTAT INTERACTIF À L'ÉCRAN (Masqué à l'impression au profit du rapport PDF Pro) */}
+          {/* RÉSULTAT À L'ÉCRAN : 100% fidèle à l'esthétique 3 couleurs (Crème, Charbon, Terre cuite) */}
           {hasProcessed && (
             <div className="no-print" style={{ marginTop: '32px', background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
-              
-              {/* Barre d'actions d'exportation */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-                <div style={{ flex: 1, minWidth: '240px' }}>
-                  <div style={{ fontSize: '0.72rem', fontWeight: '800', color: THEME.accent, letterSpacing: '0.06em', marginBottom: '4px' }}>
-                    {t.titleResult}
-                  </div>
-                  <input
-                    type="text"
-                    value={meetingTitle}
-                    onChange={(e) => setMeetingTitle(e.target.value)}
-                    placeholder={t.meetingTitlePlaceholder}
-                    style={{
-                      width: '100%',
-                      fontSize: '1.25rem',
-                      fontWeight: '800',
-                      color: THEME.ink,
-                      background: 'transparent',
-                      border: 'none',
-                      borderBottom: `1.5px dashed ${THEME.borderSubtle}`,
-                      padding: '2px 0 4px 0',
-                      outline: 'none',
-                      fontFamily: 'inherit'
-                    }}
-                  />
-                  <p style={{ color: THEME.inkMuted, fontSize: '0.78rem', margin: '6px 0 0 0' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+                <div>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: '800', margin: 0, letterSpacing: '-0.01em' }}>{t.titleResult}</h2>
+                  <p style={{ color: THEME.inkMuted, fontSize: '0.82rem', margin: '4px 0 0 0' }}>
                     {t.descResult}
                   </p>
                 </div>
                 
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  {copyFeedback && (
+                    <span style={{ fontSize: '0.78rem', fontWeight: '700', color: THEME.accent, marginRight: '6px' }}>
+                      ✓ {copyFeedback}
+                    </span>
+                  )}
                   <button 
                     onClick={copyEmailReady}
-                    style={{ background: THEME.accent, color: '#ffffff', border: `2px solid ${THEME.border}`, padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: '800', boxShadow: `2px 2px 0px ${THEME.border}` }}
+                    style={{ background: THEME.ink, color: THEME.surface, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
                   >
                     {t.copyEmail}
                   </button>
                   <button 
-                    onClick={() => window.print()}
-                    style={{ background: THEME.ink, color: THEME.surface, border: `2px solid ${THEME.border}`, padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: '700' }}
-                  >
-                    {t.printPdf}
-                  </button>
-                  <button 
                     onClick={copyToClipboard}
-                    style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '8px 12px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: '700' }}
+                    style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
                   >
                     {t.copyMd}
                   </button>
                   <button 
                     onClick={downloadMarkdown}
-                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '8px 12px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: '600' }}
+                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
                   >
                     {t.downloadMd}
+                  </button>
+                  <button 
+                    onClick={() => window.print()}
+                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
+                  >
+                    {t.printPdf}
                   </button>
                 </div>
               </div>
 
-              {copyFeedback && (
-                <div style={{ backgroundColor: '#dcfce7', color: '#166534', border: '1.5px solid #15803d', padding: '10px 14px', marginBottom: '16px', fontSize: '0.85rem', fontWeight: '700' }}>
-                  ✓ {copyFeedback}
-                </div>
-              )}
-
-              {/* Cartes par catégorie avec codes couleurs */}
               <div style={{ display: 'grid', gap: '20px' }}>
                 {Object.keys(t.categories).map(catKey => {
                   const cat = t.categories[catKey];
                   const catItems = items.filter(i => i.category === catKey);
                   return (
-                    <div key={catKey} style={{ background: cat.bgLight, padding: '16px', border: `1.5px solid ${THEME.border}`, borderLeft: `6px solid ${cat.color}` }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: `1.5px solid ${cat.borderLight}`, paddingBottom: '8px' }}>
-                        <h3 style={{ color: cat.color, fontSize: '0.92rem', fontWeight: '800', letterSpacing: '0.04em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
-                          <span style={{ backgroundColor: cat.color, color: '#ffffff', padding: '2px 7px', fontSize: '0.72rem', textDecoration: 'none' }}>
+                    <div key={catKey} className="category-card" style={{ background: THEME.bg, padding: '16px', border: `1.5px solid ${THEME.border}` }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: `1px solid ${THEME.borderSubtle}`, paddingBottom: '8px' }}>
+                        <h3 style={{ color: THEME.ink, fontSize: '0.9rem', fontWeight: '800', letterSpacing: '0.04em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ backgroundColor: THEME.ink, color: THEME.surface, padding: '2px 6px', fontSize: '0.72rem' }}>
                             {cat.tag}
                           </span>
                           {cat.label}
-                          <span style={{ color: THEME.inkMuted, fontSize: '0.8rem', fontWeight: '700', textDecoration: 'none' }}>
+                          <span style={{ color: THEME.inkMuted, fontSize: '0.8rem', fontWeight: '600' }}>
                             ({catItems.length})
                           </span>
                         </h3>
                         <button
                           onClick={() => addItem(catKey)}
-                          style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '4px 10px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: '700' }}
+                          style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '3px 10px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: '700' }}
                         >
                           {t.addBtn}
                         </button>
                       </div>
 
                       {catItems.length > 0 ? (
-                        <div style={{ display: 'grid', gap: '10px' }}>
+                        <div style={{ display: 'grid', gap: '8px' }}>
                           {catItems.map(item => (
-                            <div key={item.id} style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: THEME.surface, padding: '12px', border: `1px solid ${THEME.borderSubtle}`, boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
+                            <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: THEME.surface, padding: '10px 12px', border: `1px solid ${THEME.borderSubtle}` }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 {catKey === 'actions' && (
                                   <input 
                                     type="checkbox" 
                                     checked={item.done}
                                     onChange={(e) => updateItem(item.id, 'done', e.target.checked)}
-                                    style={{ accentColor: cat.color, width: '17px', height: '17px', cursor: 'pointer', flexShrink: 0 }} 
+                                    style={{ accentColor: THEME.accent, width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }} 
                                   />
                                 )}
                                 <input
@@ -1037,11 +993,10 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                                     background: 'transparent',
                                     color: item.done ? THEME.inkMuted : THEME.ink,
                                     textDecoration: item.done ? 'line-through' : 'none',
-                                    fontWeight: '600',
                                     border: 'none',
                                     borderBottom: '1px solid transparent',
                                     padding: '2px 4px',
-                                    fontSize: '0.94rem',
+                                    fontSize: '0.92rem',
                                     fontFamily: 'inherit',
                                     outline: 'none'
                                   }}
@@ -1059,45 +1014,44 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
                                 <button
                                   onClick={() => deleteItem(item.id)}
-                                  style={{ background: 'transparent', color: THEME.inkMuted, border: 'none', cursor: 'pointer', fontSize: '1rem', fontWeight: '800', padding: '2px 6px' }}
+                                  style={{ background: 'transparent', color: THEME.inkMuted, border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '800', padding: '2px 6px' }}
                                   title="Supprimer"
                                 >
                                   ×
                                 </button>
                               </div>
 
-                              {/* Badges colorés Responsable / Date / Budget */}
-                              <div style={{ display: 'flex', gap: '10px', paddingLeft: catKey === 'actions' ? '25px' : '0px', flexWrap: 'wrap' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', background: item.assignee ? '#eff6ff' : THEME.bg, border: `1px solid ${item.assignee ? '#93c5fd' : THEME.borderSubtle}`, padding: '3px 8px', borderRadius: '4px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: item.assignee ? '#1e40af' : THEME.inkMuted, marginRight: '6px' }}>👤 RESP:</span>
+                              <div style={{ display: 'flex', gap: '10px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>RESP:</span>
                                   <input
                                     type="text"
-                                    placeholder="Ajouter..."
+                                    placeholder="—"
                                     value={item.assignee}
                                     onChange={(e) => updateItem(item.id, 'assignee', e.target.value)}
-                                    style={{ background: 'transparent', color: '#1e3a8a', border: 'none', fontSize: '0.76rem', fontWeight: '700', width: '105px', outline: 'none', textDecoration: item.assignee ? 'underline' : 'none' }}
+                                    style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '90px', outline: 'none' }}
                                   />
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', background: item.deadline ? '#fef3c7' : THEME.bg, border: `1px solid ${item.deadline ? '#fcd34d' : THEME.borderSubtle}`, padding: '3px 8px', borderRadius: '4px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: item.deadline ? '#92400e' : THEME.inkMuted, marginRight: '6px' }}>📅 ÉCHÉANCE:</span>
+                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>DATE:</span>
                                   <input
                                     type="text"
-                                    placeholder="Ajouter..."
+                                    placeholder="—"
                                     value={item.deadline}
                                     onChange={(e) => updateItem(item.id, 'deadline', e.target.value)}
-                                    style={{ background: 'transparent', color: '#78350f', border: 'none', fontSize: '0.76rem', fontWeight: '700', width: '145px', outline: 'none' }}
+                                    style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '130px', outline: 'none' }}
                                   />
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', background: item.budget ? '#dcfce7' : THEME.bg, border: `1px solid ${item.budget ? '#86efac' : THEME.borderSubtle}`, padding: '3px 8px', borderRadius: '4px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: item.budget ? '#166534' : THEME.inkMuted, marginRight: '6px' }}>💰 BUDGET:</span>
+                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>BUDGET:</span>
                                   <input
                                     type="text"
-                                    placeholder="Ajouter..."
+                                    placeholder="—"
                                     value={item.budget}
                                     onChange={(e) => updateItem(item.id, 'budget', e.target.value)}
-                                    style={{ background: 'transparent', color: '#14532d', border: 'none', fontSize: '0.76rem', fontWeight: '800', width: '90px', outline: 'none' }}
+                                    style={{ background: 'transparent', color: THEME.accent, border: 'none', fontSize: '0.75rem', fontWeight: '800', width: '80px', outline: 'none' }}
                                   />
                                 </div>
                               </div>
@@ -1105,7 +1059,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                           ))}
                         </div>
                       ) : (
-                        <p style={{ color: THEME.inkMuted, margin: 0, fontSize: '0.85rem', fontStyle: 'italic' }}>
+                        <p style={{ color: THEME.inkMuted, margin: 0, fontSize: '0.85rem' }}>
                           {t.emptyCategory}
                         </p>
                       )}
@@ -1117,7 +1071,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
           )}
 
           {/* =====================================================================
-              RAPPORT EXÉCUTIF DÉDIÉ À L'IMPRESSION PDF (Visible uniquement en PDF)
+              COMPTE RENDU EN COULEUR DÉDIÉ UNIQUEMENT À L'EXPORT PDF
              ===================================================================== */}
           {hasProcessed && (
             <div className="print-only">
@@ -1135,21 +1089,19 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 </div>
               </div>
 
-              {/* Bandeau de synthèse statistique PDF */}
               <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
                 {Object.keys(t.categories).map(catKey => {
                   const cat = t.categories[catKey];
                   const count = items.filter(i => i.category === catKey).length;
                   return (
-                    <div key={catKey} style={{ flex: 1, border: `1.5px solid ${cat.color}`, backgroundColor: cat.bgLight, padding: '8px 12px' }}>
-                      <div style={{ fontSize: '18px', fontWeight: '800', color: cat.color }}>{count}</div>
+                    <div key={catKey} style={{ flex: 1, border: `1.5px solid ${cat.exportColor}`, backgroundColor: cat.exportBg, padding: '8px 12px' }}>
+                      <div style={{ fontSize: '18px', fontWeight: '800', color: cat.exportColor }}>{count}</div>
                       <div style={{ fontSize: '10px', fontWeight: '700', color: '#1c1c21', textTransform: 'uppercase' }}>{cat.shortLabel}(S)</div>
                     </div>
                   );
                 })}
               </div>
 
-              {/* Sections du rapport PDF sans aucun <input> ni champ vide */}
               {Object.keys(t.categories).map(catKey => {
                 const cat = t.categories[catKey];
                 const catItems = items.filter(i => i.category === catKey);
@@ -1157,17 +1109,17 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
                 return (
                   <div key={catKey} style={{ marginBottom: '22px', pageBreakInside: 'avoid' }}>
-                    <h2 style={{ fontSize: '13px', fontWeight: '800', color: cat.color, borderBottom: `2px solid ${cat.color}`, paddingBottom: '4px', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <h2 style={{ fontSize: '13px', fontWeight: '800', color: cat.exportColor, borderBottom: `2px solid ${cat.exportColor}`, paddingBottom: '4px', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       {cat.tag}. <u>{cat.label}</u> ({catItems.length})
                     </h2>
                     <div style={{ display: 'grid', gap: '8px' }}>
                       {catItems.map(item => (
-                        <div key={item.id} style={{ padding: '10px 12px', backgroundColor: cat.bgLight, borderLeft: `4px solid ${cat.color}`, border: `1px solid ${cat.borderLight}`, borderLeftWidth: '4px' }}>
+                        <div key={item.id} style={{ padding: '10px 12px', backgroundColor: cat.exportBg, border: `1px solid ${cat.exportBorder}`, borderLeft: `4px solid ${cat.exportColor}` }}>
                           <div style={{ fontSize: '13px', fontWeight: '600', color: '#1c1c21', textDecoration: item.done ? 'line-through' : 'none' }}>
                             {catKey === 'actions' ? (item.done ? '☑ ' : '☐ ') : '• '}
                             {item.text.includes(' : ') ? (
                               <>
-                                <strong style={{ textDecoration: 'underline', color: cat.color }}>{item.text.split(' : ')[0]} :</strong>{' '}
+                                <strong style={{ textDecoration: 'underline', color: cat.exportColor }}>{item.text.split(' : ')[0]} :</strong>{' '}
                                 <span>{item.text.split(' : ').slice(1).join(' : ')}</span>
                               </>
                             ) : (
@@ -1227,7 +1179,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 </div>
                 <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '0.84rem', lineHeight: '1.6', color: THEME.ink }}>
                   {t.afterSample.map((line, i) => (
-                    <li key={i} style={{ marginBottom: '4px', fontWeight: '600' }}>{line}</li>
+                    <li key={i} style={{ marginBottom: '4px', fontWeight: '500' }}>{line}</li>
                   ))}
                 </ul>
               </div>
