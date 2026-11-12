@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-// Palette inspirée de Paperback-2 & 2Bit Demichrome (Lospec)
+// Palette inspirée de Paperback-2 & 2Bit Demichrome + Couleurs sémantiques d'édition
 const THEME = {
   bg: '#f4f1ea',          // Papier crème doux
   surface: '#ffffff',     // Blanc franc
   surfaceAlt: '#eae6df',  // Gris-beige secondaire
   ink: '#1c1c21',         // Noir charbon profond
   inkMuted: '#5a5a66',    // Gris ardoise pour textes secondaires
-  accent: '#c84b31',      // Terre cuite éditorial (accent principal)
+  accent: '#c84b31',      // Terre cuite éditorial
   border: '#1c1c21',      // Bordure franche
   borderSubtle: '#d0cbc1' // Bordure légère interne
 };
@@ -35,6 +35,35 @@ const ABBREVIATIONS = {
   "\\bprod\\b": "production",
   "\\brh\\b": "RH",
   "\\bcompta\\b": "comptabilité"
+};
+
+// Dictionnaire de passage du verbe conjugué vers l'infinitif professionnel
+const VERB_TO_INFINITIVE = {
+  "achète": "Acheter",
+  "achete": "Acheter",
+  "refait": "Refaire",
+  "refaire": "Refaire",
+  "envoie": "Envoyer",
+  "envoyer": "Envoyer",
+  "prépare": "Préparer",
+  "prepare": "Préparer",
+  "relance": "Relancer",
+  "relancer": "Relancer",
+  "appelle": "Appeler",
+  "contacte": "Contacter",
+  "vérifie": "Vérifier",
+  "verifie": "Vérifier",
+  "corrige": "Corriger",
+  "teste": "Tester",
+  " rédige": " Rédiger",
+  "planifie": "Planifier",
+  "organise": "Organiser",
+  "termine": "Terminer",
+  "finit": "Finaliser",
+  "livre": "Livrer",
+  "déploie": "Déployer",
+  "chiffre": "Chiffrer",
+  "valide": "Valider"
 };
 
 const KEYWORDS = {
@@ -87,40 +116,41 @@ const TRANSLATIONS = {
   fr: {
     badge: "OUTIL DE BUREAUTIQUE LOCAL • SANS COMPTE",
     h1Title: "MeetClean — Structuration de comptes rendus de réunion",
-    subtitle: "Transformez vos prises de notes brutes en un document clair : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
+    subtitle: "Transformez vos prises de notes brutes en un document exécutif : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
     testBtn: "Insérer un jeu de notes exemple",
     clearBtn: "Effacer",
-    testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15.5k€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
+    testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "NOTES BRUTES DE LA RÉUNION",
     placeholderInput: "Saisissez ou collez vos notes prises au kilomètre (ex: Thomas -> envoyer le devis avant jeudi. Budget validé à 4500€. Attention retard possible sur la livraison...)",
-    processBtn: "Structurer le compte rendu →",
-    titleResult: "DOCUMENT STRUCTURÉ",
-    descResult: "Cliquez sur n'importe quel intitulé pour le corriger ou réassigner sa catégorie avant l'export.",
-    copyEmail: "Copier format E-mail",
-    printPdf: "Imprimer / PDF",
-    copyMd: "Copier Markdown",
-    downloadMd: "Exporter .md",
-    addBtn: "+ Ajouter une ligne",
+    processBtn: "Structurer & Reformuler le compte rendu →",
+    titleResult: "COMPTE RENDU EXÉCUTIF",
+    descResult: "Texte reformulé automatiquement. Cliquez sur un intitulé pour l'ajuster avant de le coller avec couleurs dans Gmail/Outlook ou de l'exporter en PDF.",
+    meetingTitlePlaceholder: "Compte rendu de réunion — Suivi opérationnel",
+    copyEmail: "✉️ Copier pour E-mail (Couleurs & Gras)",
+    printPdf: "🖨️ Exporter en PDF Pro",
+    copyMd: "📋 Copier Markdown",
+    downloadMd: "💾 Fichier .md",
+    addBtn: "+ Ajouter",
     emptyCategory: "Aucun élément classé dans cette section.",
     adText: "PUBLICITÉ",
     footer: "MeetClean — Outil d'organisation de notes professionnelles.",
     privacyLink: "Confidentialité & Mentions légales",
     aboutLink: "Guide méthodologique",
     categories: {
-      actions: { label: "PLAN D'ACTION (TO-DO)", shortLabel: 'ACTION', tag: '01' },
-      decisions: { label: 'DÉCISIONS ACTÉES', shortLabel: 'DÉCISION', tag: '02' },
-      risks: { label: 'RISQUES & POINTS DE BLOCAGE', shortLabel: 'RISQUE', tag: '03' },
-      summary: { label: 'SYNTHÈSE & CONTEXTE GÉNÉRAL', shortLabel: 'SYNTHÈSE', tag: '04' }
+      actions: { label: "PLAN D'ACTION OPÉRATIONNEL", shortLabel: 'ACTION', tag: '01', color: '#c84b31', bgLight: '#fdf3f1', borderLight: '#f3c6bd' },
+      decisions: { label: 'DÉCISIONS ACTÉES & BUDGETS', shortLabel: 'DÉCISION', tag: '02', color: '#15803d', bgLight: '#f0fdf4', borderLight: '#bbf7d0' },
+      risks: { label: 'POINTS DE VIGILANCE & BLOCAGES', shortLabel: 'RISQUE', tag: '03', color: '#b91c1c', bgLight: '#fef2f2', borderLight: '#fecaca' },
+      summary: { label: 'SYNTHÈSE & CONTEXTE GÉNÉRAL', shortLabel: 'SYNTHÈSE', tag: '04', color: '#1d4ed8', bgLight: '#eff6ff', borderLight: '#bfdbfe' }
     },
-    beforeAfterTitle: "Exemple concret : du brouillon au livrable",
+    beforeAfterTitle: "Exemple concret : du brouillon oral au livrable exécutif",
     beforeLabel: "AVANT — Notes prises à la volée",
-    beforeSample: "« reu lancement projet alpha. ok pour budget 12k€. fo que Marc relance le prestataire pr le serveur avant mardi. pb sur les licences actuelles qui expirent fin du mois. »",
-    afterLabel: "APRÈS — Analyse syntaxique MeetClean",
+    beforeSample: "« reu lancement projet alpha. on a validé le budget à 12k€. fo que Marc achète le serveur avant mardi. pb sur les licences actuelles qui expirent fin du mois. »",
+    afterLabel: "APRÈS — Reformulation & Mise en forme MeetClean",
     afterSample: [
-      "[ACTION] Marc doit relancer le prestataire pour le serveur (Échéance : avant mardi)",
-      "[DÉCISION] Accord pour le budget (Montant : 12k€)",
-      "[RISQUE] Problème sur les licences actuelles qui expirent fin du mois",
-      "[SYNTHÈSE] Réunion lancement projet alpha."
+      "🛠️ [ACTION] Marc : Acheter le serveur (📅 Échéance : avant mardi)",
+      "✅ [DÉCISION] Validation : Budget à 12k€ pour le projet (💰 Budget : 12k€)",
+      "⚠️ [RISQUE] Point de vigilance : Licences actuelles qui expirent fin du mois",
+      "📌 [SYNTHÈSE] Réunion lancement projet alpha."
     ],
     guideTitle: "Guide pratique : Comment rédiger un compte rendu de réunion réellement lu ?",
     guideIntro: "Un bon compte rendu ne retranscrit pas mot à mot les échanges : il isole les engagements opérationnels. C'est sur ce principe d'ingénierie documentaire que repose l'algorithme syntaxique de MeetClean.",
@@ -148,25 +178,26 @@ const TRANSLATIONS = {
       { q: "En quoi MeetClean diffère-t-il d'un générateur par IA générative ?", a: "Contrairement aux grands modèles de langage (LLM) qui peuvent inventer des chiffres (hallucinations) ou reformuler vos propos de manière générique, MeetClean utilise un moteur d'analyse lexicale et grammaticale déterministe. Vos phrases restent fidèles à vos notes, les abréviations courantes sont nettoyées et aucune donnée ne transite vers un serveur distant." },
       { q: "Comment sont détectés les budgets, dates et responsables ?", a: "L'application utilise des expressions régulières avancées (Regex) couplées à un système de pondération sémantique. Lorsqu'une somme (en €, k€ ou $), une échéance temporelle ou un prénom suivi d'un verbe d'action est repéré, le segment gagne des points vers la catégorie correspondante." },
       { q: "Mes notes confidentielles d'entreprise sont-elles stockées ?", a: "Non. Le code s'exécute intégralement en JavaScript au sein de la mémoire locale (localStorage) de votre propre navigateur. Vous pouvez même couper votre connexion Internet après le chargement de la page et continuer à structurer vos comptes rendus." },
-      { q: "Comment exporter le résultat vers Notion, Word ou Outlook ?", a: "Le bouton « Copier format E-mail » prépare un texte structuré prêt à être collé dans Outlook ou Gmail. Le bouton « Copier Markdown » est idéal pour Notion, Obsidian, Slack ou Jira : les cases à cocher et les titres s'y formateront automatiquement." }
+      { q: "Comment fonctionne le collage en couleur dans Gmail ou Outlook ?", a: "Le bouton « Copier pour E-mail » écrit simultanément une version HTML riche (avec couleurs, tableaux, soulignements et badges) et une version texte propre dans votre presse-papiers. En faisant Ctrl+V dans Gmail, Outlook ou Word, la mise en page professionnelle s'affiche instantanément sans code Markdown parasite." }
     ]
   },
   en: {
     badge: "LOCAL OFFICE UTILITY • NO ACCOUNT REQUIRED",
     h1Title: "MeetClean — Structured Meeting Minutes Utility",
-    subtitle: "Turn raw, messy meeting notes into a clean operational document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
+    subtitle: "Turn raw, messy meeting notes into an executive document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
     testBtn: "Load sample notes",
     clearBtn: "Clear",
     testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15.5k€ for the new software, but Thomas -> send final quote to Marc before Thursday. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. [x] Follow up with accounting (@Julie). no issue on cloud migration. warning: huge delay on website production due to a server bug.",
     labelInput: "RAW MEETING NOTES",
     placeholderInput: "Type or paste your raw notes here (e.g., John -> send the quote before Thursday. Approved budget at $4500. Warning: server delay...)",
-    processBtn: "Structure meeting minutes →",
-    titleResult: "STRUCTURED DOCUMENT",
-    descResult: "Click any line to edit the text or reassign its category before exporting.",
-    copyEmail: "Copy Email Format",
-    printPdf: "Print / Save PDF",
-    copyMd: "Copy Markdown",
-    downloadMd: "Export .md",
+    processBtn: "Structure & Polish Meeting Minutes →",
+    titleResult: "EXECUTIVE MEETING MINUTES",
+    descResult: "Automatically polished text. Click any line to edit before pasting with rich colors into Gmail/Outlook or exporting as a clean PDF.",
+    meetingTitlePlaceholder: "Meeting Minutes — Operational Follow-up",
+    copyEmail: "✉️ Copy for Email (Rich Colors & Bold)",
+    printPdf: "🖨️ Export Clean PDF",
+    copyMd: "📋 Copy Markdown",
+    downloadMd: "💾 .md File",
     addBtn: "+ Add item",
     emptyCategory: "No items classified in this section.",
     adText: "ADVERTISEMENT",
@@ -174,20 +205,20 @@ const TRANSLATIONS = {
     privacyLink: "Privacy & Legal Notice",
     aboutLink: "Methodology Guide",
     categories: {
-      actions: { label: "ACTION PLAN (TO-DO)", shortLabel: 'ACTION', tag: '01' },
-      decisions: { label: 'DECISIONS MADE', shortLabel: 'DECISION', tag: '02' },
-      risks: { label: 'RISKS & BLOCKERS', shortLabel: 'RISK', tag: '03' },
-      summary: { label: 'KEY POINTS & GENERAL CONTEXT', shortLabel: 'SUMMARY', tag: '04' }
+      actions: { label: "OPERATIONAL ACTION PLAN", shortLabel: 'ACTION', tag: '01', color: '#c84b31', bgLight: '#fdf3f1', borderLight: '#f3c6bd' },
+      decisions: { label: 'DECISIONS MADE & BUDGETS', shortLabel: 'DECISION', tag: '02', color: '#15803d', bgLight: '#f0fdf4', borderLight: '#bbf7d0' },
+      risks: { label: 'RISKS & CRITICAL BLOCKERS', shortLabel: 'RISK', tag: '03', color: '#b91c1c', bgLight: '#fef2f2', borderLight: '#fecaca' },
+      summary: { label: 'KEY POINTS & GENERAL CONTEXT', shortLabel: 'SUMMARY', tag: '04', color: '#1d4ed8', bgLight: '#eff6ff', borderLight: '#bfdbfe' }
     },
-    beforeAfterTitle: "Real-world example: from rough draft to deliverable",
+    beforeAfterTitle: "Real-world example: from rough draft to executive deliverable",
     beforeLabel: "BEFORE — Raw notes typed on the fly",
     beforeSample: "“alpha project kickoff. agreed on $12k budget. Mark needs to follow up with hosting provider before Tuesday. issue with current licenses expiring end of month.”",
-    afterLabel: "AFTER — MeetClean Syntactic Parsing",
+    afterLabel: "AFTER — MeetClean Executive Formatting",
     afterSample: [
-      "[ACTION] Mark needs to follow up with hosting provider (Deadline: before Tuesday)",
-      "[DECISION] Agreed on budget (Amount: $12k)",
-      "[RISK] Issue with current licenses expiring end of month",
-      "[SUMMARY] Alpha project kickoff."
+      "🛠️ [ACTION] Mark: Follow up with hosting provider (📅 Deadline: before Tuesday)",
+      "✅ [DECISION] Approved: $12k budget for the project (💰 Budget: $12k)",
+      "⚠️ [RISK] Point of attention: Current licenses expiring end of month",
+      "📌 [SUMMARY] Alpha project kickoff."
     ],
     guideTitle: "Practical Guide: How to write meeting minutes people actually read",
     guideIntro: "Effective minutes never transcribe every word spoken: they isolate operational commitments. MeetClean's syntactic engine is built around this exact documentary principle.",
@@ -215,20 +246,17 @@ const TRANSLATIONS = {
       { q: "How is MeetClean different from generative AI wrappers?", a: "Unlike Large Language Models (LLMs) that can hallucinate numbers or rewrite your thoughts into generic corporate jargon, MeetClean uses a deterministic lexical and grammatical rule engine. Your facts stay accurate, French shorthand is expanded, and zero data leaves your computer." },
       { q: "How are budgets, dates, and assignees extracted?", a: "The utility combines pattern-matching regular expressions with a semantic scoring matrix. Whenever a currency figure, a calendar reference, or a capitalized name paired with an action verb is detected, the sentence is weighted accordingly." },
       { q: "Are my confidential corporate notes stored on a server?", a: "Never. Everything runs in client-side JavaScript using your browser's localStorage. You can even disconnect from Wi-Fi once the page is loaded and process your notes completely offline." },
-      { q: "How do I export to Notion, Word, or Outlook?", a: "'Copy Email Format' prepares a clean plain-text layout ready to paste into Outlook or Gmail. 'Copy Markdown' is tailored for Notion, Obsidian, Slack, or GitHub where checkboxes and headings render natively." }
+      { q: "How does rich color pasting work in Gmail, Outlook, or Word?", a: "'Copy for Email' writes both a styled HTML document (with colors, underlines, bold headers, and metadata badges) and a clean plain-text fallback to your clipboard. Simply press Ctrl+V in Gmail or Outlook for an instant executive layout." }
     ]
   }
 };
 
-// 1. Expressions régulières enrichies V2 (Dates relatives, formats FR/EN, budgets variés)
-const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|fin de semaine|fin du mois|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|end of week|end of month|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|s\d{1,2}|asap|urgent|d'ici\s+[a-zà-ÿ0-9\s]+|avant\s+(?:le\s+)?[a-zà-ÿ0-9\s\/]+|pour\s+(?:le\s+)?(?:lundi|mardi|mercredi|jeudi|vendredi|\d{1,2}\/\d{1,2})|before\s+[a-z0-9\s]+|by\s+(?:monday|tuesday|wednesday|thursday|friday|tomorrow)|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre))\b/i;
+const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|fin de semaine|fin du mois|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|end of week|end of month|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|s\d{1,2}|asap|urgent|d'ici\s+[a-zà-ÿ0-9\s]+|avant\s+(?:le\s+)?(?:lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|ce soir|la fin\s+[a-zà-ÿ\s]+|[a-zà-ÿ]+\s+prochain|\d{1,2}\/\d{1,2})|pour\s+(?:le\s+)?(?:lundi|mardi|mercredi|jeudi|vendredi|\d{1,2}\/\d{1,2})|before\s+(?:next\s+)?[a-z0-9\s]+|by\s+(?:monday|tuesday|wednesday|thursday|friday|tomorrow)|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre))\b/i;
 
 const BUDGET_REGEX = /\b(\d+(?:[\s\.,]\d+)?\s*(?:k€|m€|€|\$|£|chf|k\$|k\b|euros?|dollars?|k\s*euros?|millions?))(?!\w)/i;
 
-// Verbes d'action fréquents à l'infinitif (prise de notes télégraphique)
 const INFINITIVE_ACTION_REGEX = /^(envoyer|préparer|rédiger|appeler|contacter|relancer|vérifier|tester|corriger|fixer|acheter|commander|planifier|organiser|créer|mettre à jour|modifier|refaire|terminer|finir|livrer|déployer|présenter|former|recruter|payer|facturer|valider|chiffrer|étudier|analyser|transmettre|partager|boucler|caler|voir avec|faire|send|prepare|draft|call|contact|follow up|check|test|fix|buy|order|plan|create|update|deliver|deploy|schedule|review)\b/i;
 
-// Détection des négations qui annulent un faux risque (ex: "pas de problème", "aucun retard")
 const NEGATED_RISK_REGEX = /\b(pas de|aucun|aucune|sans|plus de|zéro|no|without|zero)\s+(?:gros\s+|petit\s+|nouveau\s+)?(problème|souci|bug|erreur|panne|blocage|retard|risque|danger|alerte|conflit|problem|issue|bug|error|blocker|delay|risk)\b/i;
 
 export default function App() {
@@ -251,6 +279,7 @@ export default function App() {
   };
 
   const [rawText, setRawText] = useState(() => localStorage.getItem('meeting_rawText') || '');
+  const [meetingTitle, setMeetingTitle] = useState(() => localStorage.getItem('meeting_title') || 'Compte rendu de réunion — Suivi opérationnel');
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem('meeting_items');
     return saved ? JSON.parse(saved) : [];
@@ -260,8 +289,9 @@ export default function App() {
 
   useEffect(() => {
     localStorage.setItem('meeting_rawText', rawText);
+    localStorage.setItem('meeting_title', meetingTitle);
     localStorage.setItem('meeting_items', JSON.stringify(items));
-  }, [rawText, items]);
+  }, [rawText, meetingTitle, items]);
 
   useEffect(() => {
     try {
@@ -274,14 +304,13 @@ export default function App() {
 
   const showFeedback = (msg) => {
     setCopyFeedback(msg);
-    setTimeout(() => setCopyFeedback(''), 2800);
+    setTimeout(() => setCopyFeedback(''), 3200);
   };
 
+  // Nettoyage initial + Correction des doublons ("il il faut")
   const cleanAndFormatSentence = (str) => {
     let cleaned = str.trim();
-    // Nettoyage des puces, cases à cocher markdown et numérotations en début de ligne
     cleaned = cleaned.replace(/^(?:[\-\*\•\>\+]+|\[\s*[xX]?\s*\]|\d+[\.\)\-])\s*/, '');
-    // Nettoyage des préfixes explicites (ex: "ACTION : ", "TODO - ")
     cleaned = cleaned.replace(/^(?:todo|to-do|action|tâche|décision|decision|risque|risk|alerte|point|note)\s*[:\-–>]\s*/i, '');
 
     if (lang === 'fr') {
@@ -289,6 +318,8 @@ export default function App() {
         const regex = new RegExp(abbr, 'gi');
         cleaned = cleaned.replace(regex, ABBREVIATIONS[abbr]);
       });
+      // Évite le bug "il il faut" si l'utilisateur avait écrit "il fo"
+      cleaned = cleaned.replace(/\bil\s+il\s+faut\b/gi, 'il faut');
       cleaned = cleaned.replace(/^(et aussi|et puis|sinon|du coup|alors|bon|bah|ben|ensuite|de plus|par ailleurs|aussi|et|mais)\s+/i, '');
     } else {
       cleaned = cleaned.replace(/^(and also|also|then|so|anyway|furthermore|plus|but)\s+/i, '');
@@ -305,31 +336,97 @@ export default function App() {
     return cleaned;
   };
 
+  // NOUVEAU : Reformulation professionnelle selon la catégorie (Style Corporate)
+  const polishCorporateExpression = (sentence, category, assignee) => {
+    let s = sentence.trim();
+
+    if (lang === 'fr') {
+      // 1. Nettoyage des tics de langage oraux
+      s = s.replace(/\bde la boîte\b/gi, "de l'entreprise");
+      s = s.replace(/\bc'est important on a parlé du\b/gi, " — Point sur le");
+      s = s.replace(/\bon a parlé de la\b/gi, "Point sur la");
+      s = s.replace(/\bon a parlé du\b/gi, "Point sur le");
+      s = s.replace(/\s*\(@[A-Za-zÀ-ÿ]+\)/g, '');
+
+      if (category === 'actions') {
+        // Transforme "Il faut que Stéphane achète..." -> "Stéphane : Acheter..."
+        const ilFautMatch = s.match(/^(?:Il faut que|Faut que)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+([a-zà-ÿ]+)\s+(.+)/i);
+        if (ilFautMatch) {
+          const name = ilFautMatch[1];
+          const rawVerb = ilFautMatch[2].toLowerCase();
+          const rest = ilFautMatch[3];
+          const inf = VERB_TO_INFINITIVE[rawVerb] || (rawVerb.charAt(0).toUpperCase() + rawVerb.slice(1));
+          s = `${name} : ${inf} ${rest}`;
+        } else {
+          // Transforme "Charlotte doit refaire..." ou "Thomas -> envoyer..." -> "Charlotte : Refaire..."
+          const doitMatch = s.match(/^([A-ZÀ-Ÿ][a-zà-ÿ]+)\s*(?:->|→|:|\s+(?:elle\s+|il\s+)?(?:doit|devra|va))\s*([a-zà-ÿ]+)\s+(.+)/i);
+          if (doitMatch) {
+            const name = doitMatch[1];
+            const rawVerb = doitMatch[2].toLowerCase();
+            const rest = doitMatch[3];
+            const inf = VERB_TO_INFINITIVE[rawVerb] || (rawVerb.charAt(0).toUpperCase() + rawVerb.slice(1));
+            s = `${name} : ${inf} ${rest}`;
+          } else if (assignee && !s.toLowerCase().startsWith(assignee.toLowerCase())) {
+            s = `${assignee} : ${s.charAt(0).toUpperCase() + s.slice(1)}`;
+          }
+        }
+      } else if (category === 'decisions') {
+        // Transforme "On a validé le budget..." -> "Validation : Budget..."
+        s = s.replace(/^(?:On a validé|Nous avons validé|Validé)\s+(?:le\s+|la\s+|l'\s*)?/i, 'Validation : ');
+        s = s.replace(/^(?:On a décidé de|On a décidé|Décidé de|Décidé)\s*/i, 'Décision actée : ');
+        s = s.replace(/^(?:Ok pour|Okay pour|Accord pour|Go pour)\s+(?:le\s+|la\s+)?/i, 'Accord validé : ');
+      } else if (category === 'risks') {
+        // Transforme "Attention on a un gros retard..." -> "Point de vigilance : Gros retard..."
+        s = s.replace(/^(?:Attention\s*,?\s*)?(?:on a un|il y a un|nous avons un)\s+/i, 'Point de vigilance : ');
+        s = s.replace(/^Attention\s*[:\-]?\s*/i, 'Point de vigilance : ');
+        s = s.replace(/^Problème\s+sur\s+/i, 'Alerte — Problème sur ');
+      } else if (category === 'summary') {
+        s = s.replace(/^Pas de problème sur\s+/i, 'RAS (Conforme) : ');
+      }
+    } else {
+      // Polissage Anglais
+      s = s.replace(/\s*\(@[A-Za-zÀ-ÿ]+\)/g, '');
+      if (category === 'actions') {
+        const enMatch = s.match(/^([A-ZÀ-Ÿ][a-zà-ÿ]+)\s*(?:->|→|:|\s+(?:needs to|has to|must|will|should))\s*([a-z]+)\s+(.+)/i);
+        if (enMatch) {
+          const name = enMatch[1];
+          const verb = enMatch[2].charAt(0).toUpperCase() + enMatch[2].slice(1);
+          s = `${name}: ${verb} ${enMatch[3]}`;
+        }
+      } else if (category === 'decisions') {
+        s = s.replace(/^(?:We approved|Approved)\s+/i, 'Approved: ');
+        s = s.replace(/^(?:We agreed on|Agreed on)\s+/i, 'Agreed: ');
+      } else if (category === 'risks') {
+        s = s.replace(/^Warning\s*[:\-]?\s*/i, 'Risk Alert: ');
+      } else if (category === 'summary') {
+        s = s.replace(/^No issue on\s+/i, 'On track (No issue): ');
+      }
+    }
+
+    // Assure une majuscule après les deux-points ("Validation : budget" -> "Validation : Budget")
+    s = s.replace(/:\s+([a-zà-ÿ])/, (match, p1) => `: ${p1.toUpperCase()}`);
+    if (s.length > 0 && !/[\.\!\?]$/.test(s)) s += '.';
+    return s;
+  };
+
   const extractMetadata = (rawSegment, formattedSentence) => {
     let assignee = '';
     let deadline = '';
     let budget = '';
 
-    // 1. Extraction de la date/échéance (nettoyée des mots trop longs)
     const dateMatch = formattedSentence.match(DATE_REGEX);
     if (dateMatch) {
-      deadline = dateMatch[0].trim().split(/\s+/).slice(0, 4).join(' ');
+      deadline = dateMatch[0].trim();
     }
 
-    // 2. Extraction du budget
     const budgetMatch = formattedSentence.match(BUDGET_REGEX);
     if (budgetMatch) {
       budget = budgetMatch[0].trim();
     }
 
-    // 3. Extraction intelligente du responsable (Assignee)
-    // Cas A : Notation télégraphique en début de ligne ("Thomas : faire X", "Sarah -> relancer", "Marc - devis")
     const telegraphMatch = rawSegment.trim().match(/^([A-ZÀ-Ÿa-zà-ÿ]{3,15})\s*(?::|->|→|\-\s+)\s*(.+)/);
-    // Cas B : "@Prénom" ou "(Prénom)" en fin ou milieu de note
     const tagMatch = rawSegment.match(/(?:@|\(\s*resp\s*:?\s*|\(\s*)([A-ZÀ-Ÿ][a-zà-ÿ]+)\b/);
-    // Cas C : Structure grammaticale active ("Charlotte doit", "il faut que Stéphane", "Marc va")
-    const activeSubjectMatch = formattedSentence.match(/(?:il faut que|faut que|que)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\b|\b([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+(?:elle\s+|il\s+)?(?:doit|devra|va|s'occupe|est chargé|prend en charge|gère|achète|refait|prépare|relance|envoie|appelle|vérifie|contacte|needs to|must|will|has to|is responsible)/);
-    // Cas D : Structure passive ("confié à Marc", "fait par Julie", "charge à Thomas") — on exclut "envoyer à Marc" !
+    const activeSubjectMatch = formattedSentence.match(/(?:il faut que|faut que|que)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\b|\b([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+(?:elle\s+|il\s+)?(?:doit|devra|va|s'occupe|est chargé|prend en charge|gère|achète|refait|prépare|relance|envoie|appelle|vérifie|contacte|needs to|must|will|has to|is responsible)/i);
     const passiveMatch = formattedSentence.match(/(?:confié à|assigné à|charge à|géré par|fait par|suivi par|assigned to|handled by|by)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\b/i);
 
     const stopWords = [
@@ -346,12 +443,12 @@ export default function App() {
       assignee = tagMatch[1];
     } else if (activeSubjectMatch) {
       const candidate = activeSubjectMatch[1] || activeSubjectMatch[2];
-      if (!stopWords.includes(candidate)) assignee = candidate;
+      const normalized = candidate.charAt(0).toUpperCase() + candidate.slice(1);
+      if (!stopWords.includes(normalized)) assignee = normalized;
     } else if (passiveMatch) {
       const candidate = passiveMatch[1];
       if (!stopWords.includes(candidate)) assignee = candidate;
     } else {
-      // Fallback prudent : prénom en majuscule au milieu de la phrase (hors destinataire "envoyer à X")
       const withoutRecipient = formattedSentence.replace(/(?:envoyer|transmettre|parler|écrire|répondre|demander|send|talk|write)\s+(?:à|au|to)\s+[A-ZÀ-Ÿ][a-zà-ÿ]+/gi, '');
       const words = withoutRecipient.split(/\s+/);
       for (let i = 1; i < words.length; i++) {
@@ -369,18 +466,15 @@ export default function App() {
   const handleProcess = () => {
     if (!rawText.trim()) return;
 
-    // 1. Protection des points dans les nombres décimaux (ex: 15.5k€) et abréviations (M. Dupont)
     let protectedText = rawText
       .replace(/(\d)\.(\d)/g, '$1{{DOT}}$2')
       .replace(/\b(M|Mr|Mme|Dr|St)\.\s/gi, '$1{{DOT}} ');
 
-    // 2. Découpage intelligent des phrases composées (ex: "Budget validé, mais Thomas doit...")
     let preProcessed = protectedText
       .replace(/\s+(et aussi|sinon|par ailleurs|de plus|en revanche|and also|furthermore)\s+/gi, '. ')
       .replace(/,?\s+(mais il faut|mais faut|et il faut|mais attention|attention|cependant|toutefois|but we must|however)\s+/gi, '. $1 ')
       .replace(/,\s+(?:mais\s+|et\s+)?(?=[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:|\s+(?:doit|va|s'occupe|needs|must|will|has to)))/g, '. ');
 
-    // 3. Découpage par lignes, points, points-virgules
     const rawSegments = preProcessed
       .split(/[\.\n;\!\?]+/)
       .map(s => s.replace(/\{\{DOT\}\}/g, '.').trim())
@@ -399,34 +493,22 @@ export default function App() {
       let scoreDecision = 0;
       let scoreRisk = 0;
 
-      // Bonus A : Préfixes explicites écrits par l'utilisateur
       if (/^(?:todo|to-do|action|tâche|à faire|\[\s*[xX]?\s*\])/i.test(segment.trim())) scoreAction += 6;
       if (/^(?:décision|decision|validé|acté|accord|ok\s*:)/i.test(segment.trim())) scoreDecision += 6;
       if (/^(?:risque|risk|alerte|warning|blocage|problème|pb\s*:)/i.test(segment.trim())) scoreRisk += 6;
 
-      // Bonus B : Phrase qui commence directement par un verbe d'action à l'infinitif ("Envoyer le devis...")
       const cleanStart = formattedText.replace(/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?::|->|→|\-)\s*/, '');
-      if (INFINITIVE_ACTION_REGEX.test(cleanStart)) {
-        scoreAction += 4;
-      }
+      if (INFINITIVE_ACTION_REGEX.test(cleanStart)) scoreAction += 4;
 
-      // Bonus C : Format télégraphique "Prénom -> action" ou "Prénom : action"
-      if (/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:)\s*/.test(segment.trim())) {
-        scoreAction += 3;
-      }
+      if (/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:)\s*/.test(segment.trim())) scoreAction += 3;
 
-      // Pondération par mots-clés
       activeKeywords.actions.forEach(kw => { if (lower.includes(kw)) scoreAction += 2; });
       activeKeywords.decisions.forEach(kw => { if (lower.includes(kw)) scoreDecision += 2; });
       activeKeywords.risks.forEach(kw => { if (lower.includes(kw)) scoreRisk += 2; });
 
-      // Correction des faux positifs de Risque (ex: "pas de problème", "aucun retard")
-      if (NEGATED_RISK_REGEX.test(lower)) {
-        scoreRisk = 0;
-      }
+      if (NEGATED_RISK_REGEX.test(lower)) scoreRisk = 0;
 
-      // Bonus contextuels liés aux métadonnées extraites
-      if (meta.deadline) scoreAction += 2;
+      if (meta.deadline && scoreDecision === 0) scoreAction += 2;
       if (meta.assignee && scoreDecision === 0 && scoreRisk === 0) scoreAction += 2;
       if (meta.budget && scoreAction === 0 && scoreRisk === 0) scoreDecision += 2;
 
@@ -439,9 +521,11 @@ export default function App() {
         else category = 'risks';
       }
 
+      const polishedText = polishCorporateExpression(formattedText, category, meta.assignee);
+
       return {
         id: `item-${Date.now()}-${index}`,
-        text: formattedText,
+        text: polishedText,
         category,
         assignee: meta.assignee || '',
         deadline: meta.deadline || '',
@@ -475,38 +559,184 @@ export default function App() {
     setItems(prev => [...prev, newItem]);
   };
 
+  // Génération Markdown propre (pour Notion, Slack, Obsidian)
   const generateMarkdown = () => {
+    const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US');
     const summary = items.filter(i => i.category === 'summary');
     const decisions = items.filter(i => i.category === 'decisions');
     const actions = items.filter(i => i.category === 'actions');
     const risks = items.filter(i => i.category === 'risks');
 
-    return `# ${lang === 'fr' ? 'Compte-Rendu de Réunion' : 'Meeting Minutes'}
-*${lang === 'fr' ? 'Structuré via MeetClean le' : 'Structured via MeetClean on'} ${new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}*
+    return `# 📋 ${meetingTitle}
+*${lang === 'fr' ? 'Document structuré le' : 'Structured on'} ${dateStr} via MeetClean*
 
-## ${t.categories.actions.label}
-${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] ${i.text}${i.assignee ? ` **[Resp: ${i.assignee}]**` : ''}${i.deadline ? ` *(Échéance: ${i.deadline})*` : ''}${i.budget ? ` **[Budget: ${i.budget}]**` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune action détectée.' : 'No action detected.'}_`}
+---
 
-## ${t.categories.decisions.label}
-${decisions.length > 0 ? decisions.map(i => `- **${lang === 'fr' ? 'Décision :' : 'Decision:'}** ${i.text}${i.budget ? ` *(Budget: ${i.budget})*` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune décision explicite.' : 'No explicit decision.'}_`}
+## 🛠️ ${t.categories.actions.label} (${actions.length})
+${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] **${i.text}**${i.assignee ? ` — 👤 *Resp : ${i.assignee}*` : ''}${i.deadline ? ` | 📅 *Échéance : ${i.deadline}*` : ''}${i.budget ? ` | 💰 *Budget : ${i.budget}*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
 
-## ${t.categories.risks.label}
-${risks.length > 0 ? risks.map(i => `- ${i.text}`).join('\n') : `_${lang === 'fr' ? 'Aucun risque signalé.' : 'No risk reported.'}_`}
+## ✅ ${t.categories.decisions.label} (${decisions.length})
+${decisions.length > 0 ? decisions.map(i => `- **${i.text}**${i.budget ? ` — 💰 **Budget : ${i.budget}**` : ''}${i.deadline ? ` *(Période : ${i.deadline})*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
 
-## ${t.categories.summary.label}
-${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang === 'fr' ? 'Aucun point général.' : 'No general point.'}_`}
+## ⚠️ ${t.categories.risks.label} (${risks.length})
+${risks.length > 0 ? risks.map(i => `- **${i.text}**${i.assignee ? ` *(Référent : ${i.assignee})*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
+
+## 📌 ${t.categories.summary.label} (${summary.length})
+${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${t.emptyCategory}_`}
 `;
+  };
+
+  // NOUVEAU : Génération d'un E-mail Riche (HTML avec couleurs, gras, souligné + Fallback texte propre SANS ** ni ##)
+  const copyEmailReady = async () => {
+    const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+      day: '2-digit', month: 'long', year: 'numeric'
+    });
+
+    const actions = items.filter(i => i.category === 'actions');
+    const decisions = items.filter(i => i.category === 'decisions');
+    const risks = items.filter(i => i.category === 'risks');
+    const summary = items.filter(i => i.category === 'summary');
+
+    // 1. Version Texte Brut ultra-propre (aucun symbole ** ou ##)
+    const plainText = `${lang === 'fr' ? 'Bonjour à tous,\n\nVeuillez trouver ci-dessous le compte rendu structuré de notre réunion :' : 'Hello everyone,\n\nPlease find below the structured minutes from our meeting:'}
+
+==================================================
+📋 ${meetingTitle.toUpperCase()}
+📅 Date : ${dateStr}
+==================================================
+
+🛠️ ${t.categories.actions.label} (${actions.length})
+--------------------------------------------------
+${actions.length > 0 ? actions.map(i => `${i.done ? '☑' : '☐'} ${i.text}${i.assignee ? `\n   ↳ 👤 Responsable : ${i.assignee}` : ''}${i.deadline ? `  |  📅 Échéance : ${i.deadline}` : ''}${i.budget ? `  |  💰 Budget : ${i.budget}` : ''}`).join('\n\n') : `• ${t.emptyCategory}`}
+
+✅ ${t.categories.decisions.label} (${decisions.length})
+--------------------------------------------------
+${decisions.length > 0 ? decisions.map(i => `• ${i.text}${i.budget ? `\n   ↳ 💰 Montant validé : ${i.budget}` : ''}${i.deadline ? `  |  📅 Période : ${i.deadline}` : ''}`).join('\n\n') : `• ${t.emptyCategory}`}
+
+⚠️ ${t.categories.risks.label} (${risks.length})
+--------------------------------------------------
+${risks.length > 0 ? risks.map(i => `• ${i.text}`).join('\n') : `• ${t.emptyCategory}`}
+
+📌 ${t.categories.summary.label} (${summary.length})
+--------------------------------------------------
+${summary.length > 0 ? summary.map(i => `• ${i.text}`).join('\n') : `• ${t.emptyCategory}`}
+
+${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
+
+    // 2. Version HTML Riche avec couleurs inline (Pour Gmail, Outlook, Apple Mail, Word)
+    const renderHtmlBadges = (item) => {
+      const badges = [];
+      if (item.assignee) {
+        badges.push(`<span style="display:inline-block; background-color:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:700; margin-right:6px;">👤 Resp : <u>${item.assignee}</u></span>`);
+      }
+      if (item.deadline) {
+        badges.push(`<span style="display:inline-block; background-color:#fef3c7; color:#92400e; border:1px solid #fde68a; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:700; margin-right:6px;">📅 Échéance : <u>${item.deadline}</u></span>`);
+      }
+      if (item.budget) {
+        badges.push(`<span style="display:inline-block; background-color:#dcfce7; color:#166534; border:1px solid #bbf7d0; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:800;">💰 Budget : <u>${item.budget}</u></span>`);
+      }
+      return badges.length > 0 ? `<div style="margin-top:6px;">${badges.join(' ')}</div>` : '';
+    };
+
+    const formatRichText = (text) => {
+      if (text.includes(' : ')) {
+        const parts = text.split(' : ');
+        return `<strong style="color:#1c1c21; text-decoration:underline;">${parts[0]} :</strong> <span style="color:#1c1c21; font-weight:600;">${parts.slice(1).join(' : ')}</span>`;
+      }
+      return `<strong style="color:#1c1c21;">${text}</strong>`;
+    };
+
+    const htmlContent = `
+<div style="font-family: Arial, Helvetica, sans-serif; color: #1c1c21; max-width: 720px; line-height: 1.5; font-size: 14px;">
+  <p style="margin-bottom: 16px;">${lang === 'fr' ? 'Bonjour à tous,<br><br>Veuillez trouver ci-dessous la synthèse opérationnelle et le plan d’action de notre réunion :' : 'Hello everyone,<br><br>Please find below the operational summary and action plan from our meeting:'}</p>
+
+  <div style="border: 2px solid #1c1c21; background-color: #f4f1ea; padding: 16px 20px; margin-bottom: 20px;">
+    <div style="font-size: 11px; font-weight: 800; color: #c84b31; letter-spacing: 1px; text-transform: uppercase;">COMPTE RENDU EXÉCUTIF • MEETCLEAN</div>
+    <h1 style="margin: 4px 0 6px 0; font-size: 20px; color: #1c1c21;">${meetingTitle}</h1>
+    <div style="font-size: 12px; color: #5a5a66;">📅 <strong>Date :</strong> ${dateStr} &nbsp;|&nbsp; 🛠️ <strong>${actions.length} Action(s)</strong> &nbsp;|&nbsp; ✅ <strong>${decisions.length} Décision(s)</strong> &nbsp;|&nbsp; ⚠️ <strong>${risks.length} Point(s) de vigilance</strong></div>
+  </div>
+
+  <!-- SECTION 1 : ACTIONS -->
+  <div style="margin-bottom: 22px;">
+    <h2 style="font-size: 15px; color: #c84b31; border-bottom: 2px solid #c84b31; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
+      🛠️ 01. <u>${t.categories.actions.label}</u> (${actions.length})
+    </h2>
+    ${actions.length > 0 ? actions.map(i => `
+      <div style="background-color: #fdf3f1; border-left: 4px solid #c84b31; padding: 10px 14px; margin-bottom: 8px;">
+        <div style="font-size: 14px; ${i.done ? 'text-decoration: line-through; color: #6b7280;' : ''}">
+          ${i.done ? '✅' : '⬜'} ${formatRichText(i.text)}
+        </div>
+        ${renderHtmlBadges(i)}
+      </div>
+    `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
+  </div>
+
+  <!-- SECTION 2 : DÉCISIONS -->
+  <div style="margin-bottom: 22px;">
+    <h2 style="font-size: 15px; color: #15803d; border-bottom: 2px solid #15803d; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
+      ✅ 02. <u>${t.categories.decisions.label}</u> (${decisions.length})
+    </h2>
+    ${decisions.length > 0 ? decisions.map(i => `
+      <div style="background-color: #f0fdf4; border-left: 4px solid #15803d; padding: 10px 14px; margin-bottom: 8px;">
+        <div style="font-size: 14px;">✔️ ${formatRichText(i.text)}</div>
+        ${renderHtmlBadges(i)}
+      </div>
+    `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
+  </div>
+
+  <!-- SECTION 3 : RISQUES -->
+  <div style="margin-bottom: 22px;">
+    <h2 style="font-size: 15px; color: #b91c1c; border-bottom: 2px solid #b91c1c; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
+      ⚠️ 03. <u>${t.categories.risks.label}</u> (${risks.length})
+    </h2>
+    ${risks.length > 0 ? risks.map(i => `
+      <div style="background-color: #fef2f2; border-left: 4px solid #b91c1c; padding: 10px 14px; margin-bottom: 8px;">
+        <div style="font-size: 14px; color: #991b1b;">🚨 ${formatRichText(i.text)}</div>
+        ${renderHtmlBadges(i)}
+      </div>
+    `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
+  </div>
+
+  <!-- SECTION 4 : SYNTHÈSE -->
+  <div style="margin-bottom: 22px;">
+    <h2 style="font-size: 15px; color: #1d4ed8; border-bottom: 2px solid #1d4ed8; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
+      📌 04. <u>${t.categories.summary.label}</u> (${summary.length})
+    </h2>
+    ${summary.length > 0 ? summary.map(i => `
+      <div style="background-color: #eff6ff; border-left: 4px solid #1d4ed8; padding: 10px 14px; margin-bottom: 8px;">
+        <div style="font-size: 14px;">• ${formatRichText(i.text)}</div>
+      </div>
+    `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
+  </div>
+
+  <p style="margin-top: 24px; color: #1c1c21;">${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}</p>
+  <hr style="border: none; border-top: 1px solid #d0cbc1; margin: 16px 0 8px 0;">
+  <p style="font-size: 11px; color: #5a5a66; margin: 0;">Compte rendu structuré via <a href="https://meetclean.app" style="color: #c84b31; font-weight: bold;">meetclean.app</a></p>
+</div>`;
+
+    try {
+      if (window.ClipboardItem) {
+        const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
+        const textBlob = new Blob([plainText], { type: 'text/plain' });
+        await navigator.clipboard.write([
+          new window.ClipboardItem({
+            'text/html': htmlBlob,
+            'text/plain': textBlob
+          })
+        ]);
+      } else {
+        await navigator.clipboard.writeText(plainText);
+      }
+      showFeedback(lang === 'fr' ? "E-mail riche (couleurs & gras) copié ! Faites Ctrl+V dans Gmail" : "Rich email copied! Paste into Gmail/Outlook");
+    } catch (err) {
+      await navigator.clipboard.writeText(plainText);
+      showFeedback(lang === 'fr' ? "Texte structuré copié !" : "Structured text copied!");
+    }
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generateMarkdown());
-    showFeedback(lang === 'fr' ? "Copié en Markdown" : "Markdown copied");
-  };
-
-  const copyEmailReady = () => {
-    const emailText = `${lang === 'fr' ? 'Bonjour à tous,\n\nVoici le compte-rendu structuré de notre réunion :\n\n' : 'Hello everyone,\n\nHere are the structured minutes from our meeting:\n\n'}` + generateMarkdown() + `\n\n${lang === 'fr' ? 'Bien cordialement,\n' : 'Best regards,\n'}`;
-    navigator.clipboard.writeText(emailText);
-    showFeedback(lang === 'fr' ? "Format E-mail copié" : "Email format copied");
+    showFeedback(lang === 'fr' ? "Copié en Markdown (Notion / Slack)" : "Markdown copied");
   };
 
   const downloadMarkdown = () => {
@@ -693,86 +923,109 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
             </button>
           </div>
 
-          {/* Résultat structuré */}
+          {/* RÉSULTAT INTERACTIF À L'ÉCRAN (Masqué à l'impression au profit du rapport PDF Pro) */}
           {hasProcessed && (
-            <div className="printable-result" style={{ marginTop: '32px', background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }} className="no-print">
-                <div>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: '800', margin: 0, letterSpacing: '-0.01em' }}>{t.titleResult}</h2>
-                  <p style={{ color: THEME.inkMuted, fontSize: '0.82rem', margin: '4px 0 0 0' }}>
+            <div className="no-print" style={{ marginTop: '32px', background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
+              
+              {/* Barre d'actions d'exportation */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
+                <div style={{ flex: 1, minWidth: '240px' }}>
+                  <div style={{ fontSize: '0.72rem', fontWeight: '800', color: THEME.accent, letterSpacing: '0.06em', marginBottom: '4px' }}>
+                    {t.titleResult}
+                  </div>
+                  <input
+                    type="text"
+                    value={meetingTitle}
+                    onChange={(e) => setMeetingTitle(e.target.value)}
+                    placeholder={t.meetingTitlePlaceholder}
+                    style={{
+                      width: '100%',
+                      fontSize: '1.25rem',
+                      fontWeight: '800',
+                      color: THEME.ink,
+                      background: 'transparent',
+                      border: 'none',
+                      borderBottom: `1.5px dashed ${THEME.borderSubtle}`,
+                      padding: '2px 0 4px 0',
+                      outline: 'none',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                  <p style={{ color: THEME.inkMuted, fontSize: '0.78rem', margin: '6px 0 0 0' }}>
                     {t.descResult}
                   </p>
                 </div>
                 
                 <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-                  {copyFeedback && (
-                    <span style={{ fontSize: '0.78rem', fontWeight: '700', color: THEME.accent, marginRight: '6px' }}>
-                      ✓ {copyFeedback}
-                    </span>
-                  )}
                   <button 
                     onClick={copyEmailReady}
-                    style={{ background: THEME.ink, color: THEME.surface, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
+                    style={{ background: THEME.accent, color: '#ffffff', border: `2px solid ${THEME.border}`, padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: '800', boxShadow: `2px 2px 0px ${THEME.border}` }}
                   >
                     {t.copyEmail}
                   </button>
                   <button 
+                    onClick={() => window.print()}
+                    style={{ background: THEME.ink, color: THEME.surface, border: `2px solid ${THEME.border}`, padding: '9px 14px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: '700' }}
+                  >
+                    {t.printPdf}
+                  </button>
+                  <button 
                     onClick={copyToClipboard}
-                    style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
+                    style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '8px 12px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: '700' }}
                   >
                     {t.copyMd}
                   </button>
                   <button 
                     onClick={downloadMarkdown}
-                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
+                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '8px 12px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: '600' }}
                   >
                     {t.downloadMd}
-                  </button>
-                  <button 
-                    onClick={() => window.print()}
-                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
-                  >
-                    {t.printPdf}
                   </button>
                 </div>
               </div>
 
+              {copyFeedback && (
+                <div style={{ backgroundColor: '#dcfce7', color: '#166534', border: '1.5px solid #15803d', padding: '10px 14px', marginBottom: '16px', fontSize: '0.85rem', fontWeight: '700' }}>
+                  ✓ {copyFeedback}
+                </div>
+              )}
+
+              {/* Cartes par catégorie avec codes couleurs */}
               <div style={{ display: 'grid', gap: '20px' }}>
                 {Object.keys(t.categories).map(catKey => {
                   const cat = t.categories[catKey];
                   const catItems = items.filter(i => i.category === catKey);
                   return (
-                    <div key={catKey} className="category-card" style={{ background: THEME.bg, padding: '16px', border: `1.5px solid ${THEME.border}` }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: `1px solid ${THEME.borderSubtle}`, paddingBottom: '8px' }}>
-                        <h3 style={{ color: THEME.ink, fontSize: '0.9rem', fontWeight: '800', letterSpacing: '0.04em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <span style={{ backgroundColor: THEME.ink, color: THEME.surface, padding: '2px 6px', fontSize: '0.72rem' }}>
+                    <div key={catKey} style={{ background: cat.bgLight, padding: '16px', border: `1.5px solid ${THEME.border}`, borderLeft: `6px solid ${cat.color}` }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: `1.5px solid ${cat.borderLight}`, paddingBottom: '8px' }}>
+                        <h3 style={{ color: cat.color, fontSize: '0.92rem', fontWeight: '800', letterSpacing: '0.04em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'underline', textUnderlineOffset: '4px' }}>
+                          <span style={{ backgroundColor: cat.color, color: '#ffffff', padding: '2px 7px', fontSize: '0.72rem', textDecoration: 'none' }}>
                             {cat.tag}
                           </span>
                           {cat.label}
-                          <span style={{ color: THEME.inkMuted, fontSize: '0.8rem', fontWeight: '600' }}>
+                          <span style={{ color: THEME.inkMuted, fontSize: '0.8rem', fontWeight: '700', textDecoration: 'none' }}>
                             ({catItems.length})
                           </span>
                         </h3>
                         <button
                           onClick={() => addItem(catKey)}
-                          style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '3px 10px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: '700' }}
-                          className="no-print"
+                          style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '4px 10px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: '700' }}
                         >
                           {t.addBtn}
                         </button>
                       </div>
 
                       {catItems.length > 0 ? (
-                        <div style={{ display: 'grid', gap: '8px' }}>
+                        <div style={{ display: 'grid', gap: '10px' }}>
                           {catItems.map(item => (
-                            <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: THEME.surface, padding: '10px 12px', border: `1px solid ${THEME.borderSubtle}` }}>
+                            <div key={item.id} style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: THEME.surface, padding: '12px', border: `1px solid ${THEME.borderSubtle}`, boxShadow: '0 1px 2px rgba(0,0,0,0.04)' }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 {catKey === 'actions' && (
                                   <input 
                                     type="checkbox" 
                                     checked={item.done}
                                     onChange={(e) => updateItem(item.id, 'done', e.target.checked)}
-                                    style={{ accentColor: THEME.accent, width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }} 
+                                    style={{ accentColor: cat.color, width: '17px', height: '17px', cursor: 'pointer', flexShrink: 0 }} 
                                   />
                                 )}
                                 <input
@@ -784,10 +1037,11 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                                     background: 'transparent',
                                     color: item.done ? THEME.inkMuted : THEME.ink,
                                     textDecoration: item.done ? 'line-through' : 'none',
+                                    fontWeight: '600',
                                     border: 'none',
                                     borderBottom: '1px solid transparent',
                                     padding: '2px 4px',
-                                    fontSize: '0.92rem',
+                                    fontSize: '0.94rem',
                                     fontFamily: 'inherit',
                                     outline: 'none'
                                   }}
@@ -797,7 +1051,6 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                                   value={item.category}
                                   onChange={(e) => updateItem(item.id, 'category', e.target.value)}
                                   style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '3px 6px', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
-                                  className="no-print"
                                 >
                                   {Object.keys(t.categories).map(cKey => (
                                     <option key={cKey} value={cKey}>{t.categories[cKey].shortLabel}</option>
@@ -806,45 +1059,45 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
 
                                 <button
                                   onClick={() => deleteItem(item.id)}
-                                  style={{ background: 'transparent', color: THEME.inkMuted, border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '800', padding: '2px 6px' }}
-                                  className="no-print"
+                                  style={{ background: 'transparent', color: THEME.inkMuted, border: 'none', cursor: 'pointer', fontSize: '1rem', fontWeight: '800', padding: '2px 6px' }}
                                   title="Supprimer"
                                 >
                                   ×
                                 </button>
                               </div>
 
-                              <div style={{ display: 'flex', gap: '10px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>RESP:</span>
+                              {/* Badges colorés Responsable / Date / Budget */}
+                              <div style={{ display: 'flex', gap: '10px', paddingLeft: catKey === 'actions' ? '25px' : '0px', flexWrap: 'wrap' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', background: item.assignee ? '#eff6ff' : THEME.bg, border: `1px solid ${item.assignee ? '#93c5fd' : THEME.borderSubtle}`, padding: '3px 8px', borderRadius: '4px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: item.assignee ? '#1e40af' : THEME.inkMuted, marginRight: '6px' }}>👤 RESP:</span>
                                   <input
                                     type="text"
-                                    placeholder="—"
+                                    placeholder="Ajouter..."
                                     value={item.assignee}
                                     onChange={(e) => updateItem(item.id, 'assignee', e.target.value)}
-                                    style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '90px', outline: 'none' }}
+                                    style={{ background: 'transparent', color: '#1e3a8a', border: 'none', fontSize: '0.76rem', fontWeight: '700', width: '105px', outline: 'none', textDecoration: item.assignee ? 'underline' : 'none' }}
                                   />
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>DATE:</span>
+                                <div style={{ display: 'flex', alignItems: 'center', background: item.deadline ? '#fef3c7' : THEME.bg, border: `1px solid ${item.deadline ? '#fcd34d' : THEME.borderSubtle}`, padding: '3px 8px', borderRadius: '4px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: item.deadline ? '#92400e' : THEME.inkMuted, marginRight: '6px' }}>📅 ÉCHÉANCE:</span>
                                   <input
                                     type="text"
-                                    placeholder="—"
+                                    placeholder="Ajouter..."
                                     value={item.deadline}
                                     onChange={(e) => updateItem(item.id, 'deadline', e.target.value)}
-                                    style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '95px', outline: 'none' }}
+                                    style={{ background: 'transparent', color: '#78350f', border: 'none', fontSize: '0.76rem', fontWeight: '700', width: '145px', outline: 'none' }}
                                   />
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>BUDGET:</span>
+                                <div style={{ display: 'flex', alignItems: 'center', background: item.budget ? '#dcfce7' : THEME.bg, border: `1px solid ${item.budget ? '#86efac' : THEME.borderSubtle}`, padding: '3px 8px', borderRadius: '4px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '800', color: item.budget ? '#166534' : THEME.inkMuted, marginRight: '6px' }}>💰 BUDGET:</span>
                                   <input
                                     type="text"
-                                    placeholder="—"
+                                    placeholder="Ajouter..."
                                     value={item.budget}
                                     onChange={(e) => updateItem(item.id, 'budget', e.target.value)}
-                                    style={{ background: 'transparent', color: THEME.accent, border: 'none', fontSize: '0.75rem', fontWeight: '800', width: '80px', outline: 'none' }}
+                                    style={{ background: 'transparent', color: '#14532d', border: 'none', fontSize: '0.76rem', fontWeight: '800', width: '90px', outline: 'none' }}
                                   />
                                 </div>
                               </div>
@@ -852,7 +1105,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                           ))}
                         </div>
                       ) : (
-                        <p style={{ color: THEME.inkMuted, margin: 0, fontSize: '0.85rem' }}>
+                        <p style={{ color: THEME.inkMuted, margin: 0, fontSize: '0.85rem', fontStyle: 'italic' }}>
                           {t.emptyCategory}
                         </p>
                       )}
@@ -863,7 +1116,98 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
             </div>
           )}
 
-          {/* SECTION 1 : Démonstration Avant / Après (Forte valeur ajoutée visuelle) */}
+          {/* =====================================================================
+              RAPPORT EXÉCUTIF DÉDIÉ À L'IMPRESSION PDF (Visible uniquement en PDF)
+             ===================================================================== */}
+          {hasProcessed && (
+            <div className="print-only">
+              <div style={{ borderBottom: '3px solid #1c1c21', paddingBottom: '14px', marginBottom: '22px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+                <div>
+                  <div style={{ fontSize: '10px', fontWeight: '800', color: '#c84b31', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                    COMPTE RENDU OPÉRATIONNEL • MEETCLEAN
+                  </div>
+                  <h1 style={{ fontSize: '22px', fontWeight: '800', margin: '4px 0 0 0', color: '#1c1c21' }}>
+                    {meetingTitle}
+                  </h1>
+                </div>
+                <div style={{ textAlign: 'right', fontSize: '12px', color: '#5a5a66' }}>
+                  <strong>Date :</strong> {new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { day: '2-digit', month: 'long', year: 'numeric' })}
+                </div>
+              </div>
+
+              {/* Bandeau de synthèse statistique PDF */}
+              <div style={{ display: 'flex', gap: '12px', marginBottom: '24px' }}>
+                {Object.keys(t.categories).map(catKey => {
+                  const cat = t.categories[catKey];
+                  const count = items.filter(i => i.category === catKey).length;
+                  return (
+                    <div key={catKey} style={{ flex: 1, border: `1.5px solid ${cat.color}`, backgroundColor: cat.bgLight, padding: '8px 12px' }}>
+                      <div style={{ fontSize: '18px', fontWeight: '800', color: cat.color }}>{count}</div>
+                      <div style={{ fontSize: '10px', fontWeight: '700', color: '#1c1c21', textTransform: 'uppercase' }}>{cat.shortLabel}(S)</div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Sections du rapport PDF sans aucun <input> ni champ vide */}
+              {Object.keys(t.categories).map(catKey => {
+                const cat = t.categories[catKey];
+                const catItems = items.filter(i => i.category === catKey);
+                if (catItems.length === 0) return null;
+
+                return (
+                  <div key={catKey} style={{ marginBottom: '22px', pageBreakInside: 'avoid' }}>
+                    <h2 style={{ fontSize: '13px', fontWeight: '800', color: cat.color, borderBottom: `2px solid ${cat.color}`, paddingBottom: '4px', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      {cat.tag}. <u>{cat.label}</u> ({catItems.length})
+                    </h2>
+                    <div style={{ display: 'grid', gap: '8px' }}>
+                      {catItems.map(item => (
+                        <div key={item.id} style={{ padding: '10px 12px', backgroundColor: cat.bgLight, borderLeft: `4px solid ${cat.color}`, border: `1px solid ${cat.borderLight}`, borderLeftWidth: '4px' }}>
+                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1c1c21', textDecoration: item.done ? 'line-through' : 'none' }}>
+                            {catKey === 'actions' ? (item.done ? '☑ ' : '☐ ') : '• '}
+                            {item.text.includes(' : ') ? (
+                              <>
+                                <strong style={{ textDecoration: 'underline', color: cat.color }}>{item.text.split(' : ')[0]} :</strong>{' '}
+                                <span>{item.text.split(' : ').slice(1).join(' : ')}</span>
+                              </>
+                            ) : (
+                              <span>{item.text}</span>
+                            )}
+                          </div>
+                          {(item.assignee || item.deadline || item.budget) && (
+                            <div style={{ marginTop: '6px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                              {item.assignee && (
+                                <span style={{ fontSize: '11px', backgroundColor: '#eff6ff', color: '#1e40af', border: '1px solid #93c5fd', padding: '2px 8px', borderRadius: '3px', fontWeight: '700' }}>
+                                  👤 Responsable : <u>{item.assignee}</u>
+                                </span>
+                              )}
+                              {item.deadline && (
+                                <span style={{ fontSize: '11px', backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #fcd34d', padding: '2px 8px', borderRadius: '3px', fontWeight: '700' }}>
+                                  📅 Échéance : <u>{item.deadline}</u>
+                                </span>
+                              )}
+                              {item.budget && (
+                                <span style={{ fontSize: '11px', backgroundColor: '#dcfce7', color: '#166534', border: '1px solid #86efac', padding: '2px 8px', borderRadius: '3px', fontWeight: '800' }}>
+                                  💰 Budget : <u>{item.budget}</u>
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+
+              <div style={{ marginTop: '30px', paddingTop: '10px', borderTop: '1px solid #d0cbc1', fontSize: '10px', color: '#5a5a66', display: 'flex', justifyContent: 'space-between' }}>
+                <span>Document généré et structuré via <strong>meetclean.app</strong></span>
+                <span>Traitement 100 % local • Sans stockage serveur</span>
+              </div>
+            </div>
+          )}
+
+          {/* SECTION 1 : Démonstration Avant / Après */}
           <section className="no-print" style={{ marginTop: '48px', backgroundColor: THEME.surface, border: `2px solid ${THEME.border}`, padding: '24px' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: '800', marginTop: 0, marginBottom: '16px', letterSpacing: '-0.02em' }}>
               {t.beforeAfterTitle}
@@ -883,14 +1227,14 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                 </div>
                 <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '0.84rem', lineHeight: '1.6', color: THEME.ink }}>
                   {t.afterSample.map((line, i) => (
-                    <li key={i} style={{ marginBottom: '4px', fontWeight: '500' }}>{line}</li>
+                    <li key={i} style={{ marginBottom: '4px', fontWeight: '600' }}>{line}</li>
                   ))}
                 </ul>
               </div>
             </div>
           </section>
 
-          {/* SECTION 2 : Guide Méthodologique (Contenu éditorial riche pour Google & les utilisateurs) */}
+          {/* SECTION 2 : Guide Méthodologique */}
           <section id="guide-methodo" className="no-print" style={{ marginTop: '36px', backgroundColor: THEME.surface, border: `2px solid ${THEME.border}`, padding: '28px' }}>
             <h2 style={{ fontSize: '1.35rem', fontWeight: '800', marginTop: 0, marginBottom: '10px', letterSpacing: '-0.02em' }}>
               {t.guideTitle}
@@ -915,7 +1259,6 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
               ))}
             </div>
 
-            {/* Encart de syntaxe rapide */}
             <div style={{ marginTop: '24px', backgroundColor: THEME.surfaceAlt, padding: '18px', borderLeft: `4px solid ${THEME.ink}` }}>
               <h3 style={{ fontSize: '0.95rem', fontWeight: '800', margin: '0 0 6px 0' }}>{t.templateTitle}</h3>
               <p style={{ fontSize: '0.85rem', color: THEME.inkMuted, margin: '0 0 10px 0' }}>{t.templateDesc}</p>
@@ -971,17 +1314,29 @@ Attention : blocage ou retard sur [sujet technique].`}
       </div>
 
       <style>{`
+        .print-only {
+          display: none;
+        }
         @media (max-width: 1024px) {
           .sidebar-ad {
             display: none !important;
           }
         }
         @media print {
+          @page {
+            margin: 14mm;
+          }
           .no-print {
             display: none !important;
           }
+          .print-only {
+            display: block !important;
+            width: 100% !important;
+          }
           body {
             background-color: #ffffff !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
         }
       `}</style>
