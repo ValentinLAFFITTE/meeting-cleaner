@@ -121,12 +121,13 @@ const TRANSLATIONS = {
     cleanSpacesBtn: "Nettoyer espaces",
     testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "NOTES BRUTES DE LA RÉUNION",
-    placeholderInput: "Saisissez ou collez vos notes ici. Sélectionnez un mot et cliquez sur B, U ou S pour le mettre en gras, souligner ou barrer directement...",
+    placeholderInput: "Saisissez ou collez vos notes ici. Sélectionnez un mot et cliquez sur B, I, U ou S pour le formater directement...",
     processBtn: "Structurer le compte rendu →",
     titleResult: "DOCUMENT STRUCTURÉ",
     descResult: "Utilisez les boutons [B] [U] [S] sur chaque ligne pour mettre en gras, souligner ou barrer un point avant l'export.",
     meetingTitlePlaceholder: "Compte rendu de réunion — Suivi opérationnel",
     copyEmail: "Copier format E-mail",
+    downloadDocx: "Exporter Word (.doc)",
     printPdf: "Imprimer / PDF",
     copyMd: "Copier Markdown",
     downloadMd: "Exporter .md",
@@ -178,7 +179,7 @@ const TRANSLATIONS = {
       { q: "En quoi MeetClean diffère-t-il d'un générateur par IA générative ?", a: "Contrairement aux grands modèles de langage (LLM) qui peuvent inventer des chiffres (hallucinations) ou reformuler vos propos de manière générique, MeetClean utilise un moteur d'analyse lexicale et grammaticale déterministe. Vos phrases restent fidèles à vos notes, les abréviations courantes sont nettoyées et aucune donnée ne transite vers un serveur distant." },
       { q: "Comment sont détectés les budgets, dates et responsables ?", a: "L'application utilise des expressions régulières avancées (Regex) couplées à un système de pondération sémantique. Lorsqu'une somme (en €, k€ ou $), une échéance temporelle ou un prénom suivi d'un verbe d'action est repéré, le segment gagne des points vers la catégorie correspondante." },
       { q: "Mes notes confidentielles d'entreprise sont-elles stockées ?", a: "Non. Le code s'exécute intégralement en JavaScript au sein de la mémoire locale (localStorage) de votre propre navigateur. Vous pouvez même couper votre connexion Internet après le chargement de la page et continuer à structurer vos comptes rendus." },
-      { q: "Comment exporter le résultat vers Gmail, Outlook, Notion ou PDF ?", a: "Le bouton « Copier format E-mail » génère un compte rendu mis en forme en couleurs (gras, souligné, étiquettes visuelles) directement collable dans Gmail ou Outlook. Le bouton « Imprimer / PDF » génère une fiche de synthèse prête à partager." }
+      { q: "Comment exporter le résultat vers Word, Gmail, Outlook, Notion ou PDF ?", a: "Le bouton « Exporter Word (.doc) » télécharge directement un fichier Word éditable. Le bouton « Copier format E-mail » génère un compte rendu mis en forme en couleurs collable dans Gmail ou Outlook. Le bouton « Imprimer / PDF » génère une fiche de synthèse officielle." }
     ]
   },
   en: {
@@ -190,12 +191,13 @@ const TRANSLATIONS = {
     cleanSpacesBtn: "Clean spaces",
     testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15.5k€ for the new software, but Thomas -> send final quote to Marc before Thursday. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. [x] Follow up with accounting (@Julie). no issue on cloud migration. warning: huge delay on website production due to a server bug.",
     labelInput: "RAW MEETING NOTES",
-    placeholderInput: "Type or paste your raw notes here. Highlight any word and click B, U, or S to format directly...",
+    placeholderInput: "Type or paste your raw notes here. Highlight any word and click B, I, U, or S to format directly...",
     processBtn: "Structure meeting minutes →",
     titleResult: "STRUCTURED DOCUMENT",
     descResult: "Use the [B] [U] [S] buttons on any line to bold, underline, or strikethrough items before exporting.",
     meetingTitlePlaceholder: "Meeting Minutes — Operational Follow-up",
     copyEmail: "Copy Email Format",
+    downloadDocx: "Export Word (.doc)",
     printPdf: "Print / Save PDF",
     copyMd: "Copy Markdown",
     downloadMd: "Export .md",
@@ -247,7 +249,7 @@ const TRANSLATIONS = {
       { q: "How is MeetClean different from generative AI wrappers?", a: "Unlike Large Language Models (LLMs) that can hallucinate numbers or rewrite your thoughts into generic corporate jargon, MeetClean uses a deterministic lexical and grammatical rule engine. Your facts stay accurate, French shorthand is expanded, and zero data leaves your computer." },
       { q: "How are budgets, dates, and assignees extracted?", a: "The utility combines pattern-matching regular expressions with a semantic scoring matrix. Whenever a currency figure, a calendar reference, or a capitalized name paired with an action verb is detected, the sentence is weighted accordingly." },
       { q: "Are my confidential corporate notes stored on a server?", a: "Never. Everything runs in client-side JavaScript using your browser's localStorage. You can even disconnect from Wi-Fi once the page is loaded and process your notes completely offline." },
-      { q: "How do I export to Gmail, Outlook, Notion, or PDF?", a: "'Copy Email Format' writes a rich colored HTML layout directly to your clipboard for Gmail, Outlook, or Word. 'Copy Markdown' is tailored for Notion, Obsidian, or Slack." }
+      { q: "How do I export to Word, Gmail, Outlook, Notion, or PDF?", a: "'Export Word (.doc)' downloads an editable Word document instantly. 'Copy Email Format' writes a rich colored HTML layout directly to your clipboard for Gmail or Outlook." }
     ]
   }
 };
@@ -260,7 +262,6 @@ const INFINITIVE_ACTION_REGEX = /^(envoyer|préparer|rédiger|appeler|contacter|
 
 const NEGATED_RISK_REGEX = /\b(pas de|aucun|aucune|sans|plus de|zéro|no|without|zero)\s+(?:gros\s+|petit\s+|nouveau\s+)?(problème|souci|bug|erreur|panne|blocage|retard|risque|danger|alerte|conflit|problem|issue|bug|error|blocker|delay|risk)\b/i;
 
-// Convertit les anciens symboles **, __, ~~ éventuellement restés en mémoire vers du vrai HTML visuel
 const normalizeLegacyMarkersToHtml = (str) => {
   if (!str) return '';
   return str
@@ -308,7 +309,6 @@ export default function App() {
   const [hasProcessed, setHasProcessed] = useState(() => items.length > 0);
   const [copyFeedback, setCopyFeedback] = useState('');
 
-  // Initialisation du vrai éditeur visuel (WYSIWYG)
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== rawHtml) {
       editorRef.current.innerHTML = rawHtml;
@@ -336,14 +336,12 @@ export default function App() {
     setTimeout(() => setCopyFeedback(''), 2800);
   };
 
-  // Synchronisation de l'éditeur riche quand l'utilisateur tape au clavier
   const syncEditorState = () => {
     if (!editorRef.current) return;
     setRawHtml(editorRef.current.innerHTML);
     setRawText(editorRef.current.innerText || '');
   };
 
-  // VRAIES COMMANDES VISUELLES WYSIWYG (Gras, Souligné, Barré SANS caractères bizarres)
   const applyVisualCommand = (command, value = null) => {
     const el = editorRef.current;
     if (!el) return;
@@ -692,6 +690,112 @@ ${summary.length > 0 ? summary.map(i => `- ${mdFormat(i)}`).join('\n') : `_${t.e
 `;
   };
 
+  // EXPORT AU FORMAT WORD (.doc) PUR HTML ENCAPSULÉ (Sans librairie externe)
+  const downloadDocx = () => {
+    const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
+      day: '2-digit', month: 'long', year: 'numeric'
+    });
+
+    const actions = items.filter(i => i.category === 'actions');
+    const decisions = items.filter(i => i.category === 'decisions');
+    const risks = items.filter(i => i.category === 'risks');
+    const summary = items.filter(i => i.category === 'summary');
+
+    const renderBadgesDocx = (item) => {
+      const badges = [];
+      if (item.assignee) badges.push(`👤 Resp : <u>${item.assignee}</u>`);
+      if (item.deadline) badges.push(`📅 Échéance : <u>${item.deadline}</u>`);
+      if (item.budget) badges.push(`💰 Budget : <u>${item.budget}</u>`);
+      return badges.length > 0
+        ? `<div style="font-size:10pt; color:#5a5a66; margin-top:4px;">${badges.join(' &nbsp;|&nbsp; ')}</div>`
+        : '';
+    };
+
+    const formatDocxItem = (item) => {
+      let txt = item.text;
+      if (txt.includes(' : ')) {
+        const parts = txt.split(' : ');
+        txt = `<b style="text-decoration:underline;">${parts[0]} :</b> <span style="font-weight:${item.isBold ? 'bold' : 'normal'};">${parts.slice(1).join(' : ')}</span>`;
+      } else if (item.isBold) {
+        txt = `<b>${txt}</b>`;
+      }
+      if (item.isUnderline) txt = `<u>${txt}</u>`;
+      if (item.done) txt = `<s style="color:#6b7280;">${txt}</s>`;
+      return txt;
+    };
+
+    const docxHtml = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head>
+        <meta charset='utf-8'>
+        <title>${meetingTitle}</title>
+      </head>
+      <body style="font-family: Arial, Helvetica, sans-serif; color: #1c1c21; line-height: 1.5;">
+        <div style="border: 2px solid #1c1c21; background-color: #f4f1ea; padding: 16px; margin-bottom: 24px;">
+          <div style="font-size: 9pt; font-weight: bold; color: #c84b31; text-transform: uppercase;">COMPTE RENDU EXÉCUTIF • MEETCLEAN</div>
+          <h1 style="margin: 4px 0 6px 0; font-size: 18pt; color: #1c1c21;">${meetingTitle}</h1>
+          <div style="font-size: 10pt; color: #5a5a66;">
+            <b>Date :</b> ${dateStr} &nbsp;|&nbsp; <b>${actions.length} Action(s)</b> &nbsp;|&nbsp; <b>${decisions.length} Décision(s)</b> &nbsp;|&nbsp; <b>${risks.length} Risque(s)</b>
+          </div>
+        </div>
+
+        <h2 style="font-size: 13pt; color: #c84b31; border-bottom: 2px solid #c84b31; padding-bottom: 4px; text-transform: uppercase;">
+          🛠️ 01. <u>${t.categories.actions.label}</u> (${actions.length})
+        </h2>
+        ${actions.length > 0 ? actions.map(i => `
+          <div style="background-color: #fdf3f1; border-left: 4px solid #c84b31; padding: 8px 12px; margin-bottom: 8px;">
+            <div style="font-size: 11pt;">${i.done ? '☑ ' : '☐ '}${formatDocxItem(i)}</div>
+            ${renderBadgesDocx(i)}
+          </div>
+        `).join('') : `<p style="color:#666; font-style:italic;">${t.emptyCategory}</p>`}
+
+        <h2 style="font-size: 13pt; color: #15803d; border-bottom: 2px solid #15803d; padding-bottom: 4px; text-transform: uppercase; margin-top: 20px;">
+          ✅ 02. <u>${t.categories.decisions.label}</u> (${decisions.length})
+        </h2>
+        ${decisions.length > 0 ? decisions.map(i => `
+          <div style="background-color: #f0fdf4; border-left: 4px solid #15803d; padding: 8px 12px; margin-bottom: 8px;">
+            <div style="font-size: 11pt;">✔️ ${formatDocxItem(i)}</div>
+            ${renderBadgesDocx(i)}
+          </div>
+        `).join('') : `<p style="color:#666; font-style:italic;">${t.emptyCategory}</p>`}
+
+        <h2 style="font-size: 13pt; color: #b91c1c; border-bottom: 2px solid #b91c1c; padding-bottom: 4px; text-transform: uppercase; margin-top: 20px;">
+          ⚠️ 03. <u>${t.categories.risks.label}</u> (${risks.length})
+        </h2>
+        ${risks.length > 0 ? risks.map(i => `
+          <div style="background-color: #fef2f2; border-left: 4px solid #b91c1c; padding: 8px 12px; margin-bottom: 8px;">
+            <div style="font-size: 11pt; color: #991b1b;">🚨 ${formatDocxItem(i)}</div>
+            ${renderBadgesDocx(i)}
+          </div>
+        `).join('') : `<p style="color:#666; font-style:italic;">${t.emptyCategory}</p>`}
+
+        <h2 style="font-size: 13pt; color: #1d4ed8; border-bottom: 2px solid #1d4ed8; padding-bottom: 4px; text-transform: uppercase; margin-top: 20px;">
+          📌 04. <u>${t.categories.summary.label}</u> (${summary.length})
+        </h2>
+        ${summary.length > 0 ? summary.map(i => `
+          <div style="background-color: #eff6ff; border-left: 4px solid #1d4ed8; padding: 8px 12px; margin-bottom: 8px;">
+            <div style="font-size: 11pt;">• ${formatDocxItem(i)}</div>
+          </div>
+        `).join('') : `<p style="color:#666; font-style:italic;">${t.emptyCategory}</p>`}
+
+        <hr style="border:none; border-top:1px solid #d0cbc1; margin-top:28px;">
+        <p style="font-size:9pt; color:#5a5a66;">Document structuré via <b>meetclean.app</b></p>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob(['\ufeff', docxHtml], { type: 'application/msword;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `meetclean-cr-${new Date().toISOString().slice(0, 10)}.doc`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showFeedback(lang === 'fr' ? "Fichier Word (.doc) téléchargé" : "Word (.doc) file downloaded");
+  };
+
   const copyEmailReady = async () => {
     const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
       day: '2-digit', month: 'long', year: 'numeric'
@@ -999,7 +1103,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
         {/* Colonne centrale principale */}
         <main style={{ flex: 1, maxWidth: '850px', width: '100%' }}>
           
-          {/* Boîte de saisie avec VRAI ÉDITEUR VISUEL WYSIWYG (Gras, Souligné, Barré en direct) */}
+          {/* Boîte de saisie avec VRAI ÉDITEUR VISUEL WYSIWYG */}
           <div className="no-print" style={{ background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
               <label style={{ fontWeight: '800', fontSize: '0.8rem', letterSpacing: '0.06em', color: THEME.ink }}>
@@ -1019,7 +1123,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
               </div>
             </div>
 
-            {/* BARRE D'OUTILS WYSIWYG (onMouseDown preventDefault garde le mot sélectionné !) */}
+            {/* BARRE D'OUTILS WYSIWYG */}
             <div style={{ 
               display: 'flex', 
               flexWrap: 'wrap', 
@@ -1134,7 +1238,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
               </div>
             </div>
             
-            {/* ZONE D'ÉDITION VISUELLE RICHE (Remplace le textarea pour afficher le vrai gras/souligné/barré) */}
+            {/* ZONE D'ÉDITION VISUELLE RICHE */}
             <div
               ref={editorRef}
               contentEditable
@@ -1171,9 +1275,27 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
           {hasProcessed && (
             <div className="no-print" style={{ marginTop: '32px', background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-                <div>
+                <div style={{ flex: 1, minWidth: '220px' }}>
                   <h2 style={{ fontSize: '1.25rem', fontWeight: '800', margin: 0, letterSpacing: '-0.01em' }}>{t.titleResult}</h2>
-                  <p style={{ color: THEME.inkMuted, fontSize: '0.82rem', margin: '4px 0 0 0' }}>
+                  <input
+                    type="text"
+                    value={meetingTitle}
+                    onChange={(e) => setMeetingTitle(e.target.value)}
+                    placeholder={t.meetingTitlePlaceholder}
+                    style={{
+                      width: '100%',
+                      marginTop: '6px',
+                      fontSize: '0.95rem',
+                      fontWeight: '700',
+                      color: THEME.ink,
+                      background: THEME.bg,
+                      border: `1px solid ${THEME.borderSubtle}`,
+                      padding: '5px 8px',
+                      outline: 'none',
+                      fontFamily: 'inherit'
+                    }}
+                  />
+                  <p style={{ color: THEME.inkMuted, fontSize: '0.78rem', margin: '6px 0 0 0' }}>
                     {t.descResult}
                   </p>
                 </div>
@@ -1191,8 +1313,20 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                     {t.copyEmail}
                   </button>
                   <button 
-                    onClick={copyToClipboard}
+                    onClick={downloadDocx}
                     style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
+                  >
+                    {t.downloadDocx}
+                  </button>
+                  <button 
+                    onClick={() => window.print()}
+                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
+                  >
+                    {t.printPdf}
+                  </button>
+                  <button 
+                    onClick={copyToClipboard}
+                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
                   >
                     {t.copyMd}
                   </button>
@@ -1201,12 +1335,6 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                     style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
                   >
                     {t.downloadMd}
-                  </button>
-                  <button 
-                    onClick={() => window.print()}
-                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
-                  >
-                    {t.printPdf}
                   </button>
                 </div>
               </div>
