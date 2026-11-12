@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 // Palette stricte à 3 couleurs (Paperback-2 & 2Bit Demichrome - Lospec)
 const THEME = {
@@ -116,14 +116,15 @@ const TRANSLATIONS = {
     badge: "OUTIL DE BUREAUTIQUE LOCAL • SANS COMPTE",
     h1Title: "MeetClean — Structuration de comptes rendus de réunion",
     subtitle: "Transformez vos prises de notes brutes en un document clair : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
-    testBtn: "Insérer un jeu de notes exemple",
-    clearBtn: "Effacer",
+    testBtn: "Insérer un exemple",
+    clearBtn: "Tout effacer",
+    cleanSpacesBtn: "Nettoyer espaces",
     testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "NOTES BRUTES DE LA RÉUNION",
     placeholderInput: "Saisissez ou collez vos notes prises au kilomètre (ex: Thomas -> envoyer le devis avant jeudi. Budget validé à 4500€. Attention retard possible sur la livraison...)",
     processBtn: "Structurer le compte rendu →",
     titleResult: "DOCUMENT STRUCTURÉ",
-    descResult: "Cliquez sur n'importe quel intitulé pour le corriger avant de l'exporter (les couleurs et la mise en page riche s'appliquent dans l'E-mail et le PDF).",
+    descResult: "Utilisez les boutons [B] [U] [S] sur chaque ligne pour mettre en gras, souligner ou barrer un point avant l'export.",
     meetingTitlePlaceholder: "Compte rendu de réunion — Suivi opérationnel",
     copyEmail: "Copier format E-mail",
     printPdf: "Imprimer / PDF",
@@ -135,7 +136,6 @@ const TRANSLATIONS = {
     footer: "MeetClean — Outil d'organisation de notes professionnelles.",
     privacyLink: "Confidentialité & Mentions légales",
     aboutLink: "Guide méthodologique",
-    // Les couleurs ci-dessous servent UNIQUEMENT aux exports (Gmail / PDF)
     categories: {
       actions: { label: "PLAN D'ACTION (TO-DO)", shortLabel: 'ACTION', tag: '01', exportColor: '#c84b31', exportBg: '#fdf3f1', exportBorder: '#f3c6bd' },
       decisions: { label: 'DÉCISIONS ACTÉES', shortLabel: 'DÉCISION', tag: '02', exportColor: '#15803d', exportBg: '#f0fdf4', exportBorder: '#bbf7d0' },
@@ -185,14 +185,15 @@ const TRANSLATIONS = {
     badge: "LOCAL OFFICE UTILITY • NO ACCOUNT REQUIRED",
     h1Title: "MeetClean — Structured Meeting Minutes Utility",
     subtitle: "Turn raw, messy meeting notes into a clean operational document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
-    testBtn: "Load sample notes",
-    clearBtn: "Clear",
+    testBtn: "Load sample",
+    clearBtn: "Clear all",
+    cleanSpacesBtn: "Clean spaces",
     testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15.5k€ for the new software, but Thomas -> send final quote to Marc before Thursday. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. [x] Follow up with accounting (@Julie). no issue on cloud migration. warning: huge delay on website production due to a server bug.",
     labelInput: "RAW MEETING NOTES",
     placeholderInput: "Type or paste your raw notes here (e.g., John -> send the quote before Thursday. Approved budget at $4500. Warning: server delay...)",
     processBtn: "Structure meeting minutes →",
     titleResult: "STRUCTURED DOCUMENT",
-    descResult: "Click any line to edit before exporting (rich colors and executive formatting are automatically applied to Email and PDF exports).",
+    descResult: "Use the [B] [U] [S] buttons on any line to bold, underline, or strikethrough items before exporting.",
     meetingTitlePlaceholder: "Meeting Minutes — Operational Follow-up",
     copyEmail: "Copy Email Format",
     printPdf: "Print / Save PDF",
@@ -262,6 +263,7 @@ const NEGATED_RISK_REGEX = /\b(pas de|aucun|aucune|sans|plus de|zéro|no|without
 export default function App() {
   const [lang, setLang] = useState('fr');
   const t = TRANSLATIONS[lang];
+  const textareaRef = useRef(null);
 
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
@@ -305,6 +307,47 @@ export default function App() {
   const showFeedback = (msg) => {
     setCopyFeedback(msg);
     setTimeout(() => setCopyFeedback(''), 2800);
+  };
+
+  // BARRE D'OUTILS WORD / PAO SUR LE TEXTAREA (Gras, Souligné, Barré, Balises rapides)
+  const applyTextFormat = (prefix, suffix = prefix, defaultWord = 'texte') => {
+    const el = textareaRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = rawText.substring(start, end);
+    const replacement = `${prefix}${selected || defaultWord}${suffix}`;
+    const newValue = rawText.substring(0, start) + replacement + rawText.substring(end);
+    setRawText(newValue);
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(start + prefix.length, start + prefix.length + (selected ? selected.length : defaultWord.length));
+    }, 10);
+  };
+
+  const insertLineTag = (tag) => {
+    const el = textareaRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const before = rawText.substring(0, start);
+    const after = rawText.substring(start);
+    const needsNewLine = before.length > 0 && !before.endsWith('\n');
+    const insertion = `${needsNewLine ? '\n' : ''}${tag} `;
+    setRawText(before + insertion + after);
+    setTimeout(() => {
+      el.focus();
+      const pos = start + insertion.length;
+      el.setSelectionRange(pos, pos);
+    }, 10);
+  };
+
+  const cleanMessySpaces = () => {
+    if (!rawText.trim()) return;
+    const cleaned = rawText
+      .replace(/[ \t]+/g, ' ')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+    setRawText(cleaned);
   };
 
   const cleanAndFormatSentence = (str) => {
@@ -476,21 +519,31 @@ export default function App() {
       const lower = segment.toLowerCase();
       const isAlreadyDone = /^\[\s*[xX]\s*\]/.test(segment.trim());
 
-      const formattedText = cleanAndFormatSentence(segment);
-      const meta = extractMetadata(segment, formattedText);
+      // Détection si l'utilisateur a mis du gras (**), souligné (__) ou barré (~~) dans la zone de saisie
+      const hasBold = /\*\*(.+?)\*\*/.test(segment);
+      const hasUnderline = /__(.+?)__/.test(segment);
+      const hasStrike = /~~(.+?)~~/.test(segment);
+
+      const cleanSegment = segment
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/__(.+?)__/g, '$1')
+        .replace(/~~(.+?)~~/g, '$1');
+
+      const formattedText = cleanAndFormatSentence(cleanSegment);
+      const meta = extractMetadata(cleanSegment, formattedText);
 
       let scoreAction = 0;
       let scoreDecision = 0;
       let scoreRisk = 0;
 
-      if (/^(?:todo|to-do|action|tâche|à faire|\[\s*[xX]?\s*\])/i.test(segment.trim())) scoreAction += 6;
-      if (/^(?:décision|decision|validé|acté|accord|ok\s*:)/i.test(segment.trim())) scoreDecision += 6;
-      if (/^(?:risque|risk|alerte|warning|blocage|problème|pb\s*:)/i.test(segment.trim())) scoreRisk += 6;
+      if (/^(?:todo|to-do|action|tâche|à faire|\[\s*[xX]?\s*\])/i.test(cleanSegment.trim())) scoreAction += 6;
+      if (/^(?:décision|decision|validé|acté|accord|ok\s*:)/i.test(cleanSegment.trim())) scoreDecision += 6;
+      if (/^(?:risque|risk|alerte|warning|blocage|problème|pb\s*:)/i.test(cleanSegment.trim())) scoreRisk += 6;
 
       const cleanStart = formattedText.replace(/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?::|->|→|\-)\s*/, '');
       if (INFINITIVE_ACTION_REGEX.test(cleanStart)) scoreAction += 4;
 
-      if (/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:)\s*/.test(segment.trim())) scoreAction += 3;
+      if (/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:)\s*/.test(cleanSegment.trim())) scoreAction += 3;
 
       activeKeywords.actions.forEach(kw => { if (lower.includes(kw)) scoreAction += 2; });
       activeKeywords.decisions.forEach(kw => { if (lower.includes(kw)) scoreDecision += 2; });
@@ -520,7 +573,9 @@ export default function App() {
         assignee: meta.assignee || '',
         deadline: meta.deadline || '',
         budget: meta.budget || '',
-        done: isAlreadyDone
+        done: isAlreadyDone || hasStrike,
+        isBold: hasBold,
+        isUnderline: hasUnderline
       };
     });
 
@@ -530,6 +585,26 @@ export default function App() {
 
   const updateItem = (id, field, value) => {
     setItems(prev => prev.map(item => item.id === id ? { ...item, [field]: value } : item));
+  };
+
+  const moveItem = (id, direction) => {
+    setItems(prev => {
+      const idx = prev.findIndex(i => i.id === id);
+      if (idx === -1) return prev;
+      const targetCat = prev[idx].category;
+      const sameCatIndices = prev
+        .map((item, index) => (item.category === targetCat ? index : -1))
+        .filter(index => index !== -1);
+      const posInCat = sameCatIndices.indexOf(idx);
+      const swapPos = posInCat + direction;
+      if (swapPos < 0 || swapPos >= sameCatIndices.length) return prev;
+      const swapIdx = sameCatIndices[swapPos];
+      const copy = [...prev];
+      const temp = copy[idx];
+      copy[idx] = copy[swapIdx];
+      copy[swapIdx] = temp;
+      return copy;
+    });
   };
 
   const deleteItem = (id) => {
@@ -544,7 +619,9 @@ export default function App() {
       assignee: '',
       deadline: '',
       budget: '',
-      done: false
+      done: false,
+      isBold: false,
+      isUnderline: false
     };
     setItems(prev => [...prev, newItem]);
   };
@@ -556,24 +633,31 @@ export default function App() {
     const actions = items.filter(i => i.category === 'actions');
     const risks = items.filter(i => i.category === 'risks');
 
+    const mdFormat = (i) => {
+      let txt = i.text;
+      if (i.isUnderline) txt = `<u>${txt}</u>`;
+      if (i.isBold) txt = `**${txt}**`;
+      if (i.done) txt = `~~${txt}~~`;
+      return txt;
+    };
+
     return `# ${meetingTitle}
 *${lang === 'fr' ? 'Structuré via MeetClean le' : 'Structured via MeetClean on'} ${dateStr}*
 
 ## ${t.categories.actions.label}
-${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] **${i.text}**${i.assignee ? ` **[Resp: ${i.assignee}]**` : ''}${i.deadline ? ` *(Échéance: ${i.deadline})*` : ''}${i.budget ? ` **[Budget: ${i.budget}]**` : ''}`).join('\n') : `_${t.emptyCategory}_`}
+${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] ${mdFormat(i)}${i.assignee ? ` **[Resp: ${i.assignee}]**` : ''}${i.deadline ? ` *(Échéance: ${i.deadline})*` : ''}${i.budget ? ` **[Budget: ${i.budget}]**` : ''}`).join('\n') : `_${t.emptyCategory}_`}
 
 ## ${t.categories.decisions.label}
-${decisions.length > 0 ? decisions.map(i => `- **${i.text}**${i.budget ? ` *(Budget: ${i.budget})*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
+${decisions.length > 0 ? decisions.map(i => `- ${mdFormat(i)}${i.budget ? ` *(Budget: ${i.budget})*` : ''}`).join('\n') : `_${t.emptyCategory}_`}
 
 ## ${t.categories.risks.label}
-${risks.length > 0 ? risks.map(i => `- **${i.text}**`).join('\n') : `_${t.emptyCategory}_`}
+${risks.length > 0 ? risks.map(i => `- ${mdFormat(i)}`).join('\n') : `_${t.emptyCategory}_`}
 
 ## ${t.categories.summary.label}
-${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${t.emptyCategory}_`}
+${summary.length > 0 ? summary.map(i => `- ${mdFormat(i)}`).join('\n') : `_${t.emptyCategory}_`}
 `;
   };
 
-  // EXPORT E-MAIL EN COULEUR (Uniquement dans le presse-papiers pour Gmail / Outlook)
   const copyEmailReady = async () => {
     const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
       day: '2-digit', month: 'long', year: 'numeric'
@@ -622,12 +706,18 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
       return badges.length > 0 ? `<div style="margin-top:6px;">${badges.join(' ')}</div>` : '';
     };
 
-    const formatRichText = (text) => {
+    const formatRichItem = (item) => {
+      const text = item.text;
+      let inner = text;
       if (text.includes(' : ')) {
         const parts = text.split(' : ');
-        return `<strong style="color:#1c1c21; text-decoration:underline;">${parts[0]} :</strong> <span style="color:#1c1c21; font-weight:600;">${parts.slice(1).join(' : ')}</span>`;
+        inner = `<strong style="color:#1c1c21; text-decoration:underline;">${parts[0]} :</strong> <span style="color:#1c1c21; font-weight:${item.isBold ? '800' : '600'};">${parts.slice(1).join(' : ')}</span>`;
+      } else {
+        inner = `<span style="color:#1c1c21; font-weight:${item.isBold ? '800' : '600'};">${text}</span>`;
       }
-      return `<strong style="color:#1c1c21;">${text}</strong>`;
+      if (item.isUnderline) inner = `<u>${inner}</u>`;
+      if (item.done) inner = `<s style="color:#6b7280;">${inner}</s>`;
+      return inner;
     };
 
     const htmlContent = `
@@ -646,8 +736,8 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     </h2>
     ${actions.length > 0 ? actions.map(i => `
       <div style="background-color: #fdf3f1; border-left: 4px solid #c84b31; padding: 10px 14px; margin-bottom: 8px;">
-        <div style="font-size: 14px; ${i.done ? 'text-decoration: line-through; color: #6b7280;' : ''}">
-          ${i.done ? '☑' : '☐'} ${formatRichText(i.text)}
+        <div style="font-size: 14px;">
+          ${i.done ? '☑' : '☐'} ${formatRichItem(i)}
         </div>
         ${renderHtmlBadges(i)}
       </div>
@@ -660,7 +750,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     </h2>
     ${decisions.length > 0 ? decisions.map(i => `
       <div style="background-color: #f0fdf4; border-left: 4px solid #15803d; padding: 10px 14px; margin-bottom: 8px;">
-        <div style="font-size: 14px;">✔️ ${formatRichText(i.text)}</div>
+        <div style="font-size: 14px;">✔️ ${formatRichItem(i)}</div>
         ${renderHtmlBadges(i)}
       </div>
     `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
@@ -672,7 +762,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     </h2>
     ${risks.length > 0 ? risks.map(i => `
       <div style="background-color: #fef2f2; border-left: 4px solid #b91c1c; padding: 10px 14px; margin-bottom: 8px;">
-        <div style="font-size: 14px; color: #991b1b;">🚨 ${formatRichText(i.text)}</div>
+        <div style="font-size: 14px; color: #991b1b;">🚨 ${formatRichItem(i)}</div>
         ${renderHtmlBadges(i)}
       </div>
     `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
@@ -684,7 +774,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     </h2>
     ${summary.length > 0 ? summary.map(i => `
       <div style="background-color: #eff6ff; border-left: 4px solid #1d4ed8; padding: 10px 14px; margin-bottom: 8px;">
-        <div style="font-size: 14px;">• ${formatRichText(i.text)}</div>
+        <div style="font-size: 14px;">• ${formatRichItem(i)}</div>
       </div>
     `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
   </div>
@@ -772,6 +862,19 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
       </div>
     );
   }
+
+  // Style partagé des petits boutons de la barre d'outils Word/PAO
+  const toolBtnStyle = {
+    background: THEME.surface,
+    color: THEME.ink,
+    border: `1.5px solid ${THEME.border}`,
+    padding: '4px 9px',
+    fontSize: '0.76rem',
+    fontWeight: '800',
+    cursor: 'pointer',
+    fontFamily: 'inherit',
+    lineHeight: '1.2'
+  };
 
   return (
     <div style={{ 
@@ -863,31 +966,89 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
         {/* Colonne centrale principale */}
         <main style={{ flex: 1, maxWidth: '850px', width: '100%' }}>
           
-          {/* Boîte de saisie style Néo-Brutaliste / Papier */}
+          {/* Boîte de saisie style Néo-Brutaliste / Papier avec BARRE D'OUTILS WORD/PAO */}
           <div className="no-print" style={{ background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
               <label style={{ fontWeight: '800', fontSize: '0.8rem', letterSpacing: '0.06em', color: THEME.ink }}>
                 {t.labelInput}
               </label>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.72rem', color: THEME.inkMuted, fontWeight: '600' }}>
+                  {rawText.trim() ? `${rawText.trim().split(/\s+/).length} mots` : '0 mot'}
+                </span>
                 <button 
                   onClick={() => setRawText(t.testText)}
-                  style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '5px 12px', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '4px 10px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}
                 >
                   {t.testBtn}
                 </button>
-                {rawText && (
-                  <button 
-                    onClick={() => { setRawText(''); setItems([]); setHasProcessed(false); }}
-                    style={{ background: 'transparent', color: THEME.inkMuted, border: `1px solid ${THEME.borderSubtle}`, padding: '5px 10px', fontSize: '0.78rem', cursor: 'pointer' }}
-                  >
-                    {t.clearBtn}
-                  </button>
-                )}
+              </div>
+            </div>
+
+            {/* BARRE D'OUTILS D'ÉDITION (Style Word / Studio PAO en 3 couleurs) */}
+            <div style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              gap: '6px', 
+              alignItems: 'center', 
+              backgroundColor: THEME.surfaceAlt, 
+              border: `1.5px solid ${THEME.border}`, 
+              borderBottom: 'none', 
+              padding: '8px 10px' 
+            }}>
+              {/* Groupe Style Typographique */}
+              <button type="button" onClick={() => applyTextFormat('**', '**', 'important')} style={toolBtnStyle} title="Mettre en Gras">
+                <strong>B</strong>
+              </button>
+              <button type="button" onClick={() => applyTextFormat('__', '__', 'souligné')} style={{ ...toolBtnStyle, textDecoration: 'underline' }} title="Souligner">
+                U
+              </button>
+              <button type="button" onClick={() => applyTextFormat('~~', '~~', 'annulé')} style={{ ...toolBtnStyle, textDecoration: 'line-through' }} title="Barrer">
+                S
+              </button>
+
+              <span style={{ width: '1px', height: '18px', backgroundColor: THEME.borderSubtle, margin: '0 4px' }} />
+
+              {/* Groupe Marqueurs Métier Rapides */}
+              <button type="button" onClick={() => insertLineTag('ACTION :')} style={toolBtnStyle} title="Insérer une Action">
+                + ACTION
+              </button>
+              <button type="button" onClick={() => insertLineTag('DÉCISION :')} style={toolBtnStyle} title="Insérer une Décision">
+                + DÉCISION
+              </button>
+              <button type="button" onClick={() => insertLineTag('RISQUE :')} style={toolBtnStyle} title="Insérer un Risque">
+                + RISQUE
+              </button>
+              <button type="button" onClick={() => applyTextFormat(' -> ', '', '')} style={toolBtnStyle} title="Flèche d'assignation (Prénom -> Tâche)">
+                →
+              </button>
+              <button type="button" onClick={() => applyTextFormat(' ', '€', '1000')} style={toolBtnStyle} title="Insérer un budget en Euros">
+                €
+              </button>
+
+              {/* Groupe Nettoyage & Suppression (Aligné à droite) */}
+              <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px' }}>
+                <button 
+                  type="button" 
+                  onClick={cleanMessySpaces} 
+                  style={{ ...toolBtnStyle, fontWeight: '600', fontSize: '0.72rem' }}
+                  title="Supprimer les doubles espaces et lignes vides"
+                >
+                  {t.cleanSpacesBtn}
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => { setRawText(''); setItems([]); setHasProcessed(false); }} 
+                  style={{ ...toolBtnStyle, backgroundColor: THEME.ink, color: THEME.surface, fontSize: '0.72rem' }}
+                  title="Vider entièrement la zone"
+                >
+                  × {t.clearBtn}
+                </button>
               </div>
             </div>
             
             <textarea 
+              ref={textareaRef}
               rows="6"
               style={{ width: '100%', padding: '14px', background: THEME.bg, color: THEME.ink, border: `1.5px solid ${THEME.border}`, fontSize: '0.95rem', boxSizing: 'border-box', lineHeight: '1.55', fontFamily: 'inherit', resize: 'vertical' }}
               placeholder={t.placeholderInput}
@@ -903,7 +1064,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
             </button>
           </div>
 
-          {/* RÉSULTAT À L'ÉCRAN : 100% fidèle à l'esthétique 3 couleurs (Crème, Charbon, Terre cuite) */}
+          {/* RÉSULTAT À L'ÉCRAN : 100% fidèle à l'esthétique 3 couleurs + Mini barre d'outils par ligne */}
           {hasProcessed && (
             <div className="no-print" style={{ marginTop: '32px', background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
@@ -973,90 +1134,169 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
                       {catItems.length > 0 ? (
                         <div style={{ display: 'grid', gap: '8px' }}>
-                          {catItems.map(item => (
-                            <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: THEME.surface, padding: '10px 12px', border: `1px solid ${THEME.borderSubtle}` }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                {catKey === 'actions' && (
-                                  <input 
-                                    type="checkbox" 
-                                    checked={item.done}
-                                    onChange={(e) => updateItem(item.id, 'done', e.target.checked)}
-                                    style={{ accentColor: THEME.accent, width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }} 
+                          {catItems.map(item => {
+                            const textDecorations = [
+                              item.done ? 'line-through' : '',
+                              item.isUnderline ? 'underline' : ''
+                            ].filter(Boolean).join(' ') || 'none';
+
+                            return (
+                              <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: THEME.surface, padding: '10px 12px', border: `1px solid ${THEME.borderSubtle}` }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                  {catKey === 'actions' && (
+                                    <input 
+                                      type="checkbox" 
+                                      checked={item.done}
+                                      onChange={(e) => updateItem(item.id, 'done', e.target.checked)}
+                                      style={{ accentColor: THEME.accent, width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }} 
+                                    />
+                                  )}
+                                  <input
+                                    type="text"
+                                    value={item.text}
+                                    onChange={(e) => updateItem(item.id, 'text', e.target.value)}
+                                    style={{
+                                      flex: 1,
+                                      minWidth: '180px',
+                                      background: 'transparent',
+                                      color: item.done ? THEME.inkMuted : THEME.ink,
+                                      fontWeight: item.isBold ? '800' : '400',
+                                      textDecoration: textDecorations,
+                                      border: 'none',
+                                      borderBottom: '1px solid transparent',
+                                      padding: '2px 4px',
+                                      fontSize: '0.92rem',
+                                      fontFamily: 'inherit',
+                                      outline: 'none'
+                                    }}
                                   />
-                                )}
-                                <input
-                                  type="text"
-                                  value={item.text}
-                                  onChange={(e) => updateItem(item.id, 'text', e.target.value)}
-                                  style={{
-                                    flex: 1,
-                                    background: 'transparent',
-                                    color: item.done ? THEME.inkMuted : THEME.ink,
-                                    textDecoration: item.done ? 'line-through' : 'none',
-                                    border: 'none',
-                                    borderBottom: '1px solid transparent',
-                                    padding: '2px 4px',
-                                    fontSize: '0.92rem',
-                                    fontFamily: 'inherit',
-                                    outline: 'none'
-                                  }}
-                                />
 
-                                <select
-                                  value={item.category}
-                                  onChange={(e) => updateItem(item.id, 'category', e.target.value)}
-                                  style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '3px 6px', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
-                                >
-                                  {Object.keys(t.categories).map(cKey => (
-                                    <option key={cKey} value={cKey}>{t.categories[cKey].shortLabel}</option>
-                                  ))}
-                                </select>
+                                  {/* Mini boutons d'édition par ligne : Gras [B], Souligné [U], Barré [S], Monter/Descendre, Catégorie, Supprimer */}
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                    <button
+                                      type="button"
+                                      onClick={() => updateItem(item.id, 'isBold', !item.isBold)}
+                                      style={{
+                                        background: item.isBold ? THEME.ink : THEME.surface,
+                                        color: item.isBold ? THEME.surface : THEME.ink,
+                                        border: `1px solid ${THEME.border}`,
+                                        padding: '2px 6px',
+                                        fontSize: '0.7rem',
+                                        fontWeight: '800',
+                                        cursor: 'pointer'
+                                      }}
+                                      title="Gras"
+                                    >
+                                      B
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => updateItem(item.id, 'isUnderline', !item.isUnderline)}
+                                      style={{
+                                        background: item.isUnderline ? THEME.ink : THEME.surface,
+                                        color: item.isUnderline ? THEME.surface : THEME.ink,
+                                        border: `1px solid ${THEME.border}`,
+                                        padding: '2px 6px',
+                                        fontSize: '0.7rem',
+                                        fontWeight: '700',
+                                        textDecoration: 'underline',
+                                        cursor: 'pointer'
+                                      }}
+                                      title="Souligner"
+                                    >
+                                      U
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => updateItem(item.id, 'done', !item.done)}
+                                      style={{
+                                        background: item.done ? THEME.ink : THEME.surface,
+                                        color: item.done ? THEME.surface : THEME.ink,
+                                        border: `1px solid ${THEME.border}`,
+                                        padding: '2px 6px',
+                                        fontSize: '0.7rem',
+                                        fontWeight: '700',
+                                        textDecoration: 'line-through',
+                                        cursor: 'pointer'
+                                      }}
+                                      title="Barrer / Terminer"
+                                    >
+                                      S
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => moveItem(item.id, -1)}
+                                      style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 5px', fontSize: '0.7rem', cursor: 'pointer' }}
+                                      title="Monter"
+                                    >
+                                      ↑
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => moveItem(item.id, 1)}
+                                      style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 5px', fontSize: '0.7rem', cursor: 'pointer' }}
+                                      title="Descendre"
+                                    >
+                                      ↓
+                                    </button>
+                                  </div>
 
-                                <button
-                                  onClick={() => deleteItem(item.id)}
-                                  style={{ background: 'transparent', color: THEME.inkMuted, border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '800', padding: '2px 6px' }}
-                                  title="Supprimer"
-                                >
-                                  ×
-                                </button>
+                                  <select
+                                    value={item.category}
+                                    onChange={(e) => updateItem(item.id, 'category', e.target.value)}
+                                    style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '3px 6px', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
+                                  >
+                                    {Object.keys(t.categories).map(cKey => (
+                                      <option key={cKey} value={cKey}>{t.categories[cKey].shortLabel}</option>
+                                    ))}
+                                  </select>
+
+                                  <button
+                                    onClick={() => deleteItem(item.id)}
+                                    style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.border}`, cursor: 'pointer', fontSize: '0.78rem', fontWeight: '800', padding: '2px 7px' }}
+                                    title="Supprimer la ligne"
+                                  >
+                                    ×
+                                  </button>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '10px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>RESP:</span>
+                                    <input
+                                      type="text"
+                                      placeholder="—"
+                                      value={item.assignee}
+                                      onChange={(e) => updateItem(item.id, 'assignee', e.target.value)}
+                                      style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '90px', outline: 'none' }}
+                                    />
+                                  </div>
+
+                                  <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>DATE:</span>
+                                    <input
+                                      type="text"
+                                      placeholder="—"
+                                      value={item.deadline}
+                                      onChange={(e) => updateItem(item.id, 'deadline', e.target.value)}
+                                      style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '130px', outline: 'none' }}
+                                    />
+                                  </div>
+
+                                  <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>BUDGET:</span>
+                                    <input
+                                      type="text"
+                                      placeholder="—"
+                                      value={item.budget}
+                                      onChange={(e) => updateItem(item.id, 'budget', e.target.value)}
+                                      style={{ background: 'transparent', color: THEME.accent, border: 'none', fontSize: '0.75rem', fontWeight: '800', width: '80px', outline: 'none' }}
+                                    />
+                                  </div>
+                                </div>
                               </div>
-
-                              <div style={{ display: 'flex', gap: '10px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>RESP:</span>
-                                  <input
-                                    type="text"
-                                    placeholder="—"
-                                    value={item.assignee}
-                                    onChange={(e) => updateItem(item.id, 'assignee', e.target.value)}
-                                    style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '90px', outline: 'none' }}
-                                  />
-                                </div>
-
-                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>DATE:</span>
-                                  <input
-                                    type="text"
-                                    placeholder="—"
-                                    value={item.deadline}
-                                    onChange={(e) => updateItem(item.id, 'deadline', e.target.value)}
-                                    style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '130px', outline: 'none' }}
-                                  />
-                                </div>
-
-                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>BUDGET:</span>
-                                  <input
-                                    type="text"
-                                    placeholder="—"
-                                    value={item.budget}
-                                    onChange={(e) => updateItem(item.id, 'budget', e.target.value)}
-                                    style={{ background: 'transparent', color: THEME.accent, border: 'none', fontSize: '0.75rem', fontWeight: '800', width: '80px', outline: 'none' }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       ) : (
                         <p style={{ color: THEME.inkMuted, margin: 0, fontSize: '0.85rem' }}>
@@ -1115,7 +1355,12 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                     <div style={{ display: 'grid', gap: '8px' }}>
                       {catItems.map(item => (
                         <div key={item.id} style={{ padding: '10px 12px', backgroundColor: cat.exportBg, border: `1px solid ${cat.exportBorder}`, borderLeft: `4px solid ${cat.exportColor}` }}>
-                          <div style={{ fontSize: '13px', fontWeight: '600', color: '#1c1c21', textDecoration: item.done ? 'line-through' : 'none' }}>
+                          <div style={{
+                            fontSize: '13px',
+                            fontWeight: item.isBold ? '800' : '600',
+                            color: '#1c1c21',
+                            textDecoration: [item.done ? 'line-through' : '', item.isUnderline ? 'underline' : ''].filter(Boolean).join(' ') || 'none'
+                          }}>
                             {catKey === 'actions' ? (item.done ? '☑ ' : '☐ ') : '• '}
                             {item.text.includes(' : ') ? (
                               <>
