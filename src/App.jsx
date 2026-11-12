@@ -116,12 +116,26 @@ const TRANSLATIONS = {
     badge: "OUTIL DE BUREAUTIQUE LOCAL • SANS COMPTE",
     h1Title: "MeetClean — Structuration de comptes rendus de réunion",
     subtitle: "Transformez vos prises de notes brutes en un document clair : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
+    historyLabel: "SESSIONS ENREGISTRÉES :",
+    newMeetingBtn: "+ Nouvelle réunion",
+    saveMeetingBtn: "Sauvegarder la session",
+    savedFeedback: "Session sauvegardée dans l'historique",
+    timerLabel: "CHRONO",
+    dictateBtn: "● DICTER",
+    dictateStopBtn: "■ STOP DICTÉE",
+    dictateUnsupported: "La dictée vocale nécessite Chrome, Edge ou Safari.",
+    participantsLabel: "PARTICIPANTS PRÉSENTS (Optionnel — aide à détecter les responsables)",
+    participantsPlaceholder: "Ex: Thomas, Stéphane, Charlotte, Julie, Marc...",
+    absentsLabel: "EXCUSÉS / ABSENTS",
+    absentsPlaceholder: "Ex: Sophie, Laurent...",
     testBtn: "Insérer un exemple",
     clearBtn: "Tout effacer",
     cleanSpacesBtn: "Nettoyer espaces",
+    testParticipants: "Stéphane, Charlotte, Thomas, Julie, Marc",
+    testAbsents: "Sophie (Congés)",
     testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "NOTES BRUTES DE LA RÉUNION",
-    placeholderInput: "Saisissez ou collez vos notes ici. Sélectionnez un mot et cliquez sur B, I, U ou S pour le formater directement...",
+    placeholderInput: "Saisissez, collez ou dictez vos notes ici. Sélectionnez un mot et cliquez sur B, I, U ou S pour le formater directement...",
     processBtn: "Structurer le compte rendu →",
     titleResult: "DOCUMENT STRUCTURÉ",
     descResult: "Utilisez les boutons [B] [U] [S] sur chaque ligne pour mettre en gras, souligner ou barrer un point avant l'export.",
@@ -177,7 +191,7 @@ const TRANSLATIONS = {
     faqTitle: "Questions fréquentes sur le fonctionnement technique",
     faq: [
       { q: "En quoi MeetClean diffère-t-il d'un générateur par IA générative ?", a: "Contrairement aux grands modèles de langage (LLM) qui peuvent inventer des chiffres (hallucinations) ou reformuler vos propos de manière générique, MeetClean utilise un moteur d'analyse lexicale et grammaticale déterministe. Vos phrases restent fidèles à vos notes, les abréviations courantes sont nettoyées et aucune donnée ne transite vers un serveur distant." },
-      { q: "Comment sont détectés les budgets, dates et responsables ?", a: "L'application utilise des expressions régulières avancées (Regex) couplées à un système de pondération sémantique. Lorsqu'une somme (en €, k€ ou $), une échéance temporelle ou un prénom suivi d'un verbe d'action est repéré, le segment gagne des points vers la catégorie correspondante." },
+      { q: "Comment sont détectés les budgets, dates et responsables ?", a: "L'application utilise des expressions régulières avancées (Regex) couplées à un système de pondération sémantique et à la liste des participants présents. Lorsqu'une somme (en €, k€ ou $), une échéance temporelle ou un prénom suivi d'un verbe d'action est repéré, le segment gagne des points vers la catégorie correspondante." },
       { q: "Mes notes confidentielles d'entreprise sont-elles stockées ?", a: "Non. Le code s'exécute intégralement en JavaScript au sein de la mémoire locale (localStorage) de votre propre navigateur. Vous pouvez même couper votre connexion Internet après le chargement de la page et continuer à structurer vos comptes rendus." },
       { q: "Comment exporter le résultat vers Word, Gmail, Outlook, Notion ou PDF ?", a: "Le bouton « Exporter Word (.doc) » télécharge directement un fichier Word éditable. Le bouton « Copier format E-mail » génère un compte rendu mis en forme en couleurs collable dans Gmail ou Outlook. Le bouton « Imprimer / PDF » génère une fiche de synthèse officielle." }
     ]
@@ -186,12 +200,26 @@ const TRANSLATIONS = {
     badge: "LOCAL OFFICE UTILITY • NO ACCOUNT REQUIRED",
     h1Title: "MeetClean — Structured Meeting Minutes Utility",
     subtitle: "Turn raw, messy meeting notes into a clean operational document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
+    historyLabel: "SAVED SESSIONS:",
+    newMeetingBtn: "+ New meeting",
+    saveMeetingBtn: "Save session",
+    savedFeedback: "Session saved locally",
+    timerLabel: "TIMER",
+    dictateBtn: "● DICTATE",
+    dictateStopBtn: "■ STOP DICTATION",
+    dictateUnsupported: "Voice dictation requires Chrome, Edge, or Safari.",
+    participantsLabel: "ATTENDEES PRESENT (Optional — boosts owner detection)",
+    participantsPlaceholder: "e.g., Thomas, Stéphane, Charlotte, Julie, Mark...",
+    absentsLabel: "ABSENT / EXCUSED",
+    absentsPlaceholder: "e.g., Sarah, David...",
     testBtn: "Load sample",
     clearBtn: "Clear all",
     cleanSpacesBtn: "Clean spaces",
+    testParticipants: "Stéphane, Charlotte, Thomas, Julie, Marc",
+    testAbsents: "Sarah (PTO)",
     testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15.5k€ for the new software, but Thomas -> send final quote to Marc before Thursday. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. [x] Follow up with accounting (@Julie). no issue on cloud migration. warning: huge delay on website production due to a server bug.",
     labelInput: "RAW MEETING NOTES",
-    placeholderInput: "Type or paste your raw notes here. Highlight any word and click B, I, U, or S to format directly...",
+    placeholderInput: "Type, paste, or dictate your raw notes here. Highlight any word and click B, I, U, or S to format directly...",
     processBtn: "Structure meeting minutes →",
     titleResult: "STRUCTURED DOCUMENT",
     descResult: "Use the [B] [U] [S] buttons on any line to bold, underline, or strikethrough items before exporting.",
@@ -247,7 +275,7 @@ const TRANSLATIONS = {
     faqTitle: "Frequently Asked Questions & Technical Details",
     faq: [
       { q: "How is MeetClean different from generative AI wrappers?", a: "Unlike Large Language Models (LLMs) that can hallucinate numbers or rewrite your thoughts into generic corporate jargon, MeetClean uses a deterministic lexical and grammatical rule engine. Your facts stay accurate, French shorthand is expanded, and zero data leaves your computer." },
-      { q: "How are budgets, dates, and assignees extracted?", a: "The utility combines pattern-matching regular expressions with a semantic scoring matrix. Whenever a currency figure, a calendar reference, or a capitalized name paired with an action verb is detected, the sentence is weighted accordingly." },
+      { q: "How are budgets, dates, and assignees extracted?", a: "The utility combines pattern-matching regular expressions with a semantic scoring matrix and your attendee list. Whenever a currency figure, a calendar reference, or a capitalized name paired with an action verb is detected, the sentence is weighted accordingly." },
       { q: "Are my confidential corporate notes stored on a server?", a: "Never. Everything runs in client-side JavaScript using your browser's localStorage. You can even disconnect from Wi-Fi once the page is loaded and process your notes completely offline." },
       { q: "How do I export to Word, Gmail, Outlook, Notion, or PDF?", a: "'Export Word (.doc)' downloads an editable Word document instantly. 'Copy Email Format' writes a rich colored HTML layout directly to your clipboard for Gmail or Outlook." }
     ]
@@ -274,6 +302,7 @@ export default function App() {
   const [lang, setLang] = useState('fr');
   const t = TRANSLATIONS[lang];
   const editorRef = useRef(null);
+  const recognitionRef = useRef(null);
 
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
@@ -290,6 +319,12 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
+  // États principaux du compte rendu
+  const [activeSessionId, setActiveSessionId] = useState(() => localStorage.getItem('meeting_activeSessionId') || `session-${Date.now()}`);
+  const [meetingTitle, setMeetingTitle] = useState(() => localStorage.getItem('meeting_title') || 'Compte rendu de réunion — Suivi opérationnel');
+  const [participants, setParticipants] = useState(() => localStorage.getItem('meeting_participants') || '');
+  const [absents, setAbsents] = useState(() => localStorage.getItem('meeting_absents') || '');
+
   const [rawText, setRawText] = useState(() => {
     const saved = localStorage.getItem('meeting_rawText') || '';
     return saved.replace(/\*\*(.+?)\*\*/g, '$1').replace(/__(.+?)__/g, '$1').replace(/~~(.+?)~~/g, '$1');
@@ -301,13 +336,47 @@ export default function App() {
     return normalizeLegacyMarkersToHtml(savedText);
   });
 
-  const [meetingTitle, setMeetingTitle] = useState(() => localStorage.getItem('meeting_title') || 'Compte rendu de réunion — Suivi opérationnel');
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem('meeting_items');
     return saved ? JSON.parse(saved) : [];
   });
   const [hasProcessed, setHasProcessed] = useState(() => items.length > 0);
   const [copyFeedback, setCopyFeedback] = useState('');
+
+  // Historique multi-réunions (stocké dans localStorage)
+  const [savedSessions, setSavedSessions] = useState(() => {
+    try {
+      const saved = localStorage.getItem('meeting_savedSessions');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Chronomètre de réunion en direct
+  const [secondsElapsed, setSecondsElapsed] = useState(0);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+  // Dictée vocale (Web Speech API)
+  const [isListening, setIsListening] = useState(false);
+
+  useEffect(() => {
+    let interval = null;
+    if (isTimerRunning) {
+      interval = setInterval(() => {
+        setSecondsElapsed(prev => prev + 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isTimerRunning]);
+
+  const formatTimer = (totalSec) => {
+    const mins = Math.floor(totalSec / 60);
+    const secs = totalSec % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  };
 
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== rawHtml) {
@@ -316,11 +385,18 @@ export default function App() {
   }, [currentPath]);
 
   useEffect(() => {
+    localStorage.setItem('meeting_activeSessionId', activeSessionId);
     localStorage.setItem('meeting_rawText', rawText);
     localStorage.setItem('meeting_rawHtml', rawHtml);
     localStorage.setItem('meeting_title', meetingTitle);
+    localStorage.setItem('meeting_participants', participants);
+    localStorage.setItem('meeting_absents', absents);
     localStorage.setItem('meeting_items', JSON.stringify(items));
-  }, [rawText, rawHtml, meetingTitle, items]);
+  }, [activeSessionId, rawText, rawHtml, meetingTitle, participants, absents, items]);
+
+  useEffect(() => {
+    localStorage.setItem('meeting_savedSessions', JSON.stringify(savedSessions));
+  }, [savedSessions]);
 
   useEffect(() => {
     try {
@@ -334,6 +410,110 @@ export default function App() {
   const showFeedback = (msg) => {
     setCopyFeedback(msg);
     setTimeout(() => setCopyFeedback(''), 2800);
+  };
+
+  // Gestionnaire d'historique multi-réunions
+  const saveCurrentSessionToHistory = (customItems = items) => {
+    const sessionObj = {
+      id: activeSessionId,
+      title: meetingTitle.trim() || 'Réunion sans titre',
+      date: new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { day: '2-digit', month: '2-digit' }),
+      participants,
+      absents,
+      rawText,
+      rawHtml,
+      items: customItems,
+      duration: secondsElapsed
+    };
+
+    setSavedSessions(prev => {
+      const exists = prev.some(s => s.id === activeSessionId);
+      if (exists) {
+        return prev.map(s => s.id === activeSessionId ? sessionObj : s);
+      }
+      return [sessionObj, ...prev].slice(0, 8); // Garde les 8 dernières réunions
+    });
+    showFeedback(t.savedFeedback);
+  };
+
+  const loadSessionFromHistory = (session) => {
+    setActiveSessionId(session.id);
+    setMeetingTitle(session.title);
+    setParticipants(session.participants || '');
+    setAbsents(session.absents || '');
+    setRawText(session.rawText || '');
+    setRawHtml(session.rawHtml || '');
+    setItems(session.items || []);
+    setHasProcessed((session.items || []).length > 0);
+    setSecondsElapsed(session.duration || 0);
+    setIsTimerRunning(false);
+    if (editorRef.current) {
+      editorRef.current.innerHTML = session.rawHtml || session.rawText || '';
+    }
+  };
+
+  const startNewMeetingSession = () => {
+    const newId = `session-${Date.now()}`;
+    setActiveSessionId(newId);
+    setMeetingTitle(lang === 'fr' ? `Réunion du ${new Date().toLocaleDateString('fr-FR')}` : `Meeting — ${new Date().toLocaleDateString('en-US')}`);
+    setParticipants('');
+    setAbsents('');
+    setRawText('');
+    setRawHtml('');
+    setItems([]);
+    setHasProcessed(false);
+    setSecondsElapsed(0);
+    setIsTimerRunning(false);
+    if (editorRef.current) {
+      editorRef.current.innerHTML = '';
+    }
+  };
+
+  const deleteSessionFromHistory = (idToDelete, e) => {
+    e.stopPropagation();
+    setSavedSessions(prev => prev.filter(s => s.id !== idToDelete));
+  };
+
+  // Dictée vocale en direct (Web Speech API)
+  const toggleVoiceDictation = () => {
+    if (isListening) {
+      if (recognitionRef.current) recognitionRef.current.stop();
+      setIsListening(false);
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert(t.dictateUnsupported);
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    recognition.onresult = (event) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        if (event.results[i].isFinal) {
+          transcript += event.results[i][0].transcript.trim() + '. ';
+        }
+      }
+      if (transcript && editorRef.current) {
+        const currentContent = editorRef.current.innerHTML;
+        const spacer = currentContent && !currentContent.endsWith(' ') ? ' ' : '';
+        editorRef.current.innerHTML = currentContent + spacer + transcript;
+        syncEditorState();
+      }
+    };
+
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
+
+    recognitionRef.current = recognition;
+    recognition.start();
+    setIsListening(true);
   };
 
   const syncEditorState = () => {
@@ -359,6 +539,8 @@ export default function App() {
   };
 
   const loadSampleInEditor = () => {
+    setParticipants(t.testParticipants);
+    setAbsents(t.testAbsents);
     const sampleHtml = lang === 'fr'
       ? `réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à <b>15000€</b> pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les <b>tables</b> pour le <u>bureau</u> avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la <s>compta</s> (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.`
       : t.testText;
@@ -429,17 +611,19 @@ export default function App() {
       s = s.replace(/\s*\(@[A-Za-zÀ-ÿ]+\)/g, '');
 
       if (category === 'actions') {
-        const ilFautMatch = s.match(/^(?:Il\s+)?(?:il\s+)?faut que\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+([a-zà-ÿ]+)\s+(.+)/i);
+        const ilFautMatch = s.match(/^(?:Il\s+)?(?:il\s+)?faut que\s+([A-ZÀ-Ÿa-zà-ÿ]+)\s+([a-zà-ÿ]+)\s+(.+)/i);
         if (ilFautMatch) {
-          const name = ilFautMatch[1];
+          const rawName = ilFautMatch[1];
+          const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
           const rawVerb = ilFautMatch[2].toLowerCase();
           const rest = ilFautMatch[3];
           const inf = VERB_TO_INFINITIVE[rawVerb] || (rawVerb.charAt(0).toUpperCase() + rawVerb.slice(1));
           s = `${name} : ${inf} ${rest}`;
         } else {
-          const doitMatch = s.match(/^([A-ZÀ-Ÿ][a-zà-ÿ]+)\s*(?:->|→|:|\s+(?:elle\s+|il\s+)?(?:doit|devra|va))\s*([a-zà-ÿ]+)\s+(.+)/i);
+          const doitMatch = s.match(/^([A-ZÀ-Ÿa-zà-ÿ]+)\s*(?:->|→|:|\s+(?:elle\s+|il\s+)?(?:doit|devra|va))\s*([a-zà-ÿ]+)\s+(.+)/i);
           if (doitMatch) {
-            const name = doitMatch[1];
+            const rawName = doitMatch[1];
+            const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
             const rawVerb = doitMatch[2].toLowerCase();
             const rest = doitMatch[3];
             const inf = VERB_TO_INFINITIVE[rawVerb] || (rawVerb.charAt(0).toUpperCase() + rawVerb.slice(1));
@@ -462,9 +646,9 @@ export default function App() {
     } else {
       s = s.replace(/\s*\(@[A-Za-zÀ-ÿ]+\)/g, '');
       if (category === 'actions') {
-        const enMatch = s.match(/^([A-ZÀ-Ÿ][a-zà-ÿ]+)\s*(?:->|→|:|\s+(?:needs to|has to|must|will|should))\s*([a-z]+)\s+(.+)/i);
+        const enMatch = s.match(/^([A-ZÀ-Ÿa-zà-ÿ]+)\s*(?:->|→|:|\s+(?:needs to|has to|must|will|should))\s*([a-z]+)\s+(.+)/i);
         if (enMatch) {
-          const name = enMatch[1];
+          const name = enMatch[1].charAt(0).toUpperCase() + enMatch[1].slice(1);
           const verb = enMatch[2].charAt(0).toUpperCase() + enMatch[2].slice(1);
           s = `${name}: ${verb} ${enMatch[3]}`;
         }
@@ -498,8 +682,24 @@ export default function App() {
       budget = budgetMatch[0].trim();
     }
 
+    // 0. Priorité intelligente : croisement avec la liste des PARTICIPANTS PRÉSENTS renseignée par l'utilisateur
+    const knownParticipants = participants
+      .split(/[,;/\n]+/)
+      .map(p => p.replace(/\([^)]*\)/g, '').trim())
+      .filter(p => p.length >= 2);
+
+    const withoutRecipient = formattedSentence.replace(/(?:envoyer|transmettre|parler|écrire|répondre|demander|send|talk|write)\s+(?:à|au|to)\s+[A-ZÀ-Ÿa-zà-ÿ]+/gi, '');
+
+    for (const part of knownParticipants) {
+      const partRegex = new RegExp(`\\b${part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+      if (partRegex.test(withoutRecipient)) {
+        assignee = part.charAt(0).toUpperCase() + part.slice(1);
+        break;
+      }
+    }
+
     const telegraphMatch = rawSegment.trim().match(/^([A-ZÀ-Ÿa-zà-ÿ]{3,15})\s*(?::|->|→|\-\s+)\s*(.+)/);
-    const tagMatch = rawSegment.match(/(?:@|\(\s*resp\s*:?\s*|\(\s*)([A-ZÀ-Ÿ][a-zà-ÿ]+)\b/);
+    const tagMatch = rawSegment.match(/(?:@|\(\s*resp\s*:?\s*|\(\s*)([A-ZÀ-Ÿa-zà-ÿ]+)\b/);
     const activeSubjectMatch = formattedSentence.match(/(?:il faut que|faut que|que)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\b|\b([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+(?:elle\s+|il\s+)?(?:doit|devra|va|s'occupe|est chargé|prend en charge|gère|achète|refait|prépare|relance|envoie|appelle|vérifie|contacte|needs to|must|will|has to|is responsible)/i);
     const passiveMatch = formattedSentence.match(/(?:confié à|assigné à|charge à|géré par|fait par|suivi par|assigned to|handled by|by)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\b/i);
 
@@ -510,26 +710,27 @@ export default function App() {
       'Risque', 'Synthèse', 'Todo', 'Urgent', 'Important', 'Validation', 'Accord', 'Problème', 'Retard', 'Suite'
     ];
 
-    if (telegraphMatch && !stopWords.includes(telegraphMatch[1].charAt(0).toUpperCase() + telegraphMatch[1].slice(1).toLowerCase())) {
-      const candidate = telegraphMatch[1];
-      assignee = candidate.charAt(0).toUpperCase() + candidate.slice(1).toLowerCase();
-    } else if (tagMatch && !stopWords.includes(tagMatch[1])) {
-      assignee = tagMatch[1];
-    } else if (activeSubjectMatch) {
-      const candidate = activeSubjectMatch[1] || activeSubjectMatch[2];
-      const normalized = candidate.charAt(0).toUpperCase() + candidate.slice(1);
-      if (!stopWords.includes(normalized)) assignee = normalized;
-    } else if (passiveMatch) {
-      const candidate = passiveMatch[1];
-      if (!stopWords.includes(candidate)) assignee = candidate;
-    } else {
-      const withoutRecipient = formattedSentence.replace(/(?:envoyer|transmettre|parler|écrire|répondre|demander|send|talk|write)\s+(?:à|au|to)\s+[A-ZÀ-Ÿ][a-zà-ÿ]+/gi, '');
-      const words = withoutRecipient.split(/\s+/);
-      for (let i = 1; i < words.length; i++) {
-        const w = words[i].replace(/[^a-zA-ZÀ-ÿ]/g, '');
-        if (w.length > 2 && w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase() && !stopWords.includes(w)) {
-          assignee = w;
-          break;
+    if (!assignee) {
+      if (telegraphMatch && !stopWords.includes(telegraphMatch[1].charAt(0).toUpperCase() + telegraphMatch[1].slice(1).toLowerCase())) {
+        const candidate = telegraphMatch[1];
+        assignee = candidate.charAt(0).toUpperCase() + candidate.slice(1).toLowerCase();
+      } else if (tagMatch && !stopWords.includes(tagMatch[1])) {
+        assignee = tagMatch[1].charAt(0).toUpperCase() + tagMatch[1].slice(1);
+      } else if (activeSubjectMatch) {
+        const candidate = activeSubjectMatch[1] || activeSubjectMatch[2];
+        const normalized = candidate.charAt(0).toUpperCase() + candidate.slice(1);
+        if (!stopWords.includes(normalized)) assignee = normalized;
+      } else if (passiveMatch) {
+        const candidate = passiveMatch[1];
+        if (!stopWords.includes(candidate)) assignee = candidate;
+      } else {
+        const words = withoutRecipient.split(/\s+/);
+        for (let i = 1; i < words.length; i++) {
+          const w = words[i].replace(/[^a-zA-ZÀ-ÿ]/g, '');
+          if (w.length > 2 && w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase() && !stopWords.includes(w)) {
+            assignee = w;
+            break;
+          }
         }
       }
     }
@@ -575,7 +776,7 @@ export default function App() {
       const cleanStart = formattedText.replace(/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?::|->|→|\-)\s*/, '');
       if (INFINITIVE_ACTION_REGEX.test(cleanStart)) scoreAction += 4;
 
-      if (/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:)\s*/.test(segment.trim())) scoreAction += 3;
+      if (/^[A-ZÀ-Ÿa-zà-ÿ]+\s*(?:->|→|:)\s*/.test(segment.trim())) scoreAction += 3;
 
       activeKeywords.actions.forEach(kw => { if (lower.includes(kw)) scoreAction += 2; });
       activeKeywords.decisions.forEach(kw => { if (lower.includes(kw)) scoreDecision += 2; });
@@ -613,6 +814,7 @@ export default function App() {
 
     setItems(parsedItems);
     setHasProcessed(true);
+    saveCurrentSessionToHistory(parsedItems);
   };
 
   const updateItem = (id, field, value) => {
@@ -673,9 +875,14 @@ export default function App() {
       return txt;
     };
 
+    const attendeesBlock = [
+      participants.trim() ? `- **${lang === 'fr' ? 'Présents' : 'Present'} :** ${participants.trim()}` : '',
+      absents.trim() ? `- **${lang === 'fr' ? 'Excusés / Absents' : 'Absent'} :** ${absents.trim()}` : ''
+    ].filter(Boolean).join('\n');
+
     return `# ${meetingTitle}
 *${lang === 'fr' ? 'Structuré via MeetClean le' : 'Structured via MeetClean on'} ${dateStr}*
-
+${attendeesBlock ? `\n${attendeesBlock}\n` : ''}
 ## ${t.categories.actions.label}
 ${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] ${mdFormat(i)}${i.assignee ? ` **[Resp: ${i.assignee}]**` : ''}${i.deadline ? ` *(Échéance: ${i.deadline})*` : ''}${i.budget ? ` **[Budget: ${i.budget}]**` : ''}`).join('\n') : `_${t.emptyCategory}_`}
 
@@ -737,6 +944,8 @@ ${summary.length > 0 ? summary.map(i => `- ${mdFormat(i)}`).join('\n') : `_${t.e
           <div style="font-size: 10pt; color: #5a5a66;">
             <b>Date :</b> ${dateStr} &nbsp;|&nbsp; <b>${actions.length} Action(s)</b> &nbsp;|&nbsp; <b>${decisions.length} Décision(s)</b> &nbsp;|&nbsp; <b>${risks.length} Risque(s)</b>
           </div>
+          ${participants.trim() ? `<div style="font-size: 10pt; color: #1c1c21; margin-top: 6px;"><b>Présents :</b> ${participants}</div>` : ''}
+          ${absents.trim() ? `<div style="font-size: 10pt; color: #5a5a66; margin-top: 2px;"><b>Excusés / Absents :</b> ${absents}</div>` : ''}
         </div>
 
         <h2 style="font-size: 13pt; color: #c84b31; border-bottom: 2px solid #c84b31; padding-bottom: 4px; text-transform: uppercase;">
@@ -810,7 +1019,7 @@ ${summary.length > 0 ? summary.map(i => `- ${mdFormat(i)}`).join('\n') : `_${t.e
 
 ==================================================
 ${meetingTitle.toUpperCase()} (${dateStr})
-==================================================
+${participants.trim() ? `Présents : ${participants.trim()}\n` : ''}${absents.trim() ? `Excusés : ${absents.trim()}\n` : ''}==================================================
 
 01. ${t.categories.actions.label} (${actions.length})
 --------------------------------------------------
@@ -866,6 +1075,8 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     <div style="font-size: 11px; font-weight: 800; color: #c84b31; letter-spacing: 1px; text-transform: uppercase;">COMPTE RENDU EXÉCUTIF • MEETCLEAN</div>
     <h1 style="margin: 4px 0 6px 0; font-size: 20px; color: #1c1c21;">${meetingTitle}</h1>
     <div style="font-size: 12px; color: #5a5a66;">📅 <strong>Date :</strong> ${dateStr} &nbsp;|&nbsp; 🛠️ <strong>${actions.length} Action(s)</strong> &nbsp;|&nbsp; ✅ <strong>${decisions.length} Décision(s)</strong> &nbsp;|&nbsp; ⚠️ <strong>${risks.length} Point(s) de vigilance</strong></div>
+    ${participants.trim() ? `<div style="font-size: 12px; color: #1c1c21; margin-top: 8px; padding-top: 6px; border-top: 1px solid #d0cbc1;">👥 <strong>Présents :</strong> ${participants}</div>` : ''}
+    ${absents.trim() ? `<div style="font-size: 12px; color: #5a5a66; margin-top: 2px;">🕒 <strong>Excusés / Absents :</strong> ${absents}</div>` : ''}
   </div>
 
   <div style="margin-bottom: 22px;">
@@ -1024,7 +1235,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
       justifyContent: 'space-between'
     }}>
       
-      {/* Barre supérieure sobre type studio d'édition */}
+      {/* Barre supérieure sobre type studio d'édition + CHRONOMÈTRE DE RÉUNION */}
       <nav style={{ borderBottom: `2px solid ${THEME.border}`, backgroundColor: THEME.surface, padding: '12px 24px' }} className="no-print">
         <div style={{ maxWidth: '1360px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -1036,10 +1247,39 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+            {/* Widget Chronomètre de réunion en 3 couleurs */}
+            <div style={{ display: 'flex', alignItems: 'center', border: `1.5px solid ${THEME.border}`, backgroundColor: THEME.bg, padding: '3px 8px', gap: '8px' }}>
+              <span style={{ fontSize: '0.7rem', fontWeight: '800', color: THEME.inkMuted, letterSpacing: '0.04em' }}>
+                {t.timerLabel}
+              </span>
+              <span style={{ fontFamily: 'monospace', fontSize: '0.88rem', fontWeight: '800', color: isTimerRunning ? THEME.accent : THEME.ink }}>
+                {formatTimer(secondsElapsed)}
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsTimerRunning(!isTimerRunning)}
+                style={{ background: isTimerRunning ? THEME.accent : THEME.ink, color: THEME.surface, border: 'none', padding: '2px 7px', fontSize: '0.7rem', fontWeight: '800', cursor: 'pointer' }}
+                title={isTimerRunning ? "Pause" : "Démarrer le chronomètre de réunion"}
+              >
+                {isTimerRunning ? '⏸' : '▶'}
+              </button>
+              {secondsElapsed > 0 && (
+                <button
+                  type="button"
+                  onClick={() => { setIsTimerRunning(false); setSecondsElapsed(0); }}
+                  style={{ background: 'transparent', color: THEME.inkMuted, border: 'none', padding: '0 3px', fontSize: '0.75rem', fontWeight: '800', cursor: 'pointer' }}
+                  title="Réinitialiser"
+                >
+                  ↺
+                </button>
+              )}
+            </div>
+
             <a href="#guide-methodo" style={{ color: THEME.ink, fontSize: '0.85rem', fontWeight: '600', textDecoration: 'none' }}>
               {t.aboutLink}
             </a>
+
             <div style={{ display: 'flex', border: `1.5px solid ${THEME.border}` }}>
               <button 
                 onClick={() => setLang('fr')} 
@@ -1059,8 +1299,8 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
       </nav>
 
       {/* En-tête éditorial */}
-      <header style={{ maxWidth: '850px', margin: '0 auto', padding: '36px 20px 16px 20px', textAlign: 'left', width: '100%', boxSizing: 'border-box' }} className="no-print">
-        <h1 style={{ fontSize: '2.1rem', fontWeight: '800', margin: '0 0 12px 0', color: THEME.ink, letterSpacing: '-0.03em', lineHeight: '1.15' }}>
+      <header style={{ maxWidth: '850px', margin: '0 auto', padding: '32px 20px 12px 20px', textAlign: 'left', width: '100%', boxSizing: 'border-box' }} className="no-print">
+        <h1 style={{ fontSize: '2.1rem', fontWeight: '800', margin: '0 0 10px 0', color: THEME.ink, letterSpacing: '-0.03em', lineHeight: '1.15' }}>
           {t.h1Title}
         </h1>
         <p style={{ color: THEME.inkMuted, fontSize: '1rem', margin: 0, lineHeight: '1.55' }}>
@@ -1102,9 +1342,96 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
         {/* Colonne centrale principale */}
         <main style={{ flex: 1, maxWidth: '850px', width: '100%' }}>
+
+          {/* BARRE D'HISTORIQUE MULTI-RÉUNIONS (Sauvegarde locale) */}
+          <div className="no-print" style={{ marginBottom: '16px', backgroundColor: THEME.surfaceAlt, border: `1.5px solid ${THEME.border}`, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.72rem', fontWeight: '800', letterSpacing: '0.05em', color: THEME.inkMuted, marginRight: '4px' }}>
+              {t.historyLabel}
+            </span>
+
+            {savedSessions.map(session => {
+              const isCurrent = session.id === activeSessionId;
+              return (
+                <div
+                  key={session.id}
+                  onClick={() => loadSessionFromHistory(session)}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    backgroundColor: isCurrent ? THEME.ink : THEME.surface,
+                    color: isCurrent ? THEME.surface : THEME.ink,
+                    border: `1.5px solid ${THEME.border}`,
+                    padding: '4px 9px',
+                    fontSize: '0.75rem',
+                    fontWeight: '700',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <span style={{ maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {session.title}
+                  </span>
+                  <span style={{ fontSize: '0.68rem', opacity: 0.75 }}>({session.date})</span>
+                  <span
+                    onClick={(e) => deleteSessionFromHistory(session.id, e)}
+                    style={{ marginLeft: '2px', fontWeight: '800', cursor: 'pointer', padding: '0 2px' }}
+                    title="Supprimer cette session"
+                  >
+                    ×
+                  </span>
+                </div>
+              );
+            })}
+
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px' }}>
+              <button
+                type="button"
+                onClick={() => saveCurrentSessionToHistory()}
+                style={{ backgroundColor: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '4px 10px', fontSize: '0.74rem', fontWeight: '800', cursor: 'pointer' }}
+              >
+                {t.saveMeetingBtn}
+              </button>
+              <button
+                type="button"
+                onClick={startNewMeetingSession}
+                style={{ backgroundColor: THEME.ink, color: THEME.surface, border: `1.5px solid ${THEME.border}`, padding: '4px 10px', fontSize: '0.74rem', fontWeight: '800', cursor: 'pointer' }}
+              >
+                {t.newMeetingBtn}
+              </button>
+            </div>
+          </div>
           
-          {/* Boîte de saisie avec VRAI ÉDITEUR VISUEL WYSIWYG */}
+          {/* Boîte de saisie avec Participants + VRAI ÉDITEUR VISUEL WYSIWYG */}
           <div className="no-print" style={{ background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
+            
+            {/* Ligne Titre & Participants / Absents */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: `1px solid ${THEME.borderSubtle}` }}>
+              <div>
+                <label style={{ display: 'block', fontWeight: '800', fontSize: '0.7rem', letterSpacing: '0.05em', color: THEME.inkMuted, marginBottom: '5px' }}>
+                  {t.participantsLabel}
+                </label>
+                <input
+                  type="text"
+                  value={participants}
+                  onChange={(e) => setParticipants(e.target.value)}
+                  placeholder={t.participantsPlaceholder}
+                  style={{ width: '100%', padding: '8px 10px', backgroundColor: THEME.bg, color: THEME.ink, border: `1.5px solid ${THEME.border}`, fontSize: '0.84rem', fontFamily: 'inherit', fontWeight: '600', outline: 'none' }}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontWeight: '800', fontSize: '0.7rem', letterSpacing: '0.05em', color: THEME.inkMuted, marginBottom: '5px' }}>
+                  {t.absentsLabel}
+                </label>
+                <input
+                  type="text"
+                  value={absents}
+                  onChange={(e) => setAbsents(e.target.value)}
+                  placeholder={t.absentsPlaceholder}
+                  style={{ width: '100%', padding: '8px 10px', backgroundColor: THEME.bg, color: THEME.ink, border: `1.5px solid ${THEME.borderSubtle}`, fontSize: '0.84rem', fontFamily: 'inherit', outline: 'none' }}
+                />
+              </div>
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
               <label style={{ fontWeight: '800', fontSize: '0.8rem', letterSpacing: '0.06em', color: THEME.ink }}>
                 {t.labelInput}
@@ -1123,7 +1450,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
               </div>
             </div>
 
-            {/* BARRE D'OUTILS WYSIWYG */}
+            {/* BARRE D'OUTILS WYSIWYG + DICTÉE VOCALE */}
             <div style={{ 
               display: 'flex', 
               flexWrap: 'wrap', 
@@ -1216,6 +1543,21 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 title="Symbole Euro"
               >
                 €
+              </button>
+
+              {/* Bouton Dictée Vocale */}
+              <button
+                type="button"
+                onClick={toggleVoiceDictation}
+                style={{
+                  ...toolBtnStyle,
+                  backgroundColor: isListening ? THEME.accent : THEME.surface,
+                  color: isListening ? '#ffffff' : THEME.ink,
+                  borderColor: THEME.border
+                }}
+                title="Dicter vos notes au micro"
+              >
+                {isListening ? t.dictateStopBtn : t.dictateBtn}
               </button>
 
               <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px' }}>
@@ -1545,7 +1887,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
              ===================================================================== */}
           {hasProcessed && (
             <div className="print-only">
-              <div style={{ borderBottom: '3px solid #1c1c21', paddingBottom: '14px', marginBottom: '22px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <div style={{ borderBottom: '3px solid #1c1c21', paddingBottom: '14px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
                 <div>
                   <div style={{ fontSize: '10px', fontWeight: '800', color: '#c84b31', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
                     COMPTE RENDU OPÉRATIONNEL • MEETCLEAN
@@ -1553,6 +1895,16 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                   <h1 style={{ fontSize: '22px', fontWeight: '800', margin: '4px 0 0 0', color: '#1c1c21' }}>
                     {meetingTitle}
                   </h1>
+                  {participants.trim() && (
+                    <div style={{ fontSize: '11px', color: '#1c1c21', marginTop: '6px' }}>
+                      <strong>Présents :</strong> {participants}
+                    </div>
+                  )}
+                  {absents.trim() && (
+                    <div style={{ fontSize: '11px', color: '#5a5a66', marginTop: '2px' }}>
+                      <strong>Excusés / Absents :</strong> {absents}
+                    </div>
+                  )}
                 </div>
                 <div style={{ textAlign: 'right', fontSize: '12px', color: '#5a5a66' }}>
                   <strong>Date :</strong> {new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', { day: '2-digit', month: 'long', year: 'numeric' })}
