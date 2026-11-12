@@ -90,9 +90,9 @@ const TRANSLATIONS = {
     subtitle: "Transformez vos prises de notes brutes en un document clair : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
     testBtn: "Insérer un jeu de notes exemple",
     clearBtn: "Effacer",
-    testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
+    testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15.5k€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "NOTES BRUTES DE LA RÉUNION",
-    placeholderInput: "Saisissez ou collez vos notes prises au kilomètre (ex: Thomas doit envoyer le devis avant jeudi. Budget validé à 4500€. Attention retard possible sur la livraison...)",
+    placeholderInput: "Saisissez ou collez vos notes prises au kilomètre (ex: Thomas -> envoyer le devis avant jeudi. Budget validé à 4500€. Attention retard possible sur la livraison...)",
     processBtn: "Structurer le compte rendu →",
     titleResult: "DOCUMENT STRUCTURÉ",
     descResult: "Cliquez sur n'importe quel intitulé pour le corriger ou réassigner sa catégorie avant l'export.",
@@ -157,9 +157,9 @@ const TRANSLATIONS = {
     subtitle: "Turn raw, messy meeting notes into a clean operational document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
     testBtn: "Load sample notes",
     clearBtn: "Clear",
-    testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15000€ for the new software. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. warning: huge delay on website production due to a server bug.",
+    testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15.5k€ for the new software, but Thomas -> send final quote to Marc before Thursday. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. [x] Follow up with accounting (@Julie). no issue on cloud migration. warning: huge delay on website production due to a server bug.",
     labelInput: "RAW MEETING NOTES",
-    placeholderInput: "Type or paste your raw notes here (e.g., John must send the quote before Thursday. Approved budget at $4500. Warning: server delay...)",
+    placeholderInput: "Type or paste your raw notes here (e.g., John -> send the quote before Thursday. Approved budget at $4500. Warning: server delay...)",
     processBtn: "Structure meeting minutes →",
     titleResult: "STRUCTURED DOCUMENT",
     descResult: "Click any line to edit the text or reassign its category before exporting.",
@@ -220,8 +220,16 @@ const TRANSLATIONS = {
   }
 };
 
-const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|asap|urgent|d'ici [a-z0-9\s]+|avant [a-z0-9\s]+|before [a-z0-9\s]+|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\b/i;
-const BUDGET_REGEX = /\b(\d+(?:[\.,]\d+)?\s*(?:k€|€|\$|k\b|euros|dollars|k euros|millions?))(?!\w)/i;
+// 1. Expressions régulières enrichies V2 (Dates relatives, formats FR/EN, budgets variés)
+const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|fin de semaine|fin du mois|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|end of week|end of month|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|s\d{1,2}|asap|urgent|d'ici\s+[a-zà-ÿ0-9\s]+|avant\s+(?:le\s+)?[a-zà-ÿ0-9\s\/]+|pour\s+(?:le\s+)?(?:lundi|mardi|mercredi|jeudi|vendredi|\d{1,2}\/\d{1,2})|before\s+[a-z0-9\s]+|by\s+(?:monday|tuesday|wednesday|thursday|friday|tomorrow)|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre))\b/i;
+
+const BUDGET_REGEX = /\b(\d+(?:[\s\.,]\d+)?\s*(?:k€|m€|€|\$|£|chf|k\$|k\b|euros?|dollars?|k\s*euros?|millions?))(?!\w)/i;
+
+// Verbes d'action fréquents à l'infinitif (prise de notes télégraphique)
+const INFINITIVE_ACTION_REGEX = /^(envoyer|préparer|rédiger|appeler|contacter|relancer|vérifier|tester|corriger|fixer|acheter|commander|planifier|organiser|créer|mettre à jour|modifier|refaire|terminer|finir|livrer|déployer|présenter|former|recruter|payer|facturer|valider|chiffrer|étudier|analyser|transmettre|partager|boucler|caler|voir avec|faire|send|prepare|draft|call|contact|follow up|check|test|fix|buy|order|plan|create|update|deliver|deploy|schedule|review)\b/i;
+
+// Détection des négations qui annulent un faux risque (ex: "pas de problème", "aucun retard")
+const NEGATED_RISK_REGEX = /\b(pas de|aucun|aucune|sans|plus de|zéro|no|without|zero)\s+(?:gros\s+|petit\s+|nouveau\s+)?(problème|souci|bug|erreur|panne|blocage|retard|risque|danger|alerte|conflit|problem|issue|bug|error|blocker|delay|risk)\b/i;
 
 export default function App() {
   const [lang, setLang] = useState('fr');
@@ -271,16 +279,19 @@ export default function App() {
 
   const cleanAndFormatSentence = (str) => {
     let cleaned = str.trim();
-    cleaned = cleaned.replace(/^[•\-\*\>\+\d\.\)\s]+/, '');
+    // Nettoyage des puces, cases à cocher markdown et numérotations en début de ligne
+    cleaned = cleaned.replace(/^(?:[\-\*\•\>\+]+|\[\s*[xX]?\s*\]|\d+[\.\)\-])\s*/, '');
+    // Nettoyage des préfixes explicites (ex: "ACTION : ", "TODO - ")
+    cleaned = cleaned.replace(/^(?:todo|to-do|action|tâche|décision|decision|risque|risk|alerte|point|note)\s*[:\-–>]\s*/i, '');
 
     if (lang === 'fr') {
       Object.keys(ABBREVIATIONS).forEach(abbr => {
         const regex = new RegExp(abbr, 'gi');
         cleaned = cleaned.replace(regex, ABBREVIATIONS[abbr]);
       });
-      cleaned = cleaned.replace(/^(et aussi|et puis|sinon|du coup|alors|bon|bah|ben|ensuite|de plus|par ailleurs|aussi|et)\s+/i, '');
+      cleaned = cleaned.replace(/^(et aussi|et puis|sinon|du coup|alors|bon|bah|ben|ensuite|de plus|par ailleurs|aussi|et|mais)\s+/i, '');
     } else {
-      cleaned = cleaned.replace(/^(and also|also|then|so|anyway|furthermore|plus)\s+/i, '');
+      cleaned = cleaned.replace(/^(and also|also|then|so|anyway|furthermore|plus|but)\s+/i, '');
     }
 
     if (cleaned.length > 0) {
@@ -294,24 +305,56 @@ export default function App() {
     return cleaned;
   };
 
-  const extractMetadata = (sentence) => {
+  const extractMetadata = (rawSegment, formattedSentence) => {
     let assignee = '';
     let deadline = '';
     let budget = '';
 
-    const dateMatch = sentence.match(DATE_REGEX);
-    if (dateMatch) deadline = dateMatch[0];
+    // 1. Extraction de la date/échéance (nettoyée des mots trop longs)
+    const dateMatch = formattedSentence.match(DATE_REGEX);
+    if (dateMatch) {
+      deadline = dateMatch[0].trim().split(/\s+/).slice(0, 4).join(' ');
+    }
 
-    const budgetMatch = sentence.match(BUDGET_REGEX);
-    if (budgetMatch) budget = budgetMatch[0];
+    // 2. Extraction du budget
+    const budgetMatch = formattedSentence.match(BUDGET_REGEX);
+    if (budgetMatch) {
+      budget = budgetMatch[0].trim();
+    }
 
-    const universalNameMatch = sentence.match(/(?:par|pour|à|que|by|for)\s+([A-ZÀ-Ÿ][a-zà-ÿa-zA-Z]+)|([A-ZÀ-Ÿ][a-zà-ÿa-zA-Z]+)\s+(?:elle\s+|il\s+)?(?:doit|va|s'occupe|est chargé|achète|refait|prépare|needs|must|will|has to)/);
-    if (universalNameMatch) {
-      assignee = universalNameMatch[1] || universalNameMatch[2];
+    // 3. Extraction intelligente du responsable (Assignee)
+    // Cas A : Notation télégraphique en début de ligne ("Thomas : faire X", "Sarah -> relancer", "Marc - devis")
+    const telegraphMatch = rawSegment.trim().match(/^([A-ZÀ-Ÿa-zà-ÿ]{3,15})\s*(?::|->|→|\-\s+)\s*(.+)/);
+    // Cas B : "@Prénom" ou "(Prénom)" en fin ou milieu de note
+    const tagMatch = rawSegment.match(/(?:@|\(\s*resp\s*:?\s*|\(\s*)([A-ZÀ-Ÿ][a-zà-ÿ]+)\b/);
+    // Cas C : Structure grammaticale active ("Charlotte doit", "il faut que Stéphane", "Marc va")
+    const activeSubjectMatch = formattedSentence.match(/(?:il faut que|faut que|que)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\b|\b([A-ZÀ-Ÿ][a-zà-ÿ]+)\s+(?:elle\s+|il\s+)?(?:doit|devra|va|s'occupe|est chargé|prend en charge|gère|achète|refait|prépare|relance|envoie|appelle|vérifie|contacte|needs to|must|will|has to|is responsible)/);
+    // Cas D : Structure passive ("confié à Marc", "fait par Julie", "charge à Thomas") — on exclut "envoyer à Marc" !
+    const passiveMatch = formattedSentence.match(/(?:confié à|assigné à|charge à|géré par|fait par|suivi par|assigned to|handled by|by)\s+([A-ZÀ-Ÿ][a-zà-ÿ]+)\b/i);
+
+    const stopWords = [
+      'Attention', 'Réunion', 'Budget', 'Meeting', 'Warning', 'Approved', 'Il', 'Elle', 'On', 'Nous', 'Vous',
+      'Ils', 'Elles', 'Cela', 'Ceci', 'Tout', 'Tous', 'Point', 'Projet', 'Client', 'Serveur', 'Site', 'Contrat',
+      'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche', 'Demain', 'Action', 'Décision',
+      'Risque', 'Synthèse', 'Todo', 'Urgent', 'Important', 'Validation', 'Accord', 'Problème', 'Retard', 'Suite'
+    ];
+
+    if (telegraphMatch && !stopWords.includes(telegraphMatch[1].charAt(0).toUpperCase() + telegraphMatch[1].slice(1).toLowerCase())) {
+      const candidate = telegraphMatch[1];
+      assignee = candidate.charAt(0).toUpperCase() + candidate.slice(1).toLowerCase();
+    } else if (tagMatch && !stopWords.includes(tagMatch[1])) {
+      assignee = tagMatch[1];
+    } else if (activeSubjectMatch) {
+      const candidate = activeSubjectMatch[1] || activeSubjectMatch[2];
+      if (!stopWords.includes(candidate)) assignee = candidate;
+    } else if (passiveMatch) {
+      const candidate = passiveMatch[1];
+      if (!stopWords.includes(candidate)) assignee = candidate;
     } else {
-      const words = sentence.split(/\s+/);
-      const stopWords = ['Attention', 'Réunion', 'Budget', 'Meeting', 'Warning', 'Approved', 'Il', 'Elle', 'On', 'Nous'];
-      for (let i = 1; i < words.length - 1; i++) {
+      // Fallback prudent : prénom en majuscule au milieu de la phrase (hors destinataire "envoyer à X")
+      const withoutRecipient = formattedSentence.replace(/(?:envoyer|transmettre|parler|écrire|répondre|demander|send|talk|write)\s+(?:à|au|to)\s+[A-ZÀ-Ÿ][a-zà-ÿ]+/gi, '');
+      const words = withoutRecipient.split(/\s+/);
+      for (let i = 1; i < words.length; i++) {
         const w = words[i].replace(/[^a-zA-ZÀ-ÿ]/g, '');
         if (w.length > 2 && w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase() && !stopWords.includes(w)) {
           assignee = w;
@@ -326,32 +369,66 @@ export default function App() {
   const handleProcess = () => {
     if (!rawText.trim()) return;
 
-    let preProcessed = rawText
-      .replace(/\s+(et aussi|sinon|par ailleurs|de plus|and also|furthermore)\s+/gi, '. ')
-      .replace(/\s+(mais il faut|mais faut|et il faut|but we must)\s+/gi, '. ');
+    // 1. Protection des points dans les nombres décimaux (ex: 15.5k€) et abréviations (M. Dupont)
+    let protectedText = rawText
+      .replace(/(\d)\.(\d)/g, '$1{{DOT}}$2')
+      .replace(/\b(M|Mr|Mme|Dr|St)\.\s/gi, '$1{{DOT}} ');
 
+    // 2. Découpage intelligent des phrases composées (ex: "Budget validé, mais Thomas doit...")
+    let preProcessed = protectedText
+      .replace(/\s+(et aussi|sinon|par ailleurs|de plus|en revanche|and also|furthermore)\s+/gi, '. ')
+      .replace(/,?\s+(mais il faut|mais faut|et il faut|mais attention|attention|cependant|toutefois|but we must|however)\s+/gi, '. $1 ')
+      .replace(/,\s+(?:mais\s+|et\s+)?(?=[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:|\s+(?:doit|va|s'occupe|needs|must|will|has to)))/g, '. ');
+
+    // 3. Découpage par lignes, points, points-virgules
     const rawSegments = preProcessed
       .split(/[\.\n;\!\?]+/)
-      .map(s => s.trim())
+      .map(s => s.replace(/\{\{DOT\}\}/g, '.').trim())
       .filter(s => s.length > 3);
 
     const activeKeywords = KEYWORDS[lang];
 
     const parsedItems = rawSegments.map((segment, index) => {
       const lower = segment.toLowerCase();
+      const isAlreadyDone = /^\[\s*[xX]\s*\]/.test(segment.trim());
+
       const formattedText = cleanAndFormatSentence(segment);
-      const meta = extractMetadata(formattedText);
+      const meta = extractMetadata(segment, formattedText);
 
       let scoreAction = 0;
       let scoreDecision = 0;
       let scoreRisk = 0;
 
+      // Bonus A : Préfixes explicites écrits par l'utilisateur
+      if (/^(?:todo|to-do|action|tâche|à faire|\[\s*[xX]?\s*\])/i.test(segment.trim())) scoreAction += 6;
+      if (/^(?:décision|decision|validé|acté|accord|ok\s*:)/i.test(segment.trim())) scoreDecision += 6;
+      if (/^(?:risque|risk|alerte|warning|blocage|problème|pb\s*:)/i.test(segment.trim())) scoreRisk += 6;
+
+      // Bonus B : Phrase qui commence directement par un verbe d'action à l'infinitif ("Envoyer le devis...")
+      const cleanStart = formattedText.replace(/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?::|->|→|\-)\s*/, '');
+      if (INFINITIVE_ACTION_REGEX.test(cleanStart)) {
+        scoreAction += 4;
+      }
+
+      // Bonus C : Format télégraphique "Prénom -> action" ou "Prénom : action"
+      if (/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:)\s*/.test(segment.trim())) {
+        scoreAction += 3;
+      }
+
+      // Pondération par mots-clés
       activeKeywords.actions.forEach(kw => { if (lower.includes(kw)) scoreAction += 2; });
       activeKeywords.decisions.forEach(kw => { if (lower.includes(kw)) scoreDecision += 2; });
       activeKeywords.risks.forEach(kw => { if (lower.includes(kw)) scoreRisk += 2; });
 
-      if (meta.deadline) scoreAction += 1;
-      if (meta.budget) scoreDecision += 1;
+      // Correction des faux positifs de Risque (ex: "pas de problème", "aucun retard")
+      if (NEGATED_RISK_REGEX.test(lower)) {
+        scoreRisk = 0;
+      }
+
+      // Bonus contextuels liés aux métadonnées extraites
+      if (meta.deadline) scoreAction += 2;
+      if (meta.assignee && scoreDecision === 0 && scoreRisk === 0) scoreAction += 2;
+      if (meta.budget && scoreAction === 0 && scoreRisk === 0) scoreDecision += 2;
 
       const maxScore = Math.max(scoreAction, scoreDecision, scoreRisk);
       let category = 'summary';
@@ -369,7 +446,7 @@ export default function App() {
         assignee: meta.assignee || '',
         deadline: meta.deadline || '',
         budget: meta.budget || '',
-        done: false
+        done: isAlreadyDone
       };
     });
 
@@ -844,6 +921,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
               <p style={{ fontSize: '0.85rem', color: THEME.inkMuted, margin: '0 0 10px 0' }}>{t.templateDesc}</p>
               <pre style={{ margin: 0, backgroundColor: THEME.surface, padding: '12px', border: `1px solid ${THEME.borderSubtle}`, fontSize: '0.8rem', overflowX: 'auto', lineHeight: '1.5' }}>
 {`[Prénom] doit [verbe d'action] avant [jour/date].
+[Prénom] -> [verbe à l'infinitif] (@Responsable).
 Décidé : validation du budget à [montant €].
 Attention : blocage ou retard sur [sujet technique].`}
               </pre>
