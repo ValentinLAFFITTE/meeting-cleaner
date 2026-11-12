@@ -121,7 +121,7 @@ const TRANSLATIONS = {
     cleanSpacesBtn: "Nettoyer espaces",
     testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "NOTES BRUTES DE LA RÉUNION",
-    placeholderInput: "Saisissez ou collez vos notes prises au kilomètre (ex: Thomas -> envoyer le devis avant jeudi. Budget validé à 4500€. Attention retard possible sur la livraison...)",
+    placeholderInput: "Saisissez ou collez vos notes ici. Sélectionnez un mot et cliquez sur B, U ou S pour le mettre en gras, souligner ou barrer directement...",
     processBtn: "Structurer le compte rendu →",
     titleResult: "DOCUMENT STRUCTURÉ",
     descResult: "Utilisez les boutons [B] [U] [S] sur chaque ligne pour mettre en gras, souligner ou barrer un point avant l'export.",
@@ -190,7 +190,7 @@ const TRANSLATIONS = {
     cleanSpacesBtn: "Clean spaces",
     testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15.5k€ for the new software, but Thomas -> send final quote to Marc before Thursday. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. [x] Follow up with accounting (@Julie). no issue on cloud migration. warning: huge delay on website production due to a server bug.",
     labelInput: "RAW MEETING NOTES",
-    placeholderInput: "Type or paste your raw notes here (e.g., John -> send the quote before Thursday. Approved budget at $4500. Warning: server delay...)",
+    placeholderInput: "Type or paste your raw notes here. Highlight any word and click B, U, or S to format directly...",
     processBtn: "Structure meeting minutes →",
     titleResult: "STRUCTURED DOCUMENT",
     descResult: "Use the [B] [U] [S] buttons on any line to bold, underline, or strikethrough items before exporting.",
@@ -260,10 +260,19 @@ const INFINITIVE_ACTION_REGEX = /^(envoyer|préparer|rédiger|appeler|contacter|
 
 const NEGATED_RISK_REGEX = /\b(pas de|aucun|aucune|sans|plus de|zéro|no|without|zero)\s+(?:gros\s+|petit\s+|nouveau\s+)?(problème|souci|bug|erreur|panne|blocage|retard|risque|danger|alerte|conflit|problem|issue|bug|error|blocker|delay|risk)\b/i;
 
+// Convertit les anciens symboles **, __, ~~ éventuellement restés en mémoire vers du vrai HTML visuel
+const normalizeLegacyMarkersToHtml = (str) => {
+  if (!str) return '';
+  return str
+    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    .replace(/__(.+?)__/g, '<u>$1</u>')
+    .replace(/~~(.+?)~~/g, '<s>$1</s>');
+};
+
 export default function App() {
   const [lang, setLang] = useState('fr');
   const t = TRANSLATIONS[lang];
-  const textareaRef = useRef(null);
+  const editorRef = useRef(null);
 
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
@@ -280,7 +289,17 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
-  const [rawText, setRawText] = useState(() => localStorage.getItem('meeting_rawText') || '');
+  const [rawText, setRawText] = useState(() => {
+    const saved = localStorage.getItem('meeting_rawText') || '';
+    return saved.replace(/\*\*(.+?)\*\*/g, '$1').replace(/__(.+?)__/g, '$1').replace(/~~(.+?)~~/g, '$1');
+  });
+  const [rawHtml, setRawHtml] = useState(() => {
+    const savedHtml = localStorage.getItem('meeting_rawHtml');
+    if (savedHtml) return normalizeLegacyMarkersToHtml(savedHtml);
+    const savedText = localStorage.getItem('meeting_rawText') || '';
+    return normalizeLegacyMarkersToHtml(savedText);
+  });
+
   const [meetingTitle, setMeetingTitle] = useState(() => localStorage.getItem('meeting_title') || 'Compte rendu de réunion — Suivi opérationnel');
   const [items, setItems] = useState(() => {
     const saved = localStorage.getItem('meeting_items');
@@ -289,11 +308,19 @@ export default function App() {
   const [hasProcessed, setHasProcessed] = useState(() => items.length > 0);
   const [copyFeedback, setCopyFeedback] = useState('');
 
+  // Initialisation du vrai éditeur visuel (WYSIWYG)
+  useEffect(() => {
+    if (editorRef.current && editorRef.current.innerHTML !== rawHtml) {
+      editorRef.current.innerHTML = rawHtml;
+    }
+  }, [currentPath]);
+
   useEffect(() => {
     localStorage.setItem('meeting_rawText', rawText);
+    localStorage.setItem('meeting_rawHtml', rawHtml);
     localStorage.setItem('meeting_title', meetingTitle);
     localStorage.setItem('meeting_items', JSON.stringify(items));
-  }, [rawText, meetingTitle, items]);
+  }, [rawText, rawHtml, meetingTitle, items]);
 
   useEffect(() => {
     try {
@@ -309,49 +336,65 @@ export default function App() {
     setTimeout(() => setCopyFeedback(''), 2800);
   };
 
-  // BARRE D'OUTILS WORD / PAO SUR LE TEXTAREA (Gras, Souligné, Barré, Balises rapides)
-  const applyTextFormat = (prefix, suffix = prefix, defaultWord = 'texte') => {
-    const el = textareaRef.current;
-    if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
-    const selected = rawText.substring(start, end);
-    const replacement = `${prefix}${selected || defaultWord}${suffix}`;
-    const newValue = rawText.substring(0, start) + replacement + rawText.substring(end);
-    setRawText(newValue);
-    setTimeout(() => {
-      el.focus();
-      el.setSelectionRange(start + prefix.length, start + prefix.length + (selected ? selected.length : defaultWord.length));
-    }, 10);
+  // Synchronisation de l'éditeur riche quand l'utilisateur tape au clavier
+  const syncEditorState = () => {
+    if (!editorRef.current) return;
+    setRawHtml(editorRef.current.innerHTML);
+    setRawText(editorRef.current.innerText || '');
   };
 
-  const insertLineTag = (tag) => {
-    const el = textareaRef.current;
+  // VRAIES COMMANDES VISUELLES WYSIWYG (Gras, Souligné, Barré SANS caractères bizarres)
+  const applyVisualCommand = (command, value = null) => {
+    const el = editorRef.current;
     if (!el) return;
-    const start = el.selectionStart;
-    const before = rawText.substring(0, start);
-    const after = rawText.substring(start);
-    const needsNewLine = before.length > 0 && !before.endsWith('\n');
-    const insertion = `${needsNewLine ? '\n' : ''}${tag} `;
-    setRawText(before + insertion + after);
-    setTimeout(() => {
-      el.focus();
-      const pos = start + insertion.length;
-      el.setSelectionRange(pos, pos);
-    }, 10);
+    el.focus();
+    document.execCommand(command, false, value);
+    syncEditorState();
+  };
+
+  const insertVisualText = (textToInsert) => {
+    const el = editorRef.current;
+    if (!el) return;
+    el.focus();
+    document.execCommand('insertText', false, textToInsert);
+    syncEditorState();
+  };
+
+  const loadSampleInEditor = () => {
+    const sampleHtml = lang === 'fr'
+      ? `réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à <b>15000€</b> pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les <b>tables</b> pour le <u>bureau</u> avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la <s>compta</s> (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.`
+      : t.testText;
+    if (editorRef.current) {
+      editorRef.current.innerHTML = sampleHtml;
+      syncEditorState();
+    }
+  };
+
+  const clearAllEditor = () => {
+    if (editorRef.current) {
+      editorRef.current.innerHTML = '';
+    }
+    setRawHtml('');
+    setRawText('');
+    setItems([]);
+    setHasProcessed(false);
   };
 
   const cleanMessySpaces = () => {
-    if (!rawText.trim()) return;
-    const cleaned = rawText
-      .replace(/[ \t]+/g, ' ')
-      .replace(/\n{3,}/g, '\n\n')
+    if (!editorRef.current) return;
+    const cleanedHtml = editorRef.current.innerHTML
+      .replace(/(&nbsp;|\s)+/g, ' ')
       .trim();
-    setRawText(cleaned);
+    editorRef.current.innerHTML = cleanedHtml;
+    syncEditorState();
   };
 
   const cleanAndFormatSentence = (str) => {
-    let cleaned = str.trim();
+    let cleaned = str
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/__(.+?)__/g, '$1')
+      .replace(/~~(.+?)~~/g, '$1')
+      .trim();
     cleaned = cleaned.replace(/^(?:[\-\*\•\>\+]+|\[\s*[xX]?\s*\]|\d+[\.\)\-])\s*/, '');
     cleaned = cleaned.replace(/^(?:todo|to-do|action|tâche|décision|decision|risque|risk|alerte|point|note)\s*[:\-–>]\s*/i, '');
 
@@ -497,9 +540,10 @@ export default function App() {
   };
 
   const handleProcess = () => {
-    if (!rawText.trim()) return;
+    const currentText = editorRef.current ? editorRef.current.innerText : rawText;
+    if (!currentText.trim()) return;
 
-    let protectedText = rawText
+    let protectedText = currentText
       .replace(/(\d)\.(\d)/g, '$1{{DOT}}$2')
       .replace(/\b(M|Mr|Mme|Dr|St)\.\s/gi, '$1{{DOT}} ');
 
@@ -519,31 +563,21 @@ export default function App() {
       const lower = segment.toLowerCase();
       const isAlreadyDone = /^\[\s*[xX]\s*\]/.test(segment.trim());
 
-      // Détection si l'utilisateur a mis du gras (**), souligné (__) ou barré (~~) dans la zone de saisie
-      const hasBold = /\*\*(.+?)\*\*/.test(segment);
-      const hasUnderline = /__(.+?)__/.test(segment);
-      const hasStrike = /~~(.+?)~~/.test(segment);
-
-      const cleanSegment = segment
-        .replace(/\*\*(.+?)\*\*/g, '$1')
-        .replace(/__(.+?)__/g, '$1')
-        .replace(/~~(.+?)~~/g, '$1');
-
-      const formattedText = cleanAndFormatSentence(cleanSegment);
-      const meta = extractMetadata(cleanSegment, formattedText);
+      const formattedText = cleanAndFormatSentence(segment);
+      const meta = extractMetadata(segment, formattedText);
 
       let scoreAction = 0;
       let scoreDecision = 0;
       let scoreRisk = 0;
 
-      if (/^(?:todo|to-do|action|tâche|à faire|\[\s*[xX]?\s*\])/i.test(cleanSegment.trim())) scoreAction += 6;
-      if (/^(?:décision|decision|validé|acté|accord|ok\s*:)/i.test(cleanSegment.trim())) scoreDecision += 6;
-      if (/^(?:risque|risk|alerte|warning|blocage|problème|pb\s*:)/i.test(cleanSegment.trim())) scoreRisk += 6;
+      if (/^(?:todo|to-do|action|tâche|à faire|\[\s*[xX]?\s*\])/i.test(segment.trim())) scoreAction += 6;
+      if (/^(?:décision|decision|validé|acté|accord|ok\s*:)/i.test(segment.trim())) scoreDecision += 6;
+      if (/^(?:risque|risk|alerte|warning|blocage|problème|pb\s*:)/i.test(segment.trim())) scoreRisk += 6;
 
       const cleanStart = formattedText.replace(/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?::|->|→|\-)\s*/, '');
       if (INFINITIVE_ACTION_REGEX.test(cleanStart)) scoreAction += 4;
 
-      if (/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:)\s*/.test(cleanSegment.trim())) scoreAction += 3;
+      if (/^[A-ZÀ-Ÿ][a-zà-ÿ]+\s*(?:->|→|:)\s*/.test(segment.trim())) scoreAction += 3;
 
       activeKeywords.actions.forEach(kw => { if (lower.includes(kw)) scoreAction += 2; });
       activeKeywords.decisions.forEach(kw => { if (lower.includes(kw)) scoreDecision += 2; });
@@ -573,9 +607,9 @@ export default function App() {
         assignee: meta.assignee || '',
         deadline: meta.deadline || '',
         budget: meta.budget || '',
-        done: isAlreadyDone || hasStrike,
-        isBold: hasBold,
-        isUnderline: hasUnderline
+        done: isAlreadyDone,
+        isBold: false,
+        isUnderline: false
       };
     });
 
@@ -863,7 +897,6 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     );
   }
 
-  // Style partagé des petits boutons de la barre d'outils Word/PAO
   const toolBtnStyle = {
     background: THEME.surface,
     color: THEME.ink,
@@ -966,7 +999,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
         {/* Colonne centrale principale */}
         <main style={{ flex: 1, maxWidth: '850px', width: '100%' }}>
           
-          {/* Boîte de saisie style Néo-Brutaliste / Papier avec BARRE D'OUTILS WORD/PAO */}
+          {/* Boîte de saisie avec VRAI ÉDITEUR VISUEL WYSIWYG (Gras, Souligné, Barré en direct) */}
           <div className="no-print" style={{ background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
               <label style={{ fontWeight: '800', fontSize: '0.8rem', letterSpacing: '0.06em', color: THEME.ink }}>
@@ -977,7 +1010,8 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                   {rawText.trim() ? `${rawText.trim().split(/\s+/).length} mots` : '0 mot'}
                 </span>
                 <button 
-                  onClick={() => setRawText(t.testText)}
+                  type="button"
+                  onClick={loadSampleInEditor}
                   style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '4px 10px', fontSize: '0.75rem', fontWeight: '700', cursor: 'pointer' }}
                 >
                   {t.testBtn}
@@ -985,7 +1019,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
               </div>
             </div>
 
-            {/* BARRE D'OUTILS D'ÉDITION (Style Word / Studio PAO en 3 couleurs) */}
+            {/* BARRE D'OUTILS WYSIWYG (onMouseDown preventDefault garde le mot sélectionné !) */}
             <div style={{ 
               display: 'flex', 
               flexWrap: 'wrap', 
@@ -996,64 +1030,133 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
               borderBottom: 'none', 
               padding: '8px 10px' 
             }}>
-              {/* Groupe Style Typographique */}
-              <button type="button" onClick={() => applyTextFormat('**', '**', 'important')} style={toolBtnStyle} title="Mettre en Gras">
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('bold'); }}
+                style={toolBtnStyle}
+                title="Mettre en Gras (Ctrl+B)"
+              >
                 <strong>B</strong>
               </button>
-              <button type="button" onClick={() => applyTextFormat('__', '__', 'souligné')} style={{ ...toolBtnStyle, textDecoration: 'underline' }} title="Souligner">
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('italic'); }}
+                style={{ ...toolBtnStyle, fontStyle: 'italic' }}
+                title="Italique (Ctrl+I)"
+              >
+                I
+              </button>
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('underline'); }}
+                style={{ ...toolBtnStyle, textDecoration: 'underline' }}
+                title="Souligner (Ctrl+U)"
+              >
                 U
               </button>
-              <button type="button" onClick={() => applyTextFormat('~~', '~~', 'annulé')} style={{ ...toolBtnStyle, textDecoration: 'line-through' }} title="Barrer">
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('strikeThrough'); }}
+                style={{ ...toolBtnStyle, textDecoration: 'line-through' }}
+                title="Barrer"
+              >
                 S
+              </button>
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('removeFormat'); }}
+                style={{ ...toolBtnStyle, fontWeight: '600', fontSize: '0.72rem' }}
+                title="Effacer le style du mot sélectionné"
+              >
+                Tx
               </button>
 
               <span style={{ width: '1px', height: '18px', backgroundColor: THEME.borderSubtle, margin: '0 4px' }} />
 
-              {/* Groupe Marqueurs Métier Rapides */}
-              <button type="button" onClick={() => insertLineTag('ACTION :')} style={toolBtnStyle} title="Insérer une Action">
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); insertVisualText('\nACTION : '); }}
+                style={toolBtnStyle}
+                title="Insérer une Action"
+              >
                 + ACTION
               </button>
-              <button type="button" onClick={() => insertLineTag('DÉCISION :')} style={toolBtnStyle} title="Insérer une Décision">
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); insertVisualText('\nDÉCISION : '); }}
+                style={toolBtnStyle}
+                title="Insérer une Décision"
+              >
                 + DÉCISION
               </button>
-              <button type="button" onClick={() => insertLineTag('RISQUE :')} style={toolBtnStyle} title="Insérer un Risque">
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); insertVisualText('\nRISQUE : '); }}
+                style={toolBtnStyle}
+                title="Insérer un Risque"
+              >
                 + RISQUE
               </button>
-              <button type="button" onClick={() => applyTextFormat(' -> ', '', '')} style={toolBtnStyle} title="Flèche d'assignation (Prénom -> Tâche)">
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); insertVisualText(' -> '); }}
+                style={toolBtnStyle}
+                title="Flèche d'assignation"
+              >
                 →
               </button>
-              <button type="button" onClick={() => applyTextFormat(' ', '€', '1000')} style={toolBtnStyle} title="Insérer un budget en Euros">
+              <button
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); insertVisualText(' € '); }}
+                style={toolBtnStyle}
+                title="Symbole Euro"
+              >
                 €
               </button>
 
-              {/* Groupe Nettoyage & Suppression (Aligné à droite) */}
               <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px' }}>
                 <button 
                   type="button" 
                   onClick={cleanMessySpaces} 
                   style={{ ...toolBtnStyle, fontWeight: '600', fontSize: '0.72rem' }}
-                  title="Supprimer les doubles espaces et lignes vides"
+                  title="Supprimer les doubles espaces"
                 >
                   {t.cleanSpacesBtn}
                 </button>
                 <button 
                   type="button" 
-                  onClick={() => { setRawText(''); setItems([]); setHasProcessed(false); }} 
+                  onClick={clearAllEditor} 
                   style={{ ...toolBtnStyle, backgroundColor: THEME.ink, color: THEME.surface, fontSize: '0.72rem' }}
-                  title="Vider entièrement la zone"
+                  title="Tout effacer"
                 >
                   × {t.clearBtn}
                 </button>
               </div>
             </div>
             
-            <textarea 
-              ref={textareaRef}
-              rows="6"
-              style={{ width: '100%', padding: '14px', background: THEME.bg, color: THEME.ink, border: `1.5px solid ${THEME.border}`, fontSize: '0.95rem', boxSizing: 'border-box', lineHeight: '1.55', fontFamily: 'inherit', resize: 'vertical' }}
-              placeholder={t.placeholderInput}
-              value={rawText}
-              onChange={(e) => setRawText(e.target.value)}
+            {/* ZONE D'ÉDITION VISUELLE RICHE (Remplace le textarea pour afficher le vrai gras/souligné/barré) */}
+            <div
+              ref={editorRef}
+              contentEditable
+              suppressContentEditableWarning
+              onInput={syncEditorState}
+              data-placeholder={t.placeholderInput}
+              className="wysiwyg-editor"
+              style={{
+                width: '100%',
+                minHeight: '150px',
+                padding: '14px',
+                background: THEME.bg,
+                color: THEME.ink,
+                border: `1.5px solid ${THEME.border}`,
+                fontSize: '0.95rem',
+                boxSizing: 'border-box',
+                lineHeight: '1.6',
+                fontFamily: 'inherit',
+                outline: 'none',
+                whiteSpace: 'pre-wrap',
+                overflowY: 'auto'
+              }}
             />
             
             <button 
@@ -1064,7 +1167,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
             </button>
           </div>
 
-          {/* RÉSULTAT À L'ÉCRAN : 100% fidèle à l'esthétique 3 couleurs + Mini barre d'outils par ligne */}
+          {/* RÉSULTAT À L'ÉCRAN : 100% fidèle à l'esthétique 3 couleurs */}
           {hasProcessed && (
             <div className="no-print" style={{ marginTop: '32px', background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
@@ -1171,7 +1274,6 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                                     }}
                                   />
 
-                                  {/* Mini boutons d'édition par ligne : Gras [B], Souligné [U], Barré [S], Monter/Descendre, Catégorie, Supprimer */}
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
                                     <button
                                       type="button"
@@ -1511,6 +1613,12 @@ Attention : blocage ou retard sur [sujet technique].`}
       </div>
 
       <style>{`
+        .wysiwyg-editor:empty:before {
+          content: attr(data-placeholder);
+          color: #5a5a66;
+          pointer-events: none;
+          display: block;
+        }
         .print-only {
           display: none;
         }
