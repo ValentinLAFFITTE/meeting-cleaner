@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
+// Palette inspirée de Paperback-2 & 2Bit Demichrome (Lospec)
+const THEME = {
+  bg: '#f4f1ea',          // Papier crème doux
+  surface: '#ffffff',     // Blanc franc
+  surfaceAlt: '#eae6df',  // Gris-beige secondaire
+  ink: '#1c1c21',         // Noir charbon profond
+  inkMuted: '#5a5a66',    // Gris ardoise pour textes secondaires
+  accent: '#c84b31',      // Terre cuite éditorial (accent principal)
+  border: '#1c1c21',      // Bordure franche
+  borderSubtle: '#d0cbc1' // Bordure légère interne
+};
+
 const ABBREVIATIONS = {
   "\\bpb\\b": "problème",
   "\\bpbs\\b": "problèmes",
@@ -73,79 +85,148 @@ const KEYWORDS = {
 
 const TRANSLATIONS = {
   fr: {
-    h1Title: "MeetClean – Générateur de compte rendu de réunion",
-    subtitle: "Collez vos notes brutes, extrayez instantanément vos actions, décisions et budgets. 100 % local, gratuit et sans inscription.",
-    testBtn: "Charger l'exemple de test",
+    badge: "OUTIL DE BUREAUTIQUE LOCAL • SANS COMPTE",
+    h1Title: "MeetClean — Structuration de comptes rendus de réunion",
+    subtitle: "Transformez vos prises de notes brutes en un document clair : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
+    testBtn: "Insérer un jeu de notes exemple",
+    clearBtn: "Effacer",
     testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
-    labelInput: "1. Collez vos notes en vrac :",
-    placeholderInput: "Collez vos notes brutes ici...",
-    processBtn: "Analyser & Structurer les notes 🚀",
-    titleResult: "2. Compte-rendu prêt à partager",
-    descResult: "💡 Modifiez le contenu si besoin, puis copiez-le ou exportez-le en un clic.",
-    copyEmail: "✉️ Copier pour E-mail",
-    printPdf: "🖨️ Enregistrer en PDF",
-    copyMd: "📋 Copier Markdown",
-    downloadMd: "💾 Télécharger .md",
-    addBtn: "+ Ajouter",
-    emptyCategory: "Aucun élément dans cette catégorie.",
-    adText: "Espace Publicitaire",
-    footer: "MeetClean - Vos notes ne quittent pas votre navigateur.",
-    privacyLink: "Politique de confidentialité",
+    labelInput: "NOTES BRUTES DE LA RÉUNION",
+    placeholderInput: "Saisissez ou collez vos notes prises au kilomètre (ex: Thomas doit envoyer le devis avant jeudi. Budget validé à 4500€. Attention retard possible sur la livraison...)",
+    processBtn: "Structurer le compte rendu →",
+    titleResult: "DOCUMENT STRUCTURÉ",
+    descResult: "Cliquez sur n'importe quel intitulé pour le corriger ou réassigner sa catégorie avant l'export.",
+    copyEmail: "Copier format E-mail",
+    printPdf: "Imprimer / PDF",
+    copyMd: "Copier Markdown",
+    downloadMd: "Exporter .md",
+    addBtn: "+ Ajouter une ligne",
+    emptyCategory: "Aucun élément classé dans cette section.",
+    adText: "PUBLICITÉ",
+    footer: "MeetClean — Outil d'organisation de notes professionnelles.",
+    privacyLink: "Confidentialité & Mentions légales",
+    aboutLink: "Guide méthodologique",
     categories: {
-      actions: { label: "🛠️ Plan d'action (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
-      decisions: { label: '⚖️ Décisions prises', shortLabel: '⚖️ Décision', color: '#34d399' },
-      risks: { label: '⚠️ Risques & Blocages', shortLabel: '⚠️ Risque', color: '#f87171' },
-      summary: { label: '📌 Points clés & Contexte', shortLabel: '📌 Synthèse', color: '#818cf8' }
+      actions: { label: "PLAN D'ACTION (TO-DO)", shortLabel: 'ACTION', tag: '01' },
+      decisions: { label: 'DÉCISIONS ACTÉES', shortLabel: 'DÉCISION', tag: '02' },
+      risks: { label: 'RISQUES & POINTS DE BLOCAGE', shortLabel: 'RISQUE', tag: '03' },
+      summary: { label: 'SYNTHÈSE & CONTEXTE GÉNÉRAL', shortLabel: 'SYNTHÈSE', tag: '04' }
     },
-    faqTitle: "Foire Aux Questions (FAQ)",
+    beforeAfterTitle: "Exemple concret : du brouillon au livrable",
+    beforeLabel: "AVANT — Notes prises à la volée",
+    beforeSample: "« reu lancement projet alpha. ok pour budget 12k€. fo que Marc relance le prestataire pr le serveur avant mardi. pb sur les licences actuelles qui expirent fin du mois. »",
+    afterLabel: "APRÈS — Analyse syntaxique MeetClean",
+    afterSample: [
+      "[ACTION] Marc doit relancer le prestataire pour le serveur (Échéance : avant mardi)",
+      "[DÉCISION] Accord pour le budget (Montant : 12k€)",
+      "[RISQUE] Problème sur les licences actuelles qui expirent fin du mois",
+      "[SYNTHÈSE] Réunion lancement projet alpha."
+    ],
+    guideTitle: "Guide pratique : Comment rédiger un compte rendu de réunion réellement lu ?",
+    guideIntro: "Un bon compte rendu ne retranscrit pas mot à mot les échanges : il isole les engagements opérationnels. C'est sur ce principe d'ingénierie documentaire que repose l'algorithme syntaxique de MeetClean.",
+    guideCards: [
+      {
+        step: "PILIER 01",
+        title: "La règle du Verbe d'Action + Responsable",
+        text: "Une tâche sans propriétaire n'est jamais exécutée. Lors de votre prise de notes, associez systématiquement un prénom à un verbe d'engagement (« Claire prépare », « relancer par Thomas »). Notre parseur repère ces structures grammaticales pour pré-remplir les étiquettes de responsabilité."
+      },
+      {
+        step: "PILIER 02",
+        title: "Séparer le débat de la décision finale",
+        text: "Vos collègues qui n'ont pas assisté au point n'ont pas besoin de lire 20 minutes d'hésitations. Formulez explicitement les conclusions avec des marqueurs francs : « Validé : », « Accord sur », « Budget retenu ». Cela permet d'archiver une trace écrite incontestable."
+      },
+      {
+        step: "PILIER 03",
+        title: "Isoler les alertes et dépendances",
+        text: "Un retard signalé en milieu de réunion finit souvent noyé au fond d'un paragraphe. Mettre en évidence les blocages techniques ou budgétaires dans un encadré dédié permet aux décideurs de débloquer la situation dès la réception de l'e-mail."
+      }
+    ],
+    templateTitle: "Modèle de trame optimale pour vos prochaines réunions",
+    templateDesc: "Pour accélérer votre prise de notes au clavier, voici la convention d'écriture rapide recommandée :",
+    faqTitle: "Questions fréquentes sur le fonctionnement technique",
     faq: [
-      { q: "Comment fonctionne MeetClean ?", a: "Il analyse localement vos notes de réunion brutes, nettoie les abréviations et sépare automatiquement le contenu en plan d'action (to-do), décisions et risques." },
-      { q: "Mes données de réunion sont-elles sécurisées ?", a: "Oui, l'intégralité du traitement de vos notes est exécutée directement dans votre navigateur. Vos notes ne quittent pas votre appareil." },
-      { q: "Est-ce un outil vraiment gratuit ?", a: "Totalement gratuit et sans inscription requise, financé par la publicité légère." }
+      { q: "En quoi MeetClean diffère-t-il d'un générateur par IA générative ?", a: "Contrairement aux grands modèles de langage (LLM) qui peuvent inventer des chiffres (hallucinations) ou reformuler vos propos de manière générique, MeetClean utilise un moteur d'analyse lexicale et grammaticale déterministe. Vos phrases restent fidèles à vos notes, les abréviations courantes sont nettoyées et aucune donnée ne transite vers un serveur distant." },
+      { q: "Comment sont détectés les budgets, dates et responsables ?", a: "L'application utilise des expressions régulières avancées (Regex) couplées à un système de pondération sémantique. Lorsqu'une somme (en €, k€ ou $), une échéance temporelle ou un prénom suivi d'un verbe d'action est repéré, le segment gagne des points vers la catégorie correspondante." },
+      { q: "Mes notes confidentielles d'entreprise sont-elles stockées ?", a: "Non. Le code s'exécute intégralement en JavaScript au sein de la mémoire locale (localStorage) de votre propre navigateur. Vous pouvez même couper votre connexion Internet après le chargement de la page et continuer à structurer vos comptes rendus." },
+      { q: "Comment exporter le résultat vers Notion, Word ou Outlook ?", a: "Le bouton « Copier format E-mail » prépare un texte structuré prêt à être collé dans Outlook ou Gmail. Le bouton « Copier Markdown » est idéal pour Notion, Obsidian, Slack ou Jira : les cases à cocher et les titres s'y formateront automatiquement." }
     ]
   },
   en: {
-    h1Title: "MeetClean – Free Meeting Minutes Generator",
-    subtitle: "Paste raw notes and instantly extract actions, decisions, and budgets. 100% local, free, no registration.",
-    testBtn: "Load test example",
+    badge: "LOCAL OFFICE UTILITY • NO ACCOUNT REQUIRED",
+    h1Title: "MeetClean — Structured Meeting Minutes Utility",
+    subtitle: "Turn raw, messy meeting notes into a clean operational document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
+    testBtn: "Load sample notes",
+    clearBtn: "Clear",
     testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15000€ for the new software. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. warning: huge delay on website production due to a server bug.",
-    labelInput: "1. Paste your raw meeting notes:",
-    placeholderInput: "Paste your raw notes here...",
-    processBtn: "Analyze & Structure Notes 🚀",
-    titleResult: "2. Ready-to-Share Meeting Minutes",
-    descResult: "💡 Edit content if needed, then copy or export.",
-    copyEmail: "✉️ Copy for Email",
-    printPdf: "🖨️ Save as PDF",
-    copyMd: "📋 Copy Markdown",
-    downloadMd: "💾 Download .md",
-    addBtn: "+ Add",
-    emptyCategory: "No items in this category.",
-    adText: "Advertisement",
-    footer: "MeetClean - Your notes never leave your browser.",
-    privacyLink: "Privacy Policy",
+    labelInput: "RAW MEETING NOTES",
+    placeholderInput: "Type or paste your raw notes here (e.g., John must send the quote before Thursday. Approved budget at $4500. Warning: server delay...)",
+    processBtn: "Structure meeting minutes →",
+    titleResult: "STRUCTURED DOCUMENT",
+    descResult: "Click any line to edit the text or reassign its category before exporting.",
+    copyEmail: "Copy Email Format",
+    printPdf: "Print / Save PDF",
+    copyMd: "Copy Markdown",
+    downloadMd: "Export .md",
+    addBtn: "+ Add item",
+    emptyCategory: "No items classified in this section.",
+    adText: "ADVERTISEMENT",
+    footer: "MeetClean — Professional meeting notes structuring utility.",
+    privacyLink: "Privacy & Legal Notice",
+    aboutLink: "Methodology Guide",
     categories: {
-      actions: { label: "🛠️ Action Plan (To-Do)", shortLabel: '🛠️ Action', color: '#fbbf24' },
-      decisions: { label: '⚖️ Decisions Made', shortLabel: '⚖️ Decision', color: '#34d399' },
-      risks: { label: '⚠️ Risks & Blockers', shortLabel: '⚠️ Risk', color: '#f87171' },
-      summary: { label: '📌 Key Points & Context', shortLabel: '📌 Summary', color: '#818cf8' }
+      actions: { label: "ACTION PLAN (TO-DO)", shortLabel: 'ACTION', tag: '01' },
+      decisions: { label: 'DECISIONS MADE', shortLabel: 'DECISION', tag: '02' },
+      risks: { label: 'RISKS & BLOCKERS', shortLabel: 'RISK', tag: '03' },
+      summary: { label: 'KEY POINTS & GENERAL CONTEXT', shortLabel: 'SUMMARY', tag: '04' }
     },
-    faqTitle: "Frequently Asked Questions (FAQ)",
+    beforeAfterTitle: "Real-world example: from rough draft to deliverable",
+    beforeLabel: "BEFORE — Raw notes typed on the fly",
+    beforeSample: "“alpha project kickoff. agreed on $12k budget. Mark needs to follow up with hosting provider before Tuesday. issue with current licenses expiring end of month.”",
+    afterLabel: "AFTER — MeetClean Syntactic Parsing",
+    afterSample: [
+      "[ACTION] Mark needs to follow up with hosting provider (Deadline: before Tuesday)",
+      "[DECISION] Agreed on budget (Amount: $12k)",
+      "[RISK] Issue with current licenses expiring end of month",
+      "[SUMMARY] Alpha project kickoff."
+    ],
+    guideTitle: "Practical Guide: How to write meeting minutes people actually read",
+    guideIntro: "Effective minutes never transcribe every word spoken: they isolate operational commitments. MeetClean's syntactic engine is built around this exact documentary principle.",
+    guideCards: [
+      {
+        step: "PILLAR 01",
+        title: "Action Verb + Clear Owner",
+        text: "A task without an owner never gets done. When taking notes, always pair a first name with a commitment verb ('Sarah prepares', 'follow up by Mark'). Our parser detects these structures to pre-fill assignee tags."
+      },
+      {
+        step: "PILLAR 02",
+        title: "Separate debate from final decisions",
+        text: "Teammates who missed the call don't need to read 20 minutes of hesitation. State conclusions with explicit markers: 'Approved:', 'Agreed on', 'Selected budget'. This creates an indisputable written record."
+      },
+      {
+        step: "PILLAR 03",
+        title: "Highlight blockers and dependencies",
+        text: "A delay mentioned mid-meeting often gets buried in a paragraph. Isolating technical or budget risks in a dedicated box allows stakeholders to unblock the team as soon as the email lands."
+      }
+    ],
+    templateTitle: "Optimal note-taking shorthand for your next meetings",
+    templateDesc: "To speed up live keyboard note-taking, we recommend this simple syntax convention:",
+    faqTitle: "Frequently Asked Questions & Technical Details",
     faq: [
-      { q: "How does MeetClean work?", a: "It locally analyzes raw meeting notes, cleans abbreviations, and organizes content into actions, decisions, and risks." },
-      { q: "Is my meeting data secure?", a: "Yes, all processing runs directly in your browser. Your notes never leave your device." },
-      { q: "Is this tool free?", a: "Completely free with no registration required." }
+      { q: "How is MeetClean different from generative AI wrappers?", a: "Unlike Large Language Models (LLMs) that can hallucinate numbers or rewrite your thoughts into generic corporate jargon, MeetClean uses a deterministic lexical and grammatical rule engine. Your facts stay accurate, French shorthand is expanded, and zero data leaves your computer." },
+      { q: "How are budgets, dates, and assignees extracted?", a: "The utility combines pattern-matching regular expressions with a semantic scoring matrix. Whenever a currency figure, a calendar reference, or a capitalized name paired with an action verb is detected, the sentence is weighted accordingly." },
+      { q: "Are my confidential corporate notes stored on a server?", a: "Never. Everything runs in client-side JavaScript using your browser's localStorage. You can even disconnect from Wi-Fi once the page is loaded and process your notes completely offline." },
+      { q: "How do I export to Notion, Word, or Outlook?", a: "'Copy Email Format' prepares a clean plain-text layout ready to paste into Outlook or Gmail. 'Copy Markdown' is tailored for Notion, Obsidian, Slack, or GitHub where checkboxes and headings render natively." }
     ]
   }
 };
 
-const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|asap|urgent|before [a-z0-9\s]+|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\b/i;
+const DATE_REGEX = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|demain|aujourd'hui|ce soir|cet après-midi|semaine prochaine|mois prochain|janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre|monday|tuesday|wednesday|thursday|friday|saturday|sunday|tomorrow|today|tonight|next week|january|february|march|april|may|june|july|august|september|october|november|december|q1|q2|q3|q4|asap|urgent|d'ici [a-z0-9\s]+|avant [a-z0-9\s]+|before [a-z0-9\s]+|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\b/i;
 const BUDGET_REGEX = /\b(\d+(?:[\.,]\d+)?\s*(?:k€|€|\$|k\b|euros|dollars|k euros|millions?))(?!\w)/i;
 
 export default function App() {
   const [lang, setLang] = useState('fr');
   const t = TRANSLATIONS[lang];
 
-  // Gestion simple des routes (accueil vs /privacy)
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
   useEffect(() => {
@@ -155,7 +236,7 @@ export default function App() {
   }, []);
 
   const navigateTo = (path, e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     window.history.pushState({}, '', path);
     setCurrentPath(path);
     window.scrollTo(0, 0);
@@ -167,6 +248,7 @@ export default function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [hasProcessed, setHasProcessed] = useState(() => items.length > 0);
+  const [copyFeedback, setCopyFeedback] = useState('');
 
   useEffect(() => {
     localStorage.setItem('meeting_rawText', rawText);
@@ -181,6 +263,11 @@ export default function App() {
       console.error(e);
     }
   }, []);
+
+  const showFeedback = (msg) => {
+    setCopyFeedback(msg);
+    setTimeout(() => setCopyFeedback(''), 2800);
+  };
 
   const cleanAndFormatSentence = (str) => {
     let cleaned = str.trim();
@@ -218,14 +305,15 @@ export default function App() {
     const budgetMatch = sentence.match(BUDGET_REGEX);
     if (budgetMatch) budget = budgetMatch[0];
 
-    const universalNameMatch = sentence.match(/(?:par|pour|à|by|for)\s+([A-ZÀ-Ÿ][a-zà-ÿa-zA-Z]+)|([A-ZÀ-Ÿ][a-zà-ÿa-zA-Z]+)\s+(?:doit|va|s'occupe|est chargé|needs|must|will)/);
+    const universalNameMatch = sentence.match(/(?:par|pour|à|que|by|for)\s+([A-ZÀ-Ÿ][a-zà-ÿa-zA-Z]+)|([A-ZÀ-Ÿ][a-zà-ÿa-zA-Z]+)\s+(?:elle\s+|il\s+)?(?:doit|va|s'occupe|est chargé|achète|refait|prépare|needs|must|will|has to)/);
     if (universalNameMatch) {
       assignee = universalNameMatch[1] || universalNameMatch[2];
     } else {
       const words = sentence.split(/\s+/);
+      const stopWords = ['Attention', 'Réunion', 'Budget', 'Meeting', 'Warning', 'Approved', 'Il', 'Elle', 'On', 'Nous'];
       for (let i = 1; i < words.length - 1; i++) {
         const w = words[i].replace(/[^a-zA-ZÀ-ÿ]/g, '');
-        if (w.length > 2 && w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase()) {
+        if (w.length > 2 && w[0] === w[0].toUpperCase() && w[0] !== w[0].toLowerCase() && !stopWords.includes(w)) {
           assignee = w;
           break;
         }
@@ -316,14 +404,14 @@ export default function App() {
     const actions = items.filter(i => i.category === 'actions');
     const risks = items.filter(i => i.category === 'risks');
 
-    return `# 📋 ${lang === 'fr' ? 'Compte-Rendu de Réunion' : 'Meeting Minutes'}
-*${lang === 'fr' ? 'Généré par MeetClean le' : 'Generated by MeetClean on'} ${new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}*
+    return `# ${lang === 'fr' ? 'Compte-Rendu de Réunion' : 'Meeting Minutes'}
+*${lang === 'fr' ? 'Structuré via MeetClean le' : 'Structured via MeetClean on'} ${new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US')}*
 
 ## ${t.categories.actions.label}
-${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] ${i.text}${i.assignee ? ` **(👤 ${i.assignee})**` : ''}${i.deadline ? ` *(📅 ${i.deadline})*` : ''}${i.budget ? ` **(💰 ${i.budget})**` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune action détectée.' : 'No action detected.'}_`}
+${actions.length > 0 ? actions.map(i => `- [${i.done ? 'x' : ' '}] ${i.text}${i.assignee ? ` **[Resp: ${i.assignee}]**` : ''}${i.deadline ? ` *(Échéance: ${i.deadline})*` : ''}${i.budget ? ` **[Budget: ${i.budget}]**` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune action détectée.' : 'No action detected.'}_`}
 
 ## ${t.categories.decisions.label}
-${decisions.length > 0 ? decisions.map(i => `- **${lang === 'fr' ? 'Décision :' : 'Decision:'}** ${i.text}${i.budget ? ` *(💰 ${i.budget})*` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune décision explicite.' : 'No explicit decision.'}_`}
+${decisions.length > 0 ? decisions.map(i => `- **${lang === 'fr' ? 'Décision :' : 'Decision:'}** ${i.text}${i.budget ? ` *(Budget: ${i.budget})*` : ''}`).join('\n') : `_${lang === 'fr' ? 'Aucune décision explicite.' : 'No explicit decision.'}_`}
 
 ## ${t.categories.risks.label}
 ${risks.length > 0 ? risks.map(i => `- ${i.text}`).join('\n') : `_${lang === 'fr' ? 'Aucun risque signalé.' : 'No risk reported.'}_`}
@@ -335,13 +423,13 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generateMarkdown());
-    alert(lang === 'fr' ? "Compte-rendu copié au format Markdown !" : "Meeting minutes copied in Markdown!");
+    showFeedback(lang === 'fr' ? "Copié en Markdown" : "Markdown copied");
   };
 
   const copyEmailReady = () => {
-    const emailText = `${lang === 'fr' ? 'Bonjour à tous,\n\nVoici le compte-rendu de notre réunion généré via MeetClean :\n\n' : 'Hello everyone,\n\nHere are the meeting minutes generated via MeetClean:\n\n'}` + generateMarkdown() + `\n\n${lang === 'fr' ? 'Bien cordialement,\n' : 'Best regards,\n'}`;
+    const emailText = `${lang === 'fr' ? 'Bonjour à tous,\n\nVoici le compte-rendu structuré de notre réunion :\n\n' : 'Hello everyone,\n\nHere are the structured minutes from our meeting:\n\n'}` + generateMarkdown() + `\n\n${lang === 'fr' ? 'Bien cordialement,\n' : 'Best regards,\n'}`;
     navigator.clipboard.writeText(emailText);
-    alert(lang === 'fr' ? "✉️ E-mail copié ! Il vous suffit de faire Ctrl + V." : "✉️ Email copied! Just paste it.");
+    showFeedback(lang === 'fr' ? "Format E-mail copié" : "Email format copied");
   };
 
   const downloadMarkdown = () => {
@@ -350,100 +438,133 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `meetclean-minutes-${new Date().toISOString().slice(0,10)}.md`);
+    link.setAttribute('download', `meetclean-cr-${new Date().toISOString().slice(0,10)}.md`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
-
-  // SI LA ROUTE EST /privacy, ON AFFICHE LA PAGE DE CONFIDENTIALITÉ
+  // PAGE CONFIDENTIALITÉ & MENTIONS LÉGALES
   if (currentPath === '/privacy') {
     return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#0d1117', color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif', padding: '40px 20px', maxWidth: '800px', margin: '0 auto', lineHeight: '1.6' }}>
-        <p><a href="/" onClick={(e) => navigateTo('/', e)} style={{ color: '#818cf8', textDecoration: 'none' }}>← Retour à MeetClean</a></p>
-        <h1 style={{ color: '#ffffff', fontSize: '2rem', marginTop: '20px' }}>Politique de confidentialité</h1>
-        <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>Dernière mise à jour : Novembre 2026</p>
-        
-        <h2 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginTop: '30px' }}>1. Traitement des données locales</h2>
-        <p>MeetClean est un outil de restructuration de notes de réunion fonctionnant entièrement dans votre navigateur web (côté client). Aucune note de réunion ni donnée confidentielle n'est envoyée, lue ou stockée sur nos serveurs.</p>
+      <div style={{ minHeight: '100vh', backgroundColor: THEME.bg, color: THEME.ink, fontFamily: 'Inter, system-ui, sans-serif', padding: '40px 20px' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto', backgroundColor: THEME.surface, border: `2px solid ${THEME.border}`, padding: '32px', boxShadow: `4px 4px 0px ${THEME.border}` }}>
+          <a href="/" onClick={(e) => navigateTo('/', e)} style={{ color: THEME.accent, fontWeight: '700', textDecoration: 'none', fontSize: '0.9rem' }}>
+            ← Retour à l'outil MeetClean
+          </a>
+          <h1 style={{ fontSize: '1.8rem', marginTop: '20px', marginBottom: '8px', letterSpacing: '-0.02em' }}>Politique de confidentialité & Mentions Légales</h1>
+          <p style={{ color: THEME.inkMuted, fontSize: '0.85rem', borderBottom: `1px solid ${THEME.borderSubtle}`, paddingBottom: '16px' }}>
+            Dernière mise à jour : Novembre 2026 — Domaine : meetclean.app
+          </p>
+          
+          <h2 style={{ fontSize: '1.15rem', marginTop: '28px' }}>1. Fonctionnement 100 % local et protection de vos notes</h2>
+          <p style={{ lineHeight: '1.6', color: THEME.inkMuted }}>
+            MeetClean a été conçu selon le principe de confidentialité par défaut (Privacy by Design). Lorsque vous collez ou saisissez des notes de réunion dans notre interface, le traitement algorithmique est exécuté exclusivement par le navigateur de votre appareil en JavaScript. Vos textes, budgets et prénoms ne sont jamais transmis vers un serveur externe ni vers une API d'intelligence artificielle tierce. La sauvegarde temporaire utilise uniquement le stockage local (<code>localStorage</code>) de votre navigateur.
+          </p>
 
-        <h2 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginTop: '30px' }}>2. Utilisation de cookies et publicités (Google AdSense)</h2>
-        <p>Nous utilisons des services tiers, notamment Google AdSense, pour diffuser des annonces publicitaires. Google utilise des cookies pour diffuser des annonces basées sur vos visites précédentes sur notre site Web ou d'autres sites Web.</p>
-        <p>Vous pouvez désactiver la publicité personnalisée en consultant les <a href="https://adssettings.google.com" target="_blank" rel="noreferrer" style={{ color: '#818cf8' }}>Paramètres des annonces Google</a>.</p>
+          <h2 style={{ fontSize: '1.15rem', marginTop: '28px' }}>2. Cookies publicitaires et Google AdSense</h2>
+          <p style={{ lineHeight: '1.6', color: THEME.inkMuted }}>
+            Afin de maintenir cet outil gratuit et accessible sans création de compte, nous diffusons des annonces via le réseau Google AdSense. En tant que fournisseur tiers, Google utilise des cookies pour diffuser des annonces sur MeetClean en fonction de vos visites antérieures sur ce site ou sur d'autres pages web.
+          </p>
+          <p style={{ lineHeight: '1.6', color: THEME.inkMuted }}>
+            Les utilisateurs résidant dans l'Espace Économique Européen (EEE), au Royaume-Uni et en Suisse disposent d'un bandeau de gestion du consentement (CMP certifiée TCF) leur permettant d'accepter, de paramétrer ou de refuser les cookies publicitaires dès leur arrivée sur le site. Vous pouvez également gérer vos préférences à tout moment sur la page officielle <a href="https://adssettings.google.com" target="_blank" rel="noreferrer" style={{ color: THEME.accent }}>Paramètres des annonces Google</a>.
+          </p>
 
-        <h2 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginTop: '30px' }}>3. Contact</h2>
-        <p>Pour toute question concernant cette politique de confidentialité, vous pouvez nous contacter via notre support.</p>
-        
-        <p style={{ marginTop: '40px' }}><a href="/" onClick={(e) => navigateTo('/', e)} style={{ color: '#818cf8', textDecoration: 'none' }}>← Retour à l'accueil</a></p>
+          <h2 style={{ fontSize: '1.15rem', marginTop: '28px' }}>3. Éditeur et Hébergement</h2>
+          <p style={{ lineHeight: '1.6', color: THEME.inkMuted }}>
+            <strong>Éditeur :</strong> Valentin Laffitte — Projet indépendant MeetClean.<br />
+            <strong>Hébergement :</strong> Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis.
+          </p>
+
+          <div style={{ marginTop: '36px', paddingTop: '20px', borderTop: `1px solid ${THEME.borderSubtle}` }}>
+            <a href="/" onClick={(e) => navigateTo('/', e)} style={{ backgroundColor: THEME.ink, color: THEME.surface, padding: '10px 18px', textDecoration: 'none', fontWeight: '600', fontSize: '0.9rem', display: 'inline-block' }}>
+              ← Retourner au générateur de compte rendu
+            </a>
+          </div>
+        </div>
       </div>
     );
   }
 
-  // ACCUEIL STANDARD
   return (
     <div style={{ 
       minHeight: '100vh', 
-      backgroundColor: '#0d1117', 
-      color: '#ffffff', 
+      backgroundColor: THEME.bg, 
+      color: THEME.ink, 
       fontFamily: 'Inter, system-ui, sans-serif',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between'
     }}>
       
-      <header style={{ textAlign: 'center', padding: '30px 20px 10px 20px', position: 'relative' }} className="no-print">
-        <div style={{ position: 'absolute', top: '20px', right: '30px', display: 'flex', gap: '8px' }}>
-          <button 
-            onClick={() => setLang('fr')} 
-            style={{ background: lang === 'fr' ? '#334155' : 'transparent', border: '1px solid #475569', borderRadius: '6px', padding: '6px 10px', cursor: 'pointer', fontSize: '1.1rem' }}
-            title="Français"
-          >
-            🇫🇷
-          </button>
-          <button 
-            onClick={() => setLang('en')} 
-            style={{ background: lang === 'en' ? '#334155' : 'transparent', border: '1px solid #475569', borderRadius: '6px', padding: '6px 10px', cursor: 'pointer', fontSize: '1.1rem' }}
-            title="English"
-          >
-            🇬🇧
-          </button>
-        </div>
+      {/* Barre supérieure sobre type studio d'édition */}
+      <nav style={{ borderBottom: `2px solid ${THEME.border}`, backgroundColor: THEME.surface, padding: '12px 24px' }} className="no-print">
+        <div style={{ maxWidth: '1360px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ backgroundColor: THEME.ink, color: THEME.surface, fontWeight: '800', padding: '4px 10px', fontSize: '0.95rem', letterSpacing: '0.04em' }}>
+              MEETCLEAN
+            </span>
+            <span style={{ fontSize: '0.75rem', fontWeight: '600', color: THEME.inkMuted, letterSpacing: '0.05em' }}>
+              {t.badge}
+            </span>
+          </div>
 
-        <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', background: 'linear-gradient(90deg, #818cf8, #34d399)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <a href="#guide-methodo" style={{ color: THEME.ink, fontSize: '0.85rem', fontWeight: '600', textDecoration: 'none' }}>
+              {t.aboutLink}
+            </a>
+            <div style={{ display: 'flex', border: `1.5px solid ${THEME.border}` }}>
+              <button 
+                onClick={() => setLang('fr')} 
+                style={{ background: lang === 'fr' ? THEME.ink : THEME.surface, color: lang === 'fr' ? THEME.surface : THEME.ink, border: 'none', padding: '4px 10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
+              >
+                FR
+              </button>
+              <button 
+                onClick={() => setLang('en')} 
+                style={{ background: lang === 'en' ? THEME.ink : THEME.surface, color: lang === 'en' ? THEME.surface : THEME.ink, border: 'none', padding: '4px 10px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
+              >
+                EN
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* En-tête éditorial */}
+      <header style={{ maxWidth: '850px', margin: '0 auto', padding: '36px 20px 16px 20px', textAlign: 'left', width: '100%', boxSizing: 'border-box' }} className="no-print">
+        <h1 style={{ fontSize: '2.1rem', fontWeight: '800', margin: '0 0 12px 0', color: THEME.ink, letterSpacing: '-0.03em', lineHeight: '1.15' }}>
           {t.h1Title}
         </h1>
-        <p style={{ color: '#94a3b8', fontSize: '0.95rem', maxWidth: '700px', margin: '0 auto' }}>
+        <p style={{ color: THEME.inkMuted, fontSize: '1rem', margin: 0, lineHeight: '1.55' }}>
           {t.subtitle}
         </p>
       </header>
 
+      {/* Disposition 3 colonnes */}
       <div style={{ 
         display: 'flex', 
         justifyContent: 'center', 
         alignItems: 'flex-start',
-        gap: '20px', 
-        padding: '20px',
-        maxWidth: '1400px',
+        gap: '24px', 
+        padding: '16px 20px 40px 20px',
+        maxWidth: '1380px',
         margin: '0 auto',
         width: '100%',
         boxSizing: 'border-box'
-      }} className="no-print">
+      }}>
         
-        <aside className="sidebar-ad" style={{ 
+        {/* Pub latérale gauche */}
+        <aside className="sidebar-ad no-print" style={{ 
           width: '160px', 
           minHeight: '600px', 
-          background: 'rgba(255,255,255,0.02)', 
-          border: '1px dashed rgba(255,255,255,0.1)',
-          borderRadius: '8px',
+          background: THEME.surfaceAlt, 
+          border: `1px solid ${THEME.borderSubtle}`,
           padding: '10px',
           textAlign: 'center',
           flexShrink: 0
         }}>
-          <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginBottom: '10px' }}>{t.adText}</span>
+          <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.08em', color: THEME.inkMuted, display: 'block', marginBottom: '10px' }}>{t.adText}</span>
           <ins className="adsbygoogle"
                style={{ display: 'block' }}
                data-ad-client="ca-pub-8413572558669192"
@@ -452,22 +573,36 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                data-full-width-responsive="true"></ins>
         </aside>
 
+        {/* Colonne centrale principale */}
         <main style={{ flex: 1, maxWidth: '850px', width: '100%' }}>
           
-          <div style={{ background: '#1e293b', padding: '1.5rem', borderRadius: '12px', border: '1px solid #334155', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.3)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem', flexWrap: 'wrap', gap: '8px' }}>
-              <label style={{ fontWeight: '600', color: '#e2e8f0' }}>{t.labelInput}</label>
-              <button 
-                onClick={() => setRawText(t.testText)}
-                style={{ background: 'transparent', color: '#818cf8', border: '1px solid #818cf8', borderRadius: '6px', padding: '4px 10px', fontSize: '0.8rem', cursor: 'pointer' }}
-              >
-                {t.testBtn}
-              </button>
+          {/* Boîte de saisie style Néo-Brutaliste / Papier */}
+          <div className="no-print" style={{ background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+              <label style={{ fontWeight: '800', fontSize: '0.8rem', letterSpacing: '0.06em', color: THEME.ink }}>
+                {t.labelInput}
+              </label>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button 
+                  onClick={() => setRawText(t.testText)}
+                  style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '5px 12px', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer' }}
+                >
+                  {t.testBtn}
+                </button>
+                {rawText && (
+                  <button 
+                    onClick={() => { setRawText(''); setItems([]); setHasProcessed(false); }}
+                    style={{ background: 'transparent', color: THEME.inkMuted, border: `1px solid ${THEME.borderSubtle}`, padding: '5px 10px', fontSize: '0.78rem', cursor: 'pointer' }}
+                  >
+                    {t.clearBtn}
+                  </button>
+                )}
+              </div>
             </div>
             
             <textarea 
-              rows="5"
-              style={{ width: '100%', padding: '14px', background: '#0f172a', color: '#f8fafc', border: '1px solid #475569', borderRadius: '8px', fontSize: '0.95rem', boxSizing: 'border-box', lineHeight: '1.5' }}
+              rows="6"
+              style={{ width: '100%', padding: '14px', background: THEME.bg, color: THEME.ink, border: `1.5px solid ${THEME.border}`, fontSize: '0.95rem', boxSizing: 'border-box', lineHeight: '1.55', fontFamily: 'inherit', resize: 'vertical' }}
               placeholder={t.placeholderInput}
               value={rawText}
               onChange={(e) => setRawText(e.target.value)}
@@ -475,66 +610,75 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
             
             <button 
               onClick={handleProcess}
-              style={{ marginTop: '1rem', background: 'linear-gradient(90deg, #4f46e5, #6366f1)', color: 'white', border: 'none', padding: '14px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', width: '100%', fontSize: '1rem', boxShadow: '0 4px 6px -1px rgba(99, 102, 241, 0.4)' }}
+              style={{ marginTop: '14px', background: THEME.accent, color: '#ffffff', border: `2px solid ${THEME.border}`, padding: '14px 20px', cursor: 'pointer', fontWeight: '800', width: '100%', fontSize: '1rem', letterSpacing: '0.02em', boxShadow: `3px 3px 0px ${THEME.border}` }}
             >
               {t.processBtn}
             </button>
           </div>
 
+          {/* Résultat structuré */}
           {hasProcessed && (
-            <div className="printable-result" style={{ marginTop: '2rem', background: '#1e293b', padding: '1.5rem', borderRadius: '12px', border: '1px solid #334155' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #334155', paddingBottom: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '10px' }} className="no-print">
+            <div className="printable-result" style={{ marginTop: '32px', background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }} className="no-print">
                 <div>
-                  <h2 style={{ fontSize: '1.4rem', margin: 0 }}>✨ {t.titleResult}</h2>
-                  <p style={{ color: '#94a3b8', fontSize: '0.8rem', margin: '4px 0 0 0' }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: '800', margin: 0, letterSpacing: '-0.01em' }}>{t.titleResult}</h2>
+                  <p style={{ color: THEME.inkMuted, fontSize: '0.82rem', margin: '4px 0 0 0' }}>
                     {t.descResult}
                   </p>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+                  {copyFeedback && (
+                    <span style={{ fontSize: '0.78rem', fontWeight: '700', color: THEME.accent, marginRight: '6px' }}>
+                      ✓ {copyFeedback}
+                    </span>
+                  )}
                   <button 
                     onClick={copyEmailReady}
-                    style={{ background: '#2563eb', color: '#f8fafc', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}
+                    style={{ background: THEME.ink, color: THEME.surface, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
                   >
                     {t.copyEmail}
                   </button>
                   <button 
-                    onClick={handlePrint}
-                    style={{ background: '#7c3aed', color: '#f8fafc', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}
-                  >
-                    {t.printPdf}
-                  </button>
-                  <button 
                     onClick={copyToClipboard}
-                    style={{ background: '#334155', color: '#f8fafc', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}
+                    style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '700' }}
                   >
                     {t.copyMd}
                   </button>
                   <button 
                     onClick={downloadMarkdown}
-                    style={{ background: '#059669', color: '#f8fafc', border: 'none', padding: '8px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '500' }}
+                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
                   >
                     {t.downloadMd}
+                  </button>
+                  <button 
+                    onClick={() => window.print()}
+                    style={{ background: THEME.surface, color: THEME.ink, border: `1.5px solid ${THEME.border}`, padding: '7px 12px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: '600' }}
+                  >
+                    {t.printPdf}
                   </button>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gap: '1.5rem' }}>
+              <div style={{ display: 'grid', gap: '20px' }}>
                 {Object.keys(t.categories).map(catKey => {
                   const cat = t.categories[catKey];
                   const catItems = items.filter(i => i.category === catKey);
                   return (
-                    <div key={catKey} className="category-card" style={{ background: '#0f172a', padding: '1.2rem', borderRadius: '8px', borderLeft: `4px solid ${cat.color}` }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
-                        <h3 style={{ color: cat.color, fontSize: '1.05rem', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div key={catKey} className="category-card" style={{ background: THEME.bg, padding: '16px', border: `1.5px solid ${THEME.border}` }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: `1px solid ${THEME.borderSubtle}`, paddingBottom: '8px' }}>
+                        <h3 style={{ color: THEME.ink, fontSize: '0.9rem', fontWeight: '800', letterSpacing: '0.04em', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ backgroundColor: THEME.ink, color: THEME.surface, padding: '2px 6px', fontSize: '0.72rem' }}>
+                            {cat.tag}
+                          </span>
                           {cat.label}
-                          <span style={{ background: `${cat.color}20`, color: cat.color, padding: '2px 8px', borderRadius: '12px', fontSize: '0.8rem' }}>
-                            {catItems.length}
+                          <span style={{ color: THEME.inkMuted, fontSize: '0.8rem', fontWeight: '600' }}>
+                            ({catItems.length})
                           </span>
                         </h3>
                         <button
                           onClick={() => addItem(catKey)}
-                          style={{ background: '#1e293b', color: cat.color, border: `1px solid ${cat.color}50`, borderRadius: '6px', padding: '4px 10px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: '600' }}
+                          style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '3px 10px', fontSize: '0.75rem', cursor: 'pointer', fontWeight: '700' }}
                           className="no-print"
                         >
                           {t.addBtn}
@@ -542,16 +686,16 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                       </div>
 
                       {catItems.length > 0 ? (
-                        <div style={{ display: 'grid', gap: '0.6rem' }}>
+                        <div style={{ display: 'grid', gap: '8px' }}>
                           {catItems.map(item => (
-                            <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#1e293b', padding: '10px 12px', borderRadius: '6px', border: '1px solid #334155' }}>
+                            <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: THEME.surface, padding: '10px 12px', border: `1px solid ${THEME.borderSubtle}` }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 {catKey === 'actions' && (
                                   <input 
                                     type="checkbox" 
                                     checked={item.done}
                                     onChange={(e) => updateItem(item.id, 'done', e.target.checked)}
-                                    style={{ accentColor: cat.color, width: '16px', height: '16px', cursor: 'pointer', flexShrink: '0' }} 
+                                    style={{ accentColor: THEME.accent, width: '16px', height: '16px', cursor: 'pointer', flexShrink: 0 }} 
                                   />
                                 )}
                                 <input
@@ -561,22 +705,21 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                                   style={{
                                     flex: 1,
                                     background: 'transparent',
-                                    color: item.done ? '#64748b' : '#f8fafc',
+                                    color: item.done ? THEME.inkMuted : THEME.ink,
                                     textDecoration: item.done ? 'line-through' : 'none',
-                                    border: '1px solid transparent',
-                                    padding: '4px 6px',
-                                    borderRadius: '4px',
-                                    fontSize: '0.95rem',
+                                    border: 'none',
+                                    borderBottom: '1px solid transparent',
+                                    padding: '2px 4px',
+                                    fontSize: '0.92rem',
+                                    fontFamily: 'inherit',
                                     outline: 'none'
                                   }}
-                                  onFocus={(e) => e.target.style.border = '1px solid #475569'}
-                                  onBlur={(e) => e.target.style.border = '1px solid transparent'}
                                 />
 
                                 <select
                                   value={item.category}
                                   onChange={(e) => updateItem(item.id, 'category', e.target.value)}
-                                  style={{ background: '#0f172a', color: '#cbd5e1', border: '1px solid #475569', borderRadius: '4px', padding: '4px 6px', fontSize: '0.75rem', cursor: 'pointer' }}
+                                  style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '3px 6px', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
                                   className="no-print"
                                 >
                                   {Object.keys(t.categories).map(cKey => (
@@ -586,46 +729,45 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
 
                                 <button
                                   onClick={() => deleteItem(item.id)}
-                                  style={{ background: 'transparent', color: '#ef4444', border: 'none', cursor: 'pointer', fontSize: '0.9rem', padding: '4px' }}
+                                  style={{ background: 'transparent', color: THEME.inkMuted, border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '800', padding: '2px 6px' }}
                                   className="no-print"
+                                  title="Supprimer"
                                 >
-                                  🗑️
+                                  ×
                                 </button>
                               </div>
 
-                              <div style={{ display: 'flex', gap: '8px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
-                                {item.assignee !== undefined && (
-                                  <div style={{ display: 'flex', alignItems: 'center', background: '#3b82f620', border: '1px solid #3b82f640', borderRadius: '4px', padding: '2px 8px' }}>
-                                    <span style={{ fontSize: '0.75rem', marginRight: '4px' }}>👤</span>
-                                    <input
-                                      type="text"
-                                      placeholder={lang === 'fr' ? "Responsable..." : "Assignee..."}
-                                      value={item.assignee}
-                                      onChange={(e) => updateItem(item.id, 'assignee', e.target.value)}
-                                      style={{ background: 'transparent', color: '#93c5fd', border: 'none', fontSize: '0.75rem', fontWeight: '600', width: '100px', outline: 'none' }}
-                                    />
-                                  </div>
-                                )}
-
-                                <div style={{ display: 'flex', alignItems: 'center', background: '#ef444420', border: '1px solid #ef444440', borderRadius: '4px', padding: '2px 8px' }}>
-                                  <span style={{ fontSize: '0.75rem', marginRight: '4px' }}>📅</span>
+                              <div style={{ display: 'flex', gap: '10px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>RESP:</span>
                                   <input
                                     type="text"
-                                    placeholder={lang === 'fr' ? "Échéance..." : "Deadline..."}
-                                    value={item.deadline}
-                                    onChange={(e) => updateItem(item.id, 'deadline', e.target.value)}
-                                    style={{ background: 'transparent', color: '#fca5a5', border: 'none', fontSize: '0.75rem', fontWeight: '600', width: '100px', outline: 'none' }}
+                                    placeholder="—"
+                                    value={item.assignee}
+                                    onChange={(e) => updateItem(item.id, 'assignee', e.target.value)}
+                                    style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '90px', outline: 'none' }}
                                   />
                                 </div>
 
-                                <div style={{ display: 'flex', alignItems: 'center', background: '#10b98120', border: '1px solid #10b98140', borderRadius: '4px', padding: '2px 8px' }}>
-                                  <span style={{ fontSize: '0.75rem', marginRight: '4px' }}>💰</span>
+                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>DATE:</span>
                                   <input
                                     type="text"
-                                    placeholder={lang === 'fr' ? "Budget..." : "Budget..."}
+                                    placeholder="—"
+                                    value={item.deadline}
+                                    onChange={(e) => updateItem(item.id, 'deadline', e.target.value)}
+                                    style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '95px', outline: 'none' }}
+                                  />
+                                </div>
+
+                                <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
+                                  <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>BUDGET:</span>
+                                  <input
+                                    type="text"
+                                    placeholder="—"
                                     value={item.budget}
                                     onChange={(e) => updateItem(item.id, 'budget', e.target.value)}
-                                    style={{ background: 'transparent', color: '#6ee7b7', border: 'none', fontSize: '0.75rem', fontWeight: '600', width: '90px', outline: 'none' }}
+                                    style={{ background: 'transparent', color: THEME.accent, border: 'none', fontSize: '0.75rem', fontWeight: '800', width: '80px', outline: 'none' }}
                                   />
                                 </div>
                               </div>
@@ -633,7 +775,7 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
                           ))}
                         </div>
                       ) : (
-                        <p style={{ color: '#64748b', margin: 0, fontStyle: 'italic', fontSize: '0.9rem' }}>
+                        <p style={{ color: THEME.inkMuted, margin: 0, fontSize: '0.85rem' }}>
                           {t.emptyCategory}
                         </p>
                       )}
@@ -644,29 +786,102 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
             </div>
           )}
 
-          <section style={{ maxWidth: '850px', margin: '40px auto 20px auto', padding: '20px', backgroundColor: '#1e293b', borderRadius: '12px', border: '1px solid #334155', color: '#94a3b8', fontSize: '0.9rem' }} className="no-print">
-            <h3 style={{ color: '#cbd5e1', fontSize: '1.2rem', marginBottom: '15px', marginTop: 0 }}>{t.faqTitle}</h3>
-            {t.faq.map((item, idx) => (
-              <div key={idx} style={{ marginBottom: idx < t.faq.length - 1 ? '15px' : '0' }}>
-                <strong style={{ color: '#f8fafc' }}>{item.q}</strong>
-                <p style={{ margin: '5px 0 0 0', lineHeight: '1.4' }}>{item.a}</p>
+          {/* SECTION 1 : Démonstration Avant / Après (Forte valeur ajoutée visuelle) */}
+          <section className="no-print" style={{ marginTop: '48px', backgroundColor: THEME.surface, border: `2px solid ${THEME.border}`, padding: '24px' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: '800', marginTop: 0, marginBottom: '16px', letterSpacing: '-0.02em' }}>
+              {t.beforeAfterTitle}
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+              <div style={{ backgroundColor: THEME.bg, padding: '16px', border: `1px solid ${THEME.borderSubtle}` }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: '800', color: THEME.inkMuted, marginBottom: '8px', letterSpacing: '0.05em' }}>
+                  {t.beforeLabel}
+                </div>
+                <p style={{ margin: 0, fontFamily: 'monospace', fontSize: '0.85rem', lineHeight: '1.5', color: THEME.ink }}>
+                  {t.beforeSample}
+                </p>
               </div>
-            ))}
+              <div style={{ backgroundColor: THEME.bg, padding: '16px', border: `1.5px solid ${THEME.border}` }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: '800', color: THEME.accent, marginBottom: '8px', letterSpacing: '0.05em' }}>
+                  {t.afterLabel}
+                </div>
+                <ul style={{ margin: 0, paddingLeft: '16px', fontSize: '0.84rem', lineHeight: '1.6', color: THEME.ink }}>
+                  {t.afterSample.map((line, i) => (
+                    <li key={i} style={{ marginBottom: '4px', fontWeight: '500' }}>{line}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          {/* SECTION 2 : Guide Méthodologique (Contenu éditorial riche pour Google & les utilisateurs) */}
+          <section id="guide-methodo" className="no-print" style={{ marginTop: '36px', backgroundColor: THEME.surface, border: `2px solid ${THEME.border}`, padding: '28px' }}>
+            <h2 style={{ fontSize: '1.35rem', fontWeight: '800', marginTop: 0, marginBottom: '10px', letterSpacing: '-0.02em' }}>
+              {t.guideTitle}
+            </h2>
+            <p style={{ color: THEME.inkMuted, fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '24px' }}>
+              {t.guideIntro}
+            </p>
+
+            <div style={{ display: 'grid', gap: '16px' }}>
+              {t.guideCards.map((card, idx) => (
+                <article key={idx} style={{ backgroundColor: THEME.bg, border: `1px solid ${THEME.border}`, padding: '18px' }}>
+                  <div style={{ fontSize: '0.72rem', fontWeight: '800', color: THEME.accent, letterSpacing: '0.06em', marginBottom: '4px' }}>
+                    {card.step}
+                  </div>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: '800', margin: '0 0 8px 0' }}>
+                    {card.title}
+                  </h3>
+                  <p style={{ margin: 0, color: THEME.inkMuted, fontSize: '0.9rem', lineHeight: '1.55' }}>
+                    {card.text}
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            {/* Encart de syntaxe rapide */}
+            <div style={{ marginTop: '24px', backgroundColor: THEME.surfaceAlt, padding: '18px', borderLeft: `4px solid ${THEME.ink}` }}>
+              <h3 style={{ fontSize: '0.95rem', fontWeight: '800', margin: '0 0 6px 0' }}>{t.templateTitle}</h3>
+              <p style={{ fontSize: '0.85rem', color: THEME.inkMuted, margin: '0 0 10px 0' }}>{t.templateDesc}</p>
+              <pre style={{ margin: 0, backgroundColor: THEME.surface, padding: '12px', border: `1px solid ${THEME.borderSubtle}`, fontSize: '0.8rem', overflowX: 'auto', lineHeight: '1.5' }}>
+{`[Prénom] doit [verbe d'action] avant [jour/date].
+Décidé : validation du budget à [montant €].
+Attention : blocage ou retard sur [sujet technique].`}
+              </pre>
+            </div>
+          </section>
+
+          {/* SECTION 3 : FAQ Technique détaillée */}
+          <section className="no-print" style={{ marginTop: '36px', backgroundColor: THEME.surface, border: `2px solid ${THEME.border}`, padding: '28px' }}>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: '800', marginTop: 0, marginBottom: '20px', letterSpacing: '-0.02em' }}>
+              {t.faqTitle}
+            </h2>
+            <div style={{ display: 'grid', gap: '18px' }}>
+              {t.faq.map((item, idx) => (
+                <div key={idx} style={{ borderBottom: idx < t.faq.length - 1 ? `1px solid ${THEME.borderSubtle}` : 'none', paddingBottom: idx < t.faq.length - 1 ? '16px' : 0 }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '700', color: THEME.ink, margin: '0 0 6px 0' }}>
+                    {item.q}
+                  </h3>
+                  <p style={{ margin: 0, color: THEME.inkMuted, fontSize: '0.9rem', lineHeight: '1.55' }}>
+                    {item.a}
+                  </p>
+                </div>
+              ))}
+            </div>
           </section>
 
         </main>
 
-        <aside className="sidebar-ad" style={{ 
+        {/* Pub latérale droite */}
+        <aside className="sidebar-ad no-print" style={{ 
           width: '160px', 
           minHeight: '600px', 
-          background: 'rgba(255,255,255,0.02)', 
-          border: '1px dashed rgba(255,255,255,0.1)',
-          borderRadius: '8px',
+          background: THEME.surfaceAlt, 
+          border: `1px solid ${THEME.borderSubtle}`,
           padding: '10px',
           textAlign: 'center',
           flexShrink: 0
         }}>
-          <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginBottom: '10px' }}>{t.adText}</span>
+          <span style={{ fontSize: '10px', fontWeight: '700', letterSpacing: '0.08em', color: THEME.inkMuted, display: 'block', marginBottom: '10px' }}>{t.adText}</span>
           <ins className="adsbygoogle"
                style={{ display: 'block' }}
                data-ad-client="ca-pub-8413572558669192"
@@ -683,12 +898,23 @@ ${summary.length > 0 ? summary.map(i => `- ${i.text}`).join('\n') : `_${lang ===
             display: none !important;
           }
         }
+        @media print {
+          .no-print {
+            display: none !important;
+          }
+          body {
+            background-color: #ffffff !important;
+          }
+        }
       `}</style>
 
-      <footer style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '0.85rem', display: 'flex', justifyContent: 'center', gap: '15px', alignItems: 'center' }} className="no-print">
-        <span>{t.footer}</span>
+      {/* Pied de page sobre */}
+      <footer style={{ borderTop: `2px solid ${THEME.border}`, backgroundColor: THEME.surface, textAlign: 'center', padding: '24px 20px', color: THEME.inkMuted, fontSize: '0.85rem', display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }} className="no-print">
+        <span style={{ fontWeight: '600', color: THEME.ink }}>{t.footer}</span>
         <span>•</span>
-        <a href="/privacy" onClick={(e) => navigateTo('/privacy', e)} style={{ color: '#818cf8', textDecoration: 'none' }}>{t.privacyLink}</a>
+        <a href="#guide-methodo" style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>{t.aboutLink}</a>
+        <span>•</span>
+        <a href="/privacy" onClick={(e) => navigateTo('/privacy', e)} style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>{t.privacyLink}</a>
       </footer>
 
     </div>
