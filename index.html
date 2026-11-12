@@ -2,63 +2,133 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- SEO & Métadonnées -->
+    <!-- Couleur du navigateur mobile assortie au thème Papier Crème -->
+    <meta name="theme-color" content="#f4f1ea" />
+
+    <!-- Favicon vectoriel inline (Logo carré Noir & Crème haute netteté, zéro erreur 404) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231c1c21'/%3E%3Cpath d='M20 26h60v10H20zm0 20h46v10H20zm0 20h32v10H20z' fill='%23f4f1ea'/%3E%3Ccircle cx='74' cy='71' r='9' fill='%23c84b31'/%3E%3C/svg%3E" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    
+    <!-- SEO Principal (Calibré < 60 car. pour le titre et < 155 car. pour la description) -->
     <title>Générateur de compte rendu de réunion gratuit – MeetClean</title>
-    <meta name="description" content="Collez vos notes de réunion en vrac : MeetClean en tire un compte rendu structuré (actions, décisions, risques). Gratuit, sans inscription, 100 % local." />
-    <meta name="keywords" content="compte-rendu, réunion, notes, productivité, plan d'action, markdown, gestion de projet, budget" />
+    <meta name="description" content="Collez vos notes de réunion en vrac : MeetClean génère un compte rendu structuré (actions, décisions, risques). Gratuit, sans compte, 100 % local." />
+    <meta name="keywords" content="compte rendu de réunion, générateur compte rendu, structurer notes réunion, plan d'action, modèle compte rendu, prise de notes, markdown" />
     <meta name="author" content="Valentin Laffitte" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
     <link rel="canonical" href="https://meetclean.app/" />
 
-    <!-- Open Graph (Réseaux Sociaux) -->
+    <!-- Open Graph (LinkedIn, WhatsApp, Facebook) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MeetClean" />
     <meta property="og:url" content="https://meetclean.app/" />
-    <meta property="og:title" content="MeetClean – Comptes-rendus de réunion instantanés" />
-    <meta property="og:description" content="Transformez vos notes de réunion en vrac en comptes-rendus professionnels structurés instantanément." />
+    <meta property="og:title" content="MeetClean – Structuration de comptes rendus de réunion" />
+    <meta property="og:description" content="Transformez vos prises de notes brutes en un document opérationnel : plan d'action, décisions actées et points de blocage. Sans inscription, 100 % local." />
     <meta property="og:image" content="https://meetclean.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_US" />
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="MeetClean – Comptes-rendus instantanés" />
-    <meta name="twitter:description" content="Collez vos notes brutes, extrayez actions et décisions en un clic." />
+    <meta name="twitter:title" content="MeetClean – Comptes rendus de réunion structurés" />
+    <meta name="twitter:description" content="Collez vos notes brutes, extrayez plan d'action, décisions et budgets en un clic dans votre navigateur." />
     <meta name="twitter:image" content="https://meetclean.app/og-image.png" />
 
-    <!-- Données structurées JSON-LD -->
+    <!-- Données structurées JSON-LD (Double graphe : WebSite + WebApplication) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "MeetClean",
-      "alternateName": "Smart Meeting Restructurer",
-      "url": "https://meetclean.app/"
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://meetclean.app/#website",
+          "name": "MeetClean",
+          "url": "https://meetclean.app/",
+          "inLanguage": "fr-FR",
+          "publisher": {
+            "@type": "Person",
+            "name": "Valentin Laffitte"
+          }
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://meetclean.app/#app",
+          "name": "MeetClean",
+          "url": "https://meetclean.app/",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires JavaScript. Works in all modern web browsers.",
+          "description": "Outil bureautique local permettant de structurer des notes de réunion brutes en plan d'action, décisions actées et risques.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR"
+          },
+          "featureList": [
+            "Extraction automatique des plans d'action et responsables",
+            "Détection des budgets et échéances",
+            "Traitement 100 % local dans le navigateur sans serveur externe",
+            "Export en un clic au format E-mail, Markdown et PDF"
+          ]
+        }
+      ]
     }
     </script>
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8413572558669192" crossorigin="anonymous"></script>
 
-    <!-- Polices & Styles de base -->
+    <!-- Polices (Ajout de la graisse 800 pour les titres éditoriaux) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
       body {
         margin: 0;
-        background-color: #0d1117;
+        background-color: #f4f1ea;
+        color: #1c1c21;
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+      ::selection {
+        background-color: #c84b31;
         color: #ffffff;
       }
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Contenu statique de pré-rendu pour les robots n'exécutant pas JavaScript et chargement instantané -->
+      <main style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
+        <h1 style="font-size: 2rem; font-weight: 800;">MeetClean — Structuration de comptes rendus de réunion</h1>
+        <p>Transformez vos prises de notes brutes en un document clair : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur, gratuit et sans création de compte.</p>
+        <h2>Pourquoi structurer vos notes de réunion avec MeetClean ?</h2>
+        <ul>
+          <li><strong>Plan d'action (To-Do) :</strong> Identification automatique des verbes d'engagement, des responsables et des dates d'échéance.</li>
+          <li><strong>Décisions actées :</strong> Isolation des validations et des budgets votés en réunion.</li>
+          <li><strong>Risques et blocages :</strong> Mise en évidence des alertes techniques ou retards de planning.</li>
+          <li><strong>Confidentialité totale :</strong> Vos notes professionnelles ne quittent jamais votre navigateur.</li>
+        </ul>
+      </main>
+    </div>
+
+    <noscript>
+      <div style="max-width: 850px; margin: 20px auto; padding: 20px; border: 2px solid #1c1c21; background: #ffffff;">
+        Veuillez activer JavaScript dans votre navigateur pour utiliser le générateur interactif de compte rendu MeetClean.
+      </div>
+    </noscript>
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
