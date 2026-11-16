@@ -116,56 +116,56 @@ const TRANSLATIONS = {
     badge: "OUTIL DE BUREAUTIQUE LOCAL • SANS COMPTE",
     h1Title: "MeetClean — Structuration de comptes rendus de réunion",
     subtitle: "Transformez vos prises de notes brutes en un document clair : plan d'action, décisions actées et points de vigilance. Traitement déterministe exécuté à 100 % dans votre navigateur.",
-    historyLabel: "SESSIONS ENREGISTRÉES :",
+    historyLabel: "Sessions enregistrées :",
     newMeetingBtn: "+ Nouvelle réunion",
-    saveMeetingBtn: "Sauvegarder la session",
-    savedFeedback: "Session sauvegardée dans l'historique",
-    timerLabel: "CHRONO",
-    dictateBtn: "● DICTER",
-    dictateStopBtn: "■ STOP DICTÉE",
+    saveMeetingBtn: "Sauvegarder",
+    savedFeedback: "Session enregistrée",
+    timerLabel: "Durée",
+    dictateBtn: "Dicter",
+    dictateStopBtn: "Arrêter",
     dictateUnsupported: "La dictée vocale nécessite Chrome, Edge ou Safari.",
-    participantsLabel: "PARTICIPANTS PRÉSENTS (Optionnel — aide à détecter les responsables)",
-    participantsPlaceholder: "Ex: Thomas, Stéphane, Charlotte, Julie, Marc...",
-    absentsLabel: "EXCUSÉS / ABSENTS",
+    participantsLabel: "Participants présents (Optionnel)",
+    participantsPlaceholder: "Ex: Thomas, Stéphane, Charlotte, Julie...",
+    absentsLabel: "Excusés / Absents",
     absentsPlaceholder: "Ex: Sophie, Laurent...",
     testBtn: "Insérer un exemple",
-    clearBtn: "Tout effacer",
-    cleanSpacesBtn: "Nettoyer espaces",
+    clearBtn: "Effacer",
+    cleanSpacesBtn: "Nettoyer",
     testParticipants: "Stéphane, Charlotte, Thomas, Julie, Marc",
     testAbsents: "Sophie (Congés)",
     testText: "réunion du 12 c'est important on a parlé du budget de la boîte. on a validé le budget Q3 à 15000€ pour le nouveau logiciel, mais Thomas -> envoyer le devis final à Marc avant jeudi. il faut que Stéphane achète les tables pour le bureau avant vendredi prochain et aussi Charlotte doit refaire le contrat du client. [x] Relancer la compta (@Julie). pas de problème sur la migration cloud. attention on a un gros retard sur la prod du site web à cause d'un bug serveur.",
     labelInput: "NOTES BRUTES DE LA RÉUNION",
-    placeholderInput: "Saisissez, collez ou dictez vos notes ici. Sélectionnez un mot et cliquez sur B, I, U ou S pour le formater directement...",
+    placeholderInput: "Saisissez, collez ou dictez vos notes ici...",
     processBtn: "Structurer le compte rendu →",
     titleResult: "DOCUMENT STRUCTURÉ",
-    descResult: "Utilisez les boutons [B] [U] [S] sur chaque ligne pour mettre en gras, souligner ou barrer un point avant l'export.",
+    descResult: "Synthèse opérationnelle prête à être partagée ou exportée.",
     meetingTitlePlaceholder: "Compte rendu de réunion — Suivi opérationnel",
-    copyEmail: "Copier format E-mail",
-    downloadDocx: "Exporter Word (.doc)",
+    copyEmail: "Copier e-mail",
+    downloadDocx: "Exporter Word",
     printPdf: "Imprimer / PDF",
     copyMd: "Copier Markdown",
     downloadMd: "Exporter .md",
-    addBtn: "+ Ajouter une ligne",
+    addBtn: "+ Ajouter",
     emptyCategory: "Aucun élément classé dans cette section.",
     adText: "PUBLICITÉ",
     footer: "MeetClean — Outil d'organisation de notes professionnelles.",
     privacyLink: "Confidentialité & Mentions légales",
     aboutLink: "Guide méthodologique",
     categories: {
-      actions: { label: "PLAN D'ACTION (TO-DO)", shortLabel: 'ACTION', tag: '01', exportColor: '#c84b31', exportBg: '#fdf3f1', exportBorder: '#f3c6bd' },
-      decisions: { label: 'DÉCISIONS ACTÉES', shortLabel: 'DÉCISION', tag: '02', exportColor: '#15803d', exportBg: '#f0fdf4', exportBorder: '#bbf7d0' },
-      risks: { label: 'RISQUES & POINTS DE BLOCAGE', shortLabel: 'RISQUE', tag: '03', exportColor: '#b91c1c', exportBg: '#fef2f2', exportBorder: '#fecaca' },
-      summary: { label: 'SYNTHÈSE & CONTEXTE GÉNÉRAL', shortLabel: 'SYNTHÈSE', tag: '04', exportColor: '#1d4ed8', exportBg: '#eff6ff', exportBorder: '#bfdbfe' }
+      actions: { label: "PLAN D'ACTION (TO-DO)", shortLabel: 'ACTION', tag: '01' },
+      decisions: { label: 'DÉCISIONS ACTÉES', shortLabel: 'DÉCISION', tag: '02' },
+      risks: { label: 'POINTS DE VIGILANCE', shortLabel: 'RISQUE', tag: '03' },
+      summary: { label: 'SYNTHÈSE & CONTEXTE', shortLabel: 'SYNTHÈSE', tag: '04' }
     },
     beforeAfterTitle: "Exemple concret : du brouillon au livrable",
     beforeLabel: "AVANT — Notes prises à la volée",
     beforeSample: "« reu lancement projet alpha. ok pour budget 12k€. fo que Marc relance le prestataire pr le serveur avant mardi. pb sur les licences actuelles qui expirent fin du mois. »",
     afterLabel: "APRÈS — Analyse syntaxique MeetClean",
     afterSample: [
-      "[ACTION] Marc : Relancer le prestataire pour le serveur (Échéance : avant mardi)",
-      "[DÉCISION] Accord validé : Budget (Montant : 12k€)",
-      "[RISQUE] Alerte — Problème sur les licences actuelles qui expirent fin du mois",
-      "[SYNTHÈSE] Réunion lancement projet alpha."
+      "Marc : Relancer le prestataire pour le serveur (Échéance : avant mardi)",
+      "Accord validé : Budget à 12k€ pour le projet",
+      "Point de vigilance : Licences actuelles qui expirent fin du mois",
+      "Réunion lancement projet alpha."
     ],
     guideTitle: "Guide pratique : Comment rédiger un compte rendu de réunion réellement lu ?",
     guideIntro: "Un bon compte rendu ne retranscrit pas mot à mot les échanges : il isole les engagements opérationnels. C'est sur ce principe d'ingénierie documentaire que repose l'algorithme syntaxique de MeetClean.",
@@ -190,66 +190,66 @@ const TRANSLATIONS = {
     templateDesc: "Pour accélérer votre prise de notes au clavier, voici la convention d'écriture rapide recommandée :",
     faqTitle: "Questions fréquentes sur le fonctionnement technique",
     faq: [
-      { q: "En quoi MeetClean diffère-t-il d'un générateur par IA générative ?", a: "Contrairement aux grands modèles de langage (LLM) qui peuvent inventer des chiffres (hallucinations) ou reformuler vos propos de manière générique, MeetClean utilise un moteur d'analyse lexicale et grammaticale déterministe. Vos phrases restent fidèles à vos notes, les abréviations courantes sont nettoyées et aucune donnée ne transite vers un serveur distant." },
+      { q: "En quoi MeetClean diffère-t-il d'un générateur par IA générative ?", a: "Contrairement aux grands modèles de langage (LLM) qui peuvent inventer des chiffres (hallucinations) ou reformuler vos propos de manière générique, MeetClean utilise un moteur d'analyse lexicale et grammaticale déterministe. Vos faits restent fidèles à vos notes, les abréviations courantes sont nettoyées et aucune donnée ne transite vers un serveur distant." },
       { q: "Comment sont détectés les budgets, dates et responsables ?", a: "L'application utilise des expressions régulières avancées (Regex) couplées à un système de pondération sémantique et à la liste des participants présents. Lorsqu'une somme (en €, k€ ou $), une échéance temporelle ou un prénom suivi d'un verbe d'action est repéré, le segment gagne des points vers la catégorie correspondante." },
       { q: "Mes notes confidentielles d'entreprise sont-elles stockées ?", a: "Non. Le code s'exécute intégralement en JavaScript au sein de la mémoire locale (localStorage) de votre propre navigateur. Vous pouvez même couper votre connexion Internet après le chargement de la page et continuer à structurer vos comptes rendus." },
-      { q: "Comment exporter le résultat vers Word, Gmail, Outlook, Notion ou PDF ?", a: "Le bouton « Exporter Word (.doc) » télécharge directement un fichier Word éditable. Le bouton « Copier format E-mail » génère un compte rendu mis en forme en couleurs collable dans Gmail ou Outlook. Le bouton « Imprimer / PDF » génère une fiche de synthèse officielle." }
+      { q: "Comment exporter le résultat vers Word, Gmail, Outlook, Notion ou PDF ?", a: "Le bouton « Exporter Word » télécharge directement un fichier Word éditable. Le bouton « Copier e-mail » génère un compte rendu mis en forme propre collable dans Gmail ou Outlook. Le bouton « Imprimer / PDF » génère une fiche de synthèse officielle." }
     ]
   },
   en: {
     badge: "LOCAL OFFICE UTILITY • NO ACCOUNT REQUIRED",
     h1Title: "MeetClean — Structured Meeting Minutes Utility",
     subtitle: "Turn raw, messy meeting notes into a clean operational document: action items, decisions, and blockers. Deterministic parsing running 100% locally in your browser.",
-    historyLabel: "SAVED SESSIONS:",
+    historyLabel: "Saved sessions:",
     newMeetingBtn: "+ New meeting",
-    saveMeetingBtn: "Save session",
-    savedFeedback: "Session saved locally",
-    timerLabel: "TIMER",
-    dictateBtn: "● DICTATE",
-    dictateStopBtn: "■ STOP DICTATION",
+    saveMeetingBtn: "Save",
+    savedFeedback: "Session saved",
+    timerLabel: "Time",
+    dictateBtn: "Dictate",
+    dictateStopBtn: "Stop",
     dictateUnsupported: "Voice dictation requires Chrome, Edge, or Safari.",
-    participantsLabel: "ATTENDEES PRESENT (Optional — boosts owner detection)",
-    participantsPlaceholder: "e.g., Thomas, Stéphane, Charlotte, Julie, Mark...",
-    absentsLabel: "ABSENT / EXCUSED",
+    participantsLabel: "Attendees present (Optional)",
+    participantsPlaceholder: "e.g., Thomas, Stéphane, Charlotte, Julie...",
+    absentsLabel: "Absent / Excused",
     absentsPlaceholder: "e.g., Sarah, David...",
     testBtn: "Load sample",
-    clearBtn: "Clear all",
-    cleanSpacesBtn: "Clean spaces",
+    clearBtn: "Clear",
+    cleanSpacesBtn: "Clean",
     testParticipants: "Stéphane, Charlotte, Thomas, Julie, Marc",
     testAbsents: "Sarah (PTO)",
     testText: "meeting on the 12th is important, we talked about company budget. approved Q3 budget at 15.5k€ for the new software, but Thomas -> send final quote to Marc before Thursday. Stéphane needs to buy the office tables before next Friday and Charlotte has to redo the client contract. [x] Follow up with accounting (@Julie). no issue on cloud migration. warning: huge delay on website production due to a server bug.",
     labelInput: "RAW MEETING NOTES",
-    placeholderInput: "Type, paste, or dictate your raw notes here. Highlight any word and click B, I, U, or S to format directly...",
+    placeholderInput: "Type, paste, or dictate your raw notes here...",
     processBtn: "Structure meeting minutes →",
     titleResult: "STRUCTURED DOCUMENT",
-    descResult: "Use the [B] [U] [S] buttons on any line to bold, underline, or strikethrough items before exporting.",
+    descResult: "Operational summary ready to share or export.",
     meetingTitlePlaceholder: "Meeting Minutes — Operational Follow-up",
-    copyEmail: "Copy Email Format",
-    downloadDocx: "Export Word (.doc)",
-    printPdf: "Print / Save PDF",
+    copyEmail: "Copy Email",
+    downloadDocx: "Export Word",
+    printPdf: "Print / PDF",
     copyMd: "Copy Markdown",
     downloadMd: "Export .md",
-    addBtn: "+ Add item",
+    addBtn: "+ Add",
     emptyCategory: "No items classified in this section.",
     adText: "ADVERTISEMENT",
     footer: "MeetClean — Professional meeting notes structuring utility.",
     privacyLink: "Privacy & Legal Notice",
     aboutLink: "Methodology Guide",
     categories: {
-      actions: { label: "ACTION PLAN (TO-DO)", shortLabel: 'ACTION', tag: '01', exportColor: '#c84b31', exportBg: '#fdf3f1', exportBorder: '#f3c6bd' },
-      decisions: { label: 'DECISIONS MADE', shortLabel: 'DECISION', tag: '02', exportColor: '#15803d', exportBg: '#f0fdf4', exportBorder: '#bbf7d0' },
-      risks: { label: 'RISKS & BLOCKERS', shortLabel: 'RISK', tag: '03', exportColor: '#b91c1c', exportBg: '#fef2f2', exportBorder: '#fecaca' },
-      summary: { label: 'KEY POINTS & GENERAL CONTEXT', shortLabel: 'SUMMARY', tag: '04', exportColor: '#1d4ed8', exportBg: '#eff6ff', exportBorder: '#bfdbfe' }
+      actions: { label: "ACTION PLAN (TO-DO)", shortLabel: 'ACTION', tag: '01' },
+      decisions: { label: 'DECISIONS MADE', shortLabel: 'DECISION', tag: '02' },
+      risks: { label: 'RISKS & BLOCKERS', shortLabel: 'RISK', tag: '03' },
+      summary: { label: 'KEY POINTS & GENERAL CONTEXT', shortLabel: 'SUMMARY', tag: '04' }
     },
     beforeAfterTitle: "Real-world example: from rough draft to deliverable",
     beforeLabel: "BEFORE — Raw notes typed on the fly",
     beforeSample: "“alpha project kickoff. agreed on $12k budget. Mark needs to follow up with hosting provider before Tuesday. issue with current licenses expiring end of month.”",
     afterLabel: "AFTER — MeetClean Syntactic Parsing",
     afterSample: [
-      "[ACTION] Mark: Follow up with hosting provider (Deadline: before Tuesday)",
-      "[DECISION] Agreed: $12k budget (Amount: $12k)",
-      "[RISK] Risk Alert: Issue with current licenses expiring end of month",
-      "[SUMMARY] Alpha project kickoff."
+      "Mark: Follow up with hosting provider (Deadline: before Tuesday)",
+      "Agreed: $12k budget for the project",
+      "Risk Alert: Current licenses expiring end of month",
+      "Alpha project kickoff."
     ],
     guideTitle: "Practical Guide: How to write meeting minutes people actually read",
     guideIntro: "Effective minutes never transcribe every word spoken: they isolate operational commitments. MeetClean's syntactic engine is built around this exact documentary principle.",
@@ -277,7 +277,7 @@ const TRANSLATIONS = {
       { q: "How is MeetClean different from generative AI wrappers?", a: "Unlike Large Language Models (LLMs) that can hallucinate numbers or rewrite your thoughts into generic corporate jargon, MeetClean uses a deterministic lexical and grammatical rule engine. Your facts stay accurate, French shorthand is expanded, and zero data leaves your computer." },
       { q: "How are budgets, dates, and assignees extracted?", a: "The utility combines pattern-matching regular expressions with a semantic scoring matrix and your attendee list. Whenever a currency figure, a calendar reference, or a capitalized name paired with an action verb is detected, the sentence is weighted accordingly." },
       { q: "Are my confidential corporate notes stored on a server?", a: "Never. Everything runs in client-side JavaScript using your browser's localStorage. You can even disconnect from Wi-Fi once the page is loaded and process your notes completely offline." },
-      { q: "How do I export to Word, Gmail, Outlook, Notion, or PDF?", a: "'Export Word (.doc)' downloads an editable Word document instantly. 'Copy Email Format' writes a rich colored HTML layout directly to your clipboard for Gmail or Outlook." }
+      { q: "How do I export to Word, Gmail, Outlook, Notion, or PDF?", a: "'Export Word' downloads an editable Word document instantly. 'Copy Email' writes a rich colored HTML layout directly to your clipboard for Gmail or Outlook." }
     ]
   }
 };
@@ -319,7 +319,6 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
-  // États principaux du compte rendu
   const [activeSessionId, setActiveSessionId] = useState(() => localStorage.getItem('meeting_activeSessionId') || `session-${Date.now()}`);
   const [meetingTitle, setMeetingTitle] = useState(() => localStorage.getItem('meeting_title') || 'Compte rendu de réunion — Suivi opérationnel');
   const [participants, setParticipants] = useState(() => localStorage.getItem('meeting_participants') || '');
@@ -343,7 +342,6 @@ export default function App() {
   const [hasProcessed, setHasProcessed] = useState(() => items.length > 0);
   const [copyFeedback, setCopyFeedback] = useState('');
 
-  // Historique multi-réunions (stocké dans localStorage)
   const [savedSessions, setSavedSessions] = useState(() => {
     try {
       const saved = localStorage.getItem('meeting_savedSessions');
@@ -353,11 +351,8 @@ export default function App() {
     }
   });
 
-  // Chronomètre de réunion en direct
   const [secondsElapsed, setSecondsElapsed] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
-
-  // Dictée vocale (Web Speech API)
   const [isListening, setIsListening] = useState(false);
 
   useEffect(() => {
@@ -412,7 +407,6 @@ export default function App() {
     setTimeout(() => setCopyFeedback(''), 2800);
   };
 
-  // Gestionnaire d'historique multi-réunions
   const saveCurrentSessionToHistory = (customItems = items) => {
     const sessionObj = {
       id: activeSessionId,
@@ -431,7 +425,7 @@ export default function App() {
       if (exists) {
         return prev.map(s => s.id === activeSessionId ? sessionObj : s);
       }
-      return [sessionObj, ...prev].slice(0, 8); // Garde les 8 dernières réunions
+      return [sessionObj, ...prev].slice(0, 8);
     });
     showFeedback(t.savedFeedback);
   };
@@ -474,7 +468,6 @@ export default function App() {
     setSavedSessions(prev => prev.filter(s => s.id !== idToDelete));
   };
 
-  // Dictée vocale en direct (Web Speech API)
   const toggleVoiceDictation = () => {
     if (isListening) {
       if (recognitionRef.current) recognitionRef.current.stop();
@@ -682,7 +675,6 @@ export default function App() {
       budget = budgetMatch[0].trim();
     }
 
-    // 0. Priorité intelligente : croisement avec la liste des PARTICIPANTS PRÉSENTS renseignée par l'utilisateur
     const knownParticipants = participants
       .split(/[,;/\n]+/)
       .map(p => p.replace(/\([^)]*\)/g, '').trim())
@@ -897,7 +889,6 @@ ${summary.length > 0 ? summary.map(i => `- ${mdFormat(i)}`).join('\n') : `_${t.e
 `;
   };
 
-  // EXPORT AU FORMAT WORD (.doc) PUR HTML ENCAPSULÉ (Sans librairie externe)
   const downloadDocx = () => {
     const dateStr = new Date().toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', {
       day: '2-digit', month: 'long', year: 'numeric'
@@ -910,9 +901,9 @@ ${summary.length > 0 ? summary.map(i => `- ${mdFormat(i)}`).join('\n') : `_${t.e
 
     const renderBadgesDocx = (item) => {
       const badges = [];
-      if (item.assignee) badges.push(`👤 Resp : <u>${item.assignee}</u>`);
-      if (item.deadline) badges.push(`📅 Échéance : <u>${item.deadline}</u>`);
-      if (item.budget) badges.push(`💰 Budget : <u>${item.budget}</u>`);
+      if (item.assignee) badges.push(`Resp : <u>${item.assignee}</u>`);
+      if (item.deadline) badges.push(`Échéance : <u>${item.deadline}</u>`);
+      if (item.budget) badges.push(`Budget : <u>${item.budget}</u>`);
       return badges.length > 0
         ? `<div style="font-size:10pt; color:#5a5a66; margin-top:4px;">${badges.join(' &nbsp;|&nbsp; ')}</div>`
         : '';
@@ -949,37 +940,37 @@ ${summary.length > 0 ? summary.map(i => `- ${mdFormat(i)}`).join('\n') : `_${t.e
         </div>
 
         <h2 style="font-size: 13pt; color: #c84b31; border-bottom: 2px solid #c84b31; padding-bottom: 4px; text-transform: uppercase;">
-          🛠️ 01. <u>${t.categories.actions.label}</u> (${actions.length})
+          01. <u>${t.categories.actions.label}</u> (${actions.length})
         </h2>
         ${actions.length > 0 ? actions.map(i => `
           <div style="background-color: #fdf3f1; border-left: 4px solid #c84b31; padding: 8px 12px; margin-bottom: 8px;">
-            <div style="font-size: 11pt;">${i.done ? '☑ ' : '☐ '}${formatDocxItem(i)}</div>
+            <div style="font-size: 11pt;">${i.done ? '[x] ' : '[ ] '}${formatDocxItem(i)}</div>
             ${renderBadgesDocx(i)}
           </div>
         `).join('') : `<p style="color:#666; font-style:italic;">${t.emptyCategory}</p>`}
 
         <h2 style="font-size: 13pt; color: #15803d; border-bottom: 2px solid #15803d; padding-bottom: 4px; text-transform: uppercase; margin-top: 20px;">
-          ✅ 02. <u>${t.categories.decisions.label}</u> (${decisions.length})
+          02. <u>${t.categories.decisions.label}</u> (${decisions.length})
         </h2>
         ${decisions.length > 0 ? decisions.map(i => `
           <div style="background-color: #f0fdf4; border-left: 4px solid #15803d; padding: 8px 12px; margin-bottom: 8px;">
-            <div style="font-size: 11pt;">✔️ ${formatDocxItem(i)}</div>
+            <div style="font-size: 11pt;">• ${formatDocxItem(i)}</div>
             ${renderBadgesDocx(i)}
           </div>
         `).join('') : `<p style="color:#666; font-style:italic;">${t.emptyCategory}</p>`}
 
         <h2 style="font-size: 13pt; color: #b91c1c; border-bottom: 2px solid #b91c1c; padding-bottom: 4px; text-transform: uppercase; margin-top: 20px;">
-          ⚠️ 03. <u>${t.categories.risks.label}</u> (${risks.length})
+          03. <u>${t.categories.risks.label}</u> (${risks.length})
         </h2>
         ${risks.length > 0 ? risks.map(i => `
           <div style="background-color: #fef2f2; border-left: 4px solid #b91c1c; padding: 8px 12px; margin-bottom: 8px;">
-            <div style="font-size: 11pt; color: #991b1b;">🚨 ${formatDocxItem(i)}</div>
+            <div style="font-size: 11pt; color: #991b1b;">• ${formatDocxItem(i)}</div>
             ${renderBadgesDocx(i)}
           </div>
         `).join('') : `<p style="color:#666; font-style:italic;">${t.emptyCategory}</p>`}
 
         <h2 style="font-size: 13pt; color: #1d4ed8; border-bottom: 2px solid #1d4ed8; padding-bottom: 4px; text-transform: uppercase; margin-top: 20px;">
-          📌 04. <u>${t.categories.summary.label}</u> (${summary.length})
+          04. <u>${t.categories.summary.label}</u> (${summary.length})
         </h2>
         ${summary.length > 0 ? summary.map(i => `
           <div style="background-color: #eff6ff; border-left: 4px solid #1d4ed8; padding: 8px 12px; margin-bottom: 8px;">
@@ -1042,13 +1033,13 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
     const renderHtmlBadges = (item) => {
       const badges = [];
       if (item.assignee) {
-        badges.push(`<span style="display:inline-block; background-color:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:700; margin-right:6px;">👤 Resp : <u>${item.assignee}</u></span>`);
+        badges.push(`<span style="display:inline-block; background-color:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:700; margin-right:6px;">Resp : <u>${item.assignee}</u></span>`);
       }
       if (item.deadline) {
-        badges.push(`<span style="display:inline-block; background-color:#fef3c7; color:#92400e; border:1px solid #fde68a; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:700; margin-right:6px;">📅 Échéance : <u>${item.deadline}</u></span>`);
+        badges.push(`<span style="display:inline-block; background-color:#fef3c7; color:#92400e; border:1px solid #fde68a; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:700; margin-right:6px;">Échéance : <u>${item.deadline}</u></span>`);
       }
       if (item.budget) {
-        badges.push(`<span style="display:inline-block; background-color:#dcfce7; color:#166534; border:1px solid #bbf7d0; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:800;">💰 Budget : <u>${item.budget}</u></span>`);
+        badges.push(`<span style="display:inline-block; background-color:#dcfce7; color:#166534; border:1px solid #bbf7d0; padding:2px 8px; border-radius:4px; font-size:12px; font-weight:800;">Budget : <u>${item.budget}</u></span>`);
       }
       return badges.length > 0 ? `<div style="margin-top:6px;">${badges.join(' ')}</div>` : '';
     };
@@ -1074,19 +1065,19 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
   <div style="border: 2px solid #1c1c21; background-color: #f4f1ea; padding: 16px 20px; margin-bottom: 20px;">
     <div style="font-size: 11px; font-weight: 800; color: #c84b31; letter-spacing: 1px; text-transform: uppercase;">COMPTE RENDU EXÉCUTIF • MEETCLEAN</div>
     <h1 style="margin: 4px 0 6px 0; font-size: 20px; color: #1c1c21;">${meetingTitle}</h1>
-    <div style="font-size: 12px; color: #5a5a66;">📅 <strong>Date :</strong> ${dateStr} &nbsp;|&nbsp; 🛠️ <strong>${actions.length} Action(s)</strong> &nbsp;|&nbsp; ✅ <strong>${decisions.length} Décision(s)</strong> &nbsp;|&nbsp; ⚠️ <strong>${risks.length} Point(s) de vigilance</strong></div>
-    ${participants.trim() ? `<div style="font-size: 12px; color: #1c1c21; margin-top: 8px; padding-top: 6px; border-top: 1px solid #d0cbc1;">👥 <strong>Présents :</strong> ${participants}</div>` : ''}
-    ${absents.trim() ? `<div style="font-size: 12px; color: #5a5a66; margin-top: 2px;">🕒 <strong>Excusés / Absents :</strong> ${absents}</div>` : ''}
+    <div style="font-size: 12px; color: #5a5a66;">Date : ${dateStr} &nbsp;|&nbsp; <strong>${actions.length} Action(s)</strong> &nbsp;|&nbsp; <strong>${decisions.length} Décision(s)</strong> &nbsp;|&nbsp; <strong>${risks.length} Point(s) de vigilance</strong></div>
+    ${participants.trim() ? `<div style="font-size: 12px; color: #1c1c21; margin-top: 8px; padding-top: 6px; border-top: 1px solid #d0cbc1;"><strong>Présents :</strong> ${participants}</div>` : ''}
+    ${absents.trim() ? `<div style="font-size: 12px; color: #5a5a66; margin-top: 2px;"><strong>Excusés / Absents :</strong> ${absents}</div>` : ''}
   </div>
 
   <div style="margin-bottom: 22px;">
     <h2 style="font-size: 15px; color: #c84b31; border-bottom: 2px solid #c84b31; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
-      🛠️ 01. <u>${t.categories.actions.label}</u> (${actions.length})
+      01. <u>${t.categories.actions.label}</u> (${actions.length})
     </h2>
     ${actions.length > 0 ? actions.map(i => `
       <div style="background-color: #fdf3f1; border-left: 4px solid #c84b31; padding: 10px 14px; margin-bottom: 8px;">
         <div style="font-size: 14px;">
-          ${i.done ? '☑' : '☐'} ${formatRichItem(i)}
+          ${i.done ? '[x]' : '[ ]'} ${formatRichItem(i)}
         </div>
         ${renderHtmlBadges(i)}
       </div>
@@ -1095,11 +1086,11 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
   <div style="margin-bottom: 22px;">
     <h2 style="font-size: 15px; color: #15803d; border-bottom: 2px solid #15803d; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
-      ✅ 02. <u>${t.categories.decisions.label}</u> (${decisions.length})
+      02. <u>${t.categories.decisions.label}</u> (${decisions.length})
     </h2>
     ${decisions.length > 0 ? decisions.map(i => `
       <div style="background-color: #f0fdf4; border-left: 4px solid #15803d; padding: 10px 14px; margin-bottom: 8px;">
-        <div style="font-size: 14px;">✔️ ${formatRichItem(i)}</div>
+        <div style="font-size: 14px;">• ${formatRichItem(i)}</div>
         ${renderHtmlBadges(i)}
       </div>
     `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
@@ -1107,11 +1098,11 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
   <div style="margin-bottom: 22px;">
     <h2 style="font-size: 15px; color: #b91c1c; border-bottom: 2px solid #b91c1c; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
-      ⚠️ 03. <u>${t.categories.risks.label}</u> (${risks.length})
+      03. <u>${t.categories.risks.label}</u> (${risks.length})
     </h2>
     ${risks.length > 0 ? risks.map(i => `
       <div style="background-color: #fef2f2; border-left: 4px solid #b91c1c; padding: 10px 14px; margin-bottom: 8px;">
-        <div style="font-size: 14px; color: #991b1b;">🚨 ${formatRichItem(i)}</div>
+        <div style="font-size: 14px; color: #991b1b;">• ${formatRichItem(i)}</div>
         ${renderHtmlBadges(i)}
       </div>
     `).join('') : `<p style="color:#6b7280; font-style:italic; margin:4px 0;">${t.emptyCategory}</p>`}
@@ -1119,7 +1110,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
   <div style="margin-bottom: 22px;">
     <h2 style="font-size: 15px; color: #1d4ed8; border-bottom: 2px solid #1d4ed8; padding-bottom: 5px; margin: 0 0 12px 0; text-transform: uppercase;">
-      📌 04. <u>${t.categories.summary.label}</u> (${summary.length})
+      04. <u>${t.categories.summary.label}</u> (${summary.length})
     </h2>
     ${summary.length > 0 ? summary.map(i => `
       <div style="background-color: #eff6ff; border-left: 4px solid #1d4ed8; padding: 10px 14px; margin-bottom: 8px;">
@@ -1343,7 +1334,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
         {/* Colonne centrale principale */}
         <main style={{ flex: 1, maxWidth: '850px', width: '100%' }}>
 
-          {/* BARRE D'HISTORIQUE MULTI-RÉUNIONS (Sauvegarde locale) */}
+          {/* BARRE D'HISTORIQUE MULTI-RÉUNIONS */}
           <div className="no-print" style={{ marginBottom: '16px', backgroundColor: THEME.surfaceAlt, border: `1.5px solid ${THEME.border}`, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <span style={{ fontSize: '0.72rem', fontWeight: '800', letterSpacing: '0.05em', color: THEME.inkMuted, marginRight: '4px' }}>
               {t.historyLabel}
@@ -1375,7 +1366,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                   <span
                     onClick={(e) => deleteSessionFromHistory(session.id, e)}
                     style={{ marginLeft: '2px', fontWeight: '800', cursor: 'pointer', padding: '0 2px' }}
-                    title="Supprimer cette session"
+                    title="Supprimer"
                   >
                     ×
                   </span>
@@ -1401,10 +1392,9 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
             </div>
           </div>
           
-          {/* Boîte de saisie avec Participants + VRAI ÉDITEUR VISUEL WYSIWYG */}
+          {/* Boîte de saisie */}
           <div className="no-print" style={{ background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
             
-            {/* Ligne Titre & Participants / Absents */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', marginBottom: '16px', paddingBottom: '16px', borderBottom: `1px solid ${THEME.borderSubtle}` }}>
               <div>
                 <label style={{ display: 'block', fontWeight: '800', fontSize: '0.7rem', letterSpacing: '0.05em', color: THEME.inkMuted, marginBottom: '5px' }}>
@@ -1450,7 +1440,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
               </div>
             </div>
 
-            {/* BARRE D'OUTILS WYSIWYG + DICTÉE VOCALE */}
+            {/* BARRE D'OUTILS WYSIWYG ÉPURÉE */}
             <div style={{ 
               display: 'flex', 
               flexWrap: 'wrap', 
@@ -1465,7 +1455,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('bold'); }}
                 style={toolBtnStyle}
-                title="Mettre en Gras (Ctrl+B)"
+                title="Gras"
               >
                 <strong>B</strong>
               </button>
@@ -1473,7 +1463,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('italic'); }}
                 style={{ ...toolBtnStyle, fontStyle: 'italic' }}
-                title="Italique (Ctrl+I)"
+                title="Italique"
               >
                 I
               </button>
@@ -1481,7 +1471,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('underline'); }}
                 style={{ ...toolBtnStyle, textDecoration: 'underline' }}
-                title="Souligner (Ctrl+U)"
+                title="Souligner"
               >
                 U
               </button>
@@ -1497,7 +1487,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); applyVisualCommand('removeFormat'); }}
                 style={{ ...toolBtnStyle, fontWeight: '600', fontSize: '0.72rem' }}
-                title="Effacer le style du mot sélectionné"
+                title="Effacer le style"
               >
                 Tx
               </button>
@@ -1508,7 +1498,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); insertVisualText('\nACTION : '); }}
                 style={toolBtnStyle}
-                title="Insérer une Action"
+                title="Action"
               >
                 + ACTION
               </button>
@@ -1516,7 +1506,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); insertVisualText('\nDÉCISION : '); }}
                 style={toolBtnStyle}
-                title="Insérer une Décision"
+                title="Décision"
               >
                 + DÉCISION
               </button>
@@ -1524,7 +1514,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); insertVisualText('\nRISQUE : '); }}
                 style={toolBtnStyle}
-                title="Insérer un Risque"
+                title="Risque"
               >
                 + RISQUE
               </button>
@@ -1532,7 +1522,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); insertVisualText(' -> '); }}
                 style={toolBtnStyle}
-                title="Flèche d'assignation"
+                title="Flèche"
               >
                 →
               </button>
@@ -1540,12 +1530,11 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                 type="button"
                 onMouseDown={(e) => { e.preventDefault(); insertVisualText(' € '); }}
                 style={toolBtnStyle}
-                title="Symbole Euro"
+                title="Euro"
               >
                 €
               </button>
 
-              {/* Bouton Dictée Vocale */}
               <button
                 type="button"
                 onClick={toggleVoiceDictation}
@@ -1555,7 +1544,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                   color: isListening ? '#ffffff' : THEME.ink,
                   borderColor: THEME.border
                 }}
-                title="Dicter vos notes au micro"
+                title="Dictée vocale"
               >
                 {isListening ? t.dictateStopBtn : t.dictateBtn}
               </button>
@@ -1565,7 +1554,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                   type="button" 
                   onClick={cleanMessySpaces} 
                   style={{ ...toolBtnStyle, fontWeight: '600', fontSize: '0.72rem' }}
-                  title="Supprimer les doubles espaces"
+                  title="Nettoyer"
                 >
                   {t.cleanSpacesBtn}
                 </button>
@@ -1573,14 +1562,13 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                   type="button" 
                   onClick={clearAllEditor} 
                   style={{ ...toolBtnStyle, backgroundColor: THEME.ink, color: THEME.surface, fontSize: '0.72rem' }}
-                  title="Tout effacer"
+                  title="Effacer"
                 >
                   × {t.clearBtn}
                 </button>
               </div>
             </div>
             
-            {/* ZONE D'ÉDITION VISUELLE RICHE */}
             <div
               ref={editorRef}
               contentEditable
@@ -1613,7 +1601,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
             </button>
           </div>
 
-          {/* RÉSULTAT À L'ÉCRAN : 100% fidèle à l'esthétique 3 couleurs */}
+          {/* RÉSULTAT RECONSIDÉRÉ : Lignes épurées, métadonnées en badges discrets */}
           {hasProcessed && (
             <div className="no-print" style={{ marginTop: '32px', background: THEME.surface, padding: '24px', border: `2px solid ${THEME.border}`, boxShadow: `4px 4px 0px ${THEME.border}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: `2px solid ${THEME.border}`, paddingBottom: '16px', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
@@ -1714,8 +1702,8 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                             ].filter(Boolean).join(' ') || 'none';
 
                             return (
-                              <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: THEME.surface, padding: '10px 12px', border: `1px solid ${THEME.borderSubtle}` }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                              <div key={item.id} className="item-row" style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: THEME.surface, padding: '10px 14px', border: `1px solid ${THEME.borderSubtle}` }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                                   {catKey === 'actions' && (
                                     <input 
                                       type="checkbox" 
@@ -1730,33 +1718,25 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                                     onChange={(e) => updateItem(item.id, 'text', e.target.value)}
                                     style={{
                                       flex: 1,
-                                      minWidth: '180px',
+                                      minWidth: '200px',
                                       background: 'transparent',
                                       color: item.done ? THEME.inkMuted : THEME.ink,
-                                      fontWeight: item.isBold ? '800' : '400',
+                                      fontWeight: item.isBold ? '800' : '500',
                                       textDecoration: textDecorations,
                                       border: 'none',
-                                      borderBottom: '1px solid transparent',
-                                      padding: '2px 4px',
+                                      padding: '2px 0',
                                       fontSize: '0.92rem',
                                       fontFamily: 'inherit',
                                       outline: 'none'
                                     }}
                                   />
 
+                                  {/* Mini-commandes de ligne épurées */}
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
                                     <button
                                       type="button"
                                       onClick={() => updateItem(item.id, 'isBold', !item.isBold)}
-                                      style={{
-                                        background: item.isBold ? THEME.ink : THEME.surface,
-                                        color: item.isBold ? THEME.surface : THEME.ink,
-                                        border: `1px solid ${THEME.border}`,
-                                        padding: '2px 6px',
-                                        fontSize: '0.7rem',
-                                        fontWeight: '800',
-                                        cursor: 'pointer'
-                                      }}
+                                      style={{ background: item.isBold ? THEME.ink : THEME.surface, color: item.isBold ? THEME.surface : THEME.ink, border: `1px solid ${THEME.border}`, padding: '1px 5px', fontSize: '0.68rem', fontWeight: '800', cursor: 'pointer' }}
                                       title="Gras"
                                     >
                                       B
@@ -1764,16 +1744,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                                     <button
                                       type="button"
                                       onClick={() => updateItem(item.id, 'isUnderline', !item.isUnderline)}
-                                      style={{
-                                        background: item.isUnderline ? THEME.ink : THEME.surface,
-                                        color: item.isUnderline ? THEME.surface : THEME.ink,
-                                        border: `1px solid ${THEME.border}`,
-                                        padding: '2px 6px',
-                                        fontSize: '0.7rem',
-                                        fontWeight: '700',
-                                        textDecoration: 'underline',
-                                        cursor: 'pointer'
-                                      }}
+                                      style={{ background: item.isUnderline ? THEME.ink : THEME.surface, color: item.isUnderline ? THEME.surface : THEME.ink, border: `1px solid ${THEME.border}`, padding: '1px 5px', fontSize: '0.68rem', textDecoration: 'underline', cursor: 'pointer' }}
                                       title="Souligner"
                                     >
                                       U
@@ -1781,24 +1752,15 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                                     <button
                                       type="button"
                                       onClick={() => updateItem(item.id, 'done', !item.done)}
-                                      style={{
-                                        background: item.done ? THEME.ink : THEME.surface,
-                                        color: item.done ? THEME.surface : THEME.ink,
-                                        border: `1px solid ${THEME.border}`,
-                                        padding: '2px 6px',
-                                        fontSize: '0.7rem',
-                                        fontWeight: '700',
-                                        textDecoration: 'line-through',
-                                        cursor: 'pointer'
-                                      }}
-                                      title="Barrer / Terminer"
+                                      style={{ background: item.done ? THEME.ink : THEME.surface, color: item.done ? THEME.surface : THEME.ink, border: `1px solid ${THEME.border}`, padding: '1px 5px', fontSize: '0.68rem', textDecoration: 'line-through', cursor: 'pointer' }}
+                                      title="Barrer"
                                     >
                                       S
                                     </button>
                                     <button
                                       type="button"
                                       onClick={() => moveItem(item.id, -1)}
-                                      style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 5px', fontSize: '0.7rem', cursor: 'pointer' }}
+                                      style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.borderSubtle}`, padding: '1px 4px', fontSize: '0.68rem', cursor: 'pointer' }}
                                       title="Monter"
                                     >
                                       ↑
@@ -1806,7 +1768,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                                     <button
                                       type="button"
                                       onClick={() => moveItem(item.id, 1)}
-                                      style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 5px', fontSize: '0.7rem', cursor: 'pointer' }}
+                                      style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.borderSubtle}`, padding: '1px 4px', fontSize: '0.68rem', cursor: 'pointer' }}
                                       title="Descendre"
                                     >
                                       ↓
@@ -1816,7 +1778,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                                   <select
                                     value={item.category}
                                     onChange={(e) => updateItem(item.id, 'category', e.target.value)}
-                                    style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '3px 6px', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
+                                    style={{ background: THEME.surfaceAlt, color: THEME.ink, border: `1px solid ${THEME.border}`, padding: '2px 6px', fontSize: '0.7rem', fontWeight: '700', cursor: 'pointer' }}
                                   >
                                     {Object.keys(t.categories).map(cKey => (
                                       <option key={cKey} value={cKey}>{t.categories[cKey].shortLabel}</option>
@@ -1825,46 +1787,42 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
 
                                   <button
                                     onClick={() => deleteItem(item.id)}
-                                    style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.border}`, cursor: 'pointer', fontSize: '0.78rem', fontWeight: '800', padding: '2px 7px' }}
-                                    title="Supprimer la ligne"
+                                    style={{ background: THEME.surface, color: THEME.ink, border: `1px solid ${THEME.border}`, cursor: 'pointer', fontSize: '0.75rem', fontWeight: '800', padding: '1px 6px' }}
+                                    title="Supprimer"
                                   >
                                     ×
                                   </button>
                                 </div>
 
-                                <div style={{ display: 'flex', gap: '10px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap' }}>
-                                  <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>RESP:</span>
-                                    <input
+                                {/* Badges discrets (Resp, Échéance, Budget) intégrés proprement */}
+                                <div style={{ display: 'flex', gap: '12px', paddingLeft: catKey === 'actions' ? '24px' : '0px', flexWrap: 'wrap', fontSize: '0.74rem', color: THEME.inkMuted, fontWeight: '600' }}>
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                    Resp: <input
                                       type="text"
                                       placeholder="—"
                                       value={item.assignee}
                                       onChange={(e) => updateItem(item.id, 'assignee', e.target.value)}
-                                      style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '90px', outline: 'none' }}
+                                      style={{ background: 'transparent', color: THEME.ink, border: 'none', borderBottom: `1px dashed ${THEME.borderSubtle}`, fontSize: '0.74rem', fontWeight: '700', width: '85px', outline: 'none' }}
                                     />
-                                  </div>
-
-                                  <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>DATE:</span>
-                                    <input
+                                  </span>
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                    Échéance: <input
                                       type="text"
                                       placeholder="—"
                                       value={item.deadline}
                                       onChange={(e) => updateItem(item.id, 'deadline', e.target.value)}
-                                      style={{ background: 'transparent', color: THEME.ink, border: 'none', fontSize: '0.75rem', fontWeight: '700', width: '130px', outline: 'none' }}
+                                      style={{ background: 'transparent', color: THEME.ink, border: 'none', borderBottom: `1px dashed ${THEME.borderSubtle}`, fontSize: '0.74rem', fontWeight: '700', width: '100px', outline: 'none' }}
                                     />
-                                  </div>
-
-                                  <div style={{ display: 'flex', alignItems: 'center', background: THEME.bg, border: `1px solid ${THEME.borderSubtle}`, padding: '2px 8px' }}>
-                                    <span style={{ fontSize: '0.7rem', fontWeight: '700', color: THEME.inkMuted, marginRight: '6px' }}>BUDGET:</span>
-                                    <input
+                                  </span>
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                    Budget: <input
                                       type="text"
                                       placeholder="—"
                                       value={item.budget}
                                       onChange={(e) => updateItem(item.id, 'budget', e.target.value)}
-                                      style={{ background: 'transparent', color: THEME.accent, border: 'none', fontSize: '0.75rem', fontWeight: '800', width: '80px', outline: 'none' }}
+                                      style={{ background: 'transparent', color: THEME.accent, border: 'none', borderBottom: `1px dashed ${THEME.borderSubtle}`, fontSize: '0.74rem', fontWeight: '800', width: '70px', outline: 'none' }}
                                     />
-                                  </div>
+                                  </span>
                                 </div>
                               </div>
                             );
@@ -1882,9 +1840,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
             </div>
           )}
 
-          {/* =====================================================================
-              COMPTE RENDU EN COULEUR DÉDIÉ UNIQUEMENT À L'EXPORT PDF
-             ===================================================================== */}
+          {/* EXPORT PDF PRO */}
           {hasProcessed && (
             <div className="print-only">
               <div style={{ borderBottom: '3px solid #1c1c21', paddingBottom: '14px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
@@ -1943,7 +1899,7 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                             color: '#1c1c21',
                             textDecoration: [item.done ? 'line-through' : '', item.isUnderline ? 'underline' : ''].filter(Boolean).join(' ') || 'none'
                           }}>
-                            {catKey === 'actions' ? (item.done ? '☑ ' : '☐ ') : '• '}
+                            {catKey === 'actions' ? (item.done ? '[x] ' : '[ ] ') : '• '}
                             {item.text.includes(' : ') ? (
                               <>
                                 <strong style={{ textDecoration: 'underline', color: cat.exportColor }}>{item.text.split(' : ')[0]} :</strong>{' '}
@@ -1954,22 +1910,12 @@ ${lang === 'fr' ? 'Bien cordialement,' : 'Best regards,'}`;
                             )}
                           </div>
                           {(item.assignee || item.deadline || item.budget) && (
-                            <div style={{ marginTop: '6px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                              {item.assignee && (
-                                <span style={{ fontSize: '11px', backgroundColor: '#eff6ff', color: '#1e40af', border: '1px solid #93c5fd', padding: '2px 8px', borderRadius: '3px', fontWeight: '700' }}>
-                                  👤 Responsable : <u>{item.assignee}</u>
-                                </span>
-                              )}
-                              {item.deadline && (
-                                <span style={{ fontSize: '11px', backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #fcd34d', padding: '2px 8px', borderRadius: '3px', fontWeight: '700' }}>
-                                  📅 Échéance : <u>{item.deadline}</u>
-                                </span>
-                              )}
-                              {item.budget && (
-                                <span style={{ fontSize: '11px', backgroundColor: '#dcfce7', color: '#166534', border: '1px solid #86efac', padding: '2px 8px', borderRadius: '3px', fontWeight: '800' }}>
-                                  💰 Budget : <u>{item.budget}</u>
-                                </span>
-                              )}
+                            <div style={{ marginTop: '6px', fontSize: '11px', color: '#5a5a66' }}>
+                              {[
+                                item.assignee ? `Resp : ${item.assignee}` : '',
+                                item.deadline ? `Échéance : ${item.deadline}` : '',
+                                item.budget ? `Budget : ${item.budget}` : ''
+                              ].filter(Boolean).join(' | ')}
                             </div>
                           )}
                         </div>
