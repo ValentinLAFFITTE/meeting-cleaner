@@ -2040,21 +2040,27 @@ Attention : blocage ou retard sur [sujet technique].`}
       `}</style>
 
       {/* Pied de page sobre avec suppression rapide des données locales */}
-      <footer style={{ borderTop: `2px solid ${THEME.border}`, backgroundColor: THEME.surface, textAlign: 'center', padding: '24px 20px', color: THEME.inkMuted, fontSize: '0.85rem', display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }} className="no-print">
-        <span style={{ fontWeight: '600', color: THEME.ink }}>{t.footer}</span>
-        <span>•</span>
-        <a href="#guide-methodo" style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>{t.aboutLink}</a>
-        <span>•</span>
-        <a href="/privacy" onClick={(e) => navigateTo('/privacy', e)} style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>{t.privacyLink}</a>
-        <span>•</span>
-        <button
-          type="button"
-          onClick={handleDeleteAllLocalData}
-          style={{ background: 'transparent', border: 'none', color: THEME.inkMuted, textDecoration: 'underline', cursor: 'pointer', fontSize: '0.85rem', padding: 0, fontFamily: 'inherit' }}
-        >
-          {t.deleteAllDataBtn}
-        </button>
-      </footer>
+      <footer style={{ borderTop: `2px solid ${THEME.border}`, backgroundColor: THEME.surface, textAlign: 'center', padding: '24px 20px', color: THEME.inkMuted, fontSize: '0.84rem', display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap', alignItems: 'center' }} className="no-print">
+  <span style={{ fontWeight: '700', color: THEME.ink }}>{t.footer}</span>
+  <span>•</span>
+  <a href="/modele-compte-rendu-reunion" style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>Modèle de compte rendu</a>
+  <span>•</span>
+  <a href="/exemple-compte-rendu-reunion" style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>Exemples</a>
+  <span>•</span>
+  <a href="/guide-compte-rendu-reunion" style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>Guide pratique</a>
+  <span>•</span>
+  <a href="/plan-d-action-reunion" style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>Plan d'action</a>
+  <span>•</span>
+  <a href="/privacy" onClick={(e) => navigateTo('/privacy', e)} style={{ color: THEME.inkMuted, textDecoration: 'underline' }}>{t.privacyLink}</a>
+  <span>•</span>
+  <button
+    type="button"
+    onClick={handleDeleteAllLocalData}
+    style={{ background: 'transparent', border: 'none', color: THEME.inkMuted, textDecoration: 'underline', cursor: 'pointer', fontSize: '0.84rem', padding: 0, fontFamily: 'inherit' }}
+  >
+    {t.deleteAllDataBtn}
+  </button>
+</footer>
 
     </div>
   );
