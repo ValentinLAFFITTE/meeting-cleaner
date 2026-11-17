@@ -1,5 +1,21 @@
 {
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "meeting-cleanerv1.vercel.app"
+        }
+      ],
+      "destination": "https://meetclean.app/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/((?!sitemap\\.xml|robots\\.txt|ads\\.txt|favicon\\.svg|apple-touch-icon\\.png|og-image\\.png).*)",
+      "destination": "/index.html"
+    }
   ]
 }
